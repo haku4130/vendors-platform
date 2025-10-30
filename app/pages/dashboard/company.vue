@@ -1,15 +1,10 @@
 <template>
-  <div class="flex">
-    <DashboardSidebar
-      :items="menuItems"
-      :selected="activeTab"
-      @select="handleSelect"
-    />
+  <UDashboardPanel resizable>
+    <template #header>
+      <UDashboardNavbar title="Dashboard" />
+    </template>
 
-    <!-- Main content -->
-    <main class="flex-1 p-8">
-      <!-- <h1 class="text-2xl font-semibold mb-6">{{ activeTabLabel }}</h1> -->
-
+    <template #body>
       <div v-if="activeTab === 'projects'">
         <p class="text-gray-700">
           <ProjectsSection />
@@ -37,40 +32,20 @@
       <div v-else>
         <p class="text-gray-500">Select a section from the sidebar.</p>
       </div>
-    </main>
-  </div>
+    </template>
+  </UDashboardPanel>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import ProjectsSection from '@/components/dashboard/ProjectsSection.vue';
-import DashboardSidebar from '@/components/dashboard/DashboardSidebar.vue';
 import MessagesSection from '@/components/dashboard/MessagesSection.vue';
 import ShortlistSection from '@/components/dashboard/ShortlistSection.vue';
 import ReviewsSection from '@/components/dashboard/ReviewsSection.vue';
 
+definePageMeta({
+  layout: 'dashboard',
+});
+
 // Активная вкладка
-const activeTab = ref('projects');
-
-// Список вкладок для компании
-const menuItems = [
-  { id: 'projects', label: 'Projects', icon: 'mdi:layers-outline', count: 0 },
-  { id: 'messages', label: 'Messages', icon: 'mdi:message-outline', count: 0 },
-  {
-    id: 'shortlist',
-    label: 'Shortlist',
-    icon: 'mdi:bookmark-outline',
-    count: 0,
-  },
-  { id: 'reviews', label: 'Reviews', icon: 'mdi:star-outline', count: 0 },
-];
-
-// Подпись текущей вкладки
-// const activeTabLabel = computed(
-//  () => menuItems.find((i) => i.id === activeTab.value)?.label || ''
-// );
-
-// Обработка выбора
-function handleSelect(tab) {
-  activeTab.value = tab;
-}
+const activeTab = useState('activeTab');
 </script>
