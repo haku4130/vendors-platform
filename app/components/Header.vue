@@ -67,11 +67,11 @@
     </div>
   </header>
 
-  <UHeader title="Vendor Platform" class="bg-[#afacaca9]">
+  <UHeader title="Vendor Platform" class="bg-gray-100">
     <template #right>
       <div class="flex items-center gap-6">
         <!-- Search -->
-        <div class="flex items-center bg-white rounded-full border">
+        <div class="flex items-center bg-white rounded-lg border">
           <UInput
             placeholder="Search"
             icon="i-heroicons-magnifying-glass"
@@ -83,52 +83,10 @@
 
         <!-- Right links -->
         <nav class="flex items-center gap-6 text-sm font-medium">
-          <!-- <NuxtLink to="/vendors" class="hover:text-gray-300"
-            >For Vendors</NuxtLink
-          > -->
-          <NuxtLink to="/reviews" class="hover:text-gray-300"
-            >Leave a Review</NuxtLink
-          >
-          <NuxtLink to="/login" class="hover:text-gray-300">Sign In</NuxtLink>
-          <UButton
-            variant="ghost"
-            color="neutral"
-            size="sm"
-            label="Join"
-            to="/sign-in"
-            class="border-1 border-gray-200 rounded-full hover:bg-white text-white hover:text-gray-800 dark:active:bg-gray-300 px-3"
-          />
+          <UButton to="/reviews" variant="link"> Leave a Review </UButton>
+          <UButton size="sm" label="Sign In" to="/sign-in" />
         </nav>
       </div>
     </template>
   </UHeader>
 </template>
-
-<script setup lang="ts">
-import type { NavigationMenuItem } from '@nuxt/ui';
-
-const route = useRoute();
-
-const items = computed<NavigationMenuItem[]>(() => [
-  {
-    label: 'Docs',
-    to: '/docs/getting-started',
-    active: route.path.startsWith('/docs/getting-started'),
-  },
-  {
-    label: 'Components',
-    to: '/docs/components',
-    active: route.path.startsWith('/docs/components'),
-  },
-  {
-    label: 'Figma',
-    to: 'https://go.nuxt.com/figma-ui',
-    target: '_blank',
-  },
-  {
-    label: 'Releases',
-    to: 'https://github.com/nuxt/ui/releases',
-    target: '_blank',
-  },
-]);
-</script>
