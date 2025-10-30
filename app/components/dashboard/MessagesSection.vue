@@ -7,11 +7,7 @@
         <h2 class="text-xl font-semibold text-gray-900 leading-snug">
           You haven’t sent any messages yet!
         </h2>
-        <button
-          class="border border-black rounded-md px-5 py-2 font-medium text-gray-900 hover:bg-black hover:text-white transition"
-        >
-          Find a Vendor
-        </button>
+        <UButton size="xl"> Find a Vendor </UButton>
       </div>
     </section>
   </div>

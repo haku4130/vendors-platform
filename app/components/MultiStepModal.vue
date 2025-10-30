@@ -10,11 +10,7 @@
     fullscreen
   >
     <!-- Кнопка открытия -->
-    <button
-      class="border border-black rounded-md px-4 py-2 font-medium hover:bg-black hover:text-white transition"
-    >
-      {{ triggerLabel }}
-    </button>
+    <UButton size="xl"> {{ triggerLabel }} </UButton>
 
     <!-- Основной контент -->
     <template #body>
@@ -66,37 +62,29 @@
 
     <!-- Навигация -->
     <template v-if="phase === 'form'" #footer>
-      <button
-        class="px-4 py-2 border border-gray-800 rounded-md transition hover:bg-gray-800 hover:text-white disabled:opacity-50 disabled:pointer-events-none disabled:hover:bg-transparent disabled:hover:text-gray-800"
+      <UButton
+        size="xl"
         :disabled="step === 1"
+        class="hover:disabled:text-black"
         @click="prevStep"
       >
         Back
-      </button>
-      <button
-        class="px-6 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition"
-        @click="nextStep"
-      >
+      </UButton>
+      <UButton variant="solid" size="xl" @click="nextStep">
         {{ step === totalSteps ? 'Finish' : 'Next' }}
-      </button>
+      </UButton>
     </template>
     <template v-else-if="phase === 'summary'" #footer>
       <div />
-      <button
-        class="px-6 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition"
-        @click="goToVendors"
-      >
+      <UButton variant="solid" size="xl" @click="goToVendors">
         Select Vendors
-      </button>
+      </UButton>
     </template>
     <template v-else-if="phase === 'vendors'" #footer>
       <div />
-      <button
-        class="px-6 py-2 bg-gray-800 text-white rounded-md hover:bg-gray-700 transition"
-        @click="goToVendors"
-      >
+      <UButton variant="solid" size="xl" @click="finishAndClose">
         Send to Vendors
-      </button>
+      </UButton>
     </template>
   </UModal>
 </template>

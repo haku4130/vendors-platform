@@ -12,11 +12,7 @@
       <h3 class="text-lg font-semibold mb-4">
         You haven't left a review to anyone yet!
       </h3>
-      <button
-        class="border border-black rounded-md px-4 py-2 font-medium text-gray-900 hover:bg-black hover:text-white transition"
-      >
-        Find a Vendor
-      </button>
+      <UButton size="xl"> Find a Vendor </UButton>
     </section>
   </div>
 </template>

@@ -44,11 +44,7 @@
         </div>
 
         <div class="min-w-fit w-1/3 flex justify-center">
-          <button
-            class="border border-black rounded-md px-5 py-2 font-medium text-gray-900 hover:bg-black hover:text-white transition"
-          >
-            Find a Vendor
-          </button>
+          <UButton size="xl"> Find a Vendor </UButton>
         </div>
       </div>
     </section>

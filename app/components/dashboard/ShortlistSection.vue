@@ -28,11 +28,7 @@
         <h3 class="text-lg font-semibold mb-4">
           You haven’t picked your favorites yet!
         </h3>
-        <button
-          class="border border-black rounded-md px-4 py-2 font-medium text-gray-900 w-fit hover:bg-black hover:text-white transition"
-        >
-          Find a Vendor
-        </button>
+        <UButton size="xl" class="w-fit"> Find a Vendor </UButton>
       </div>
     </section>
   </div>
