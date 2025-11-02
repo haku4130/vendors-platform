@@ -17,5 +17,16 @@ export default defineAppConfig({
                 },
             ],
         },
+        radioGroup: {
+            compoundVariants: [
+                {
+                    color: 'primary',
+                    variant: 'card',
+                    class: {
+                        item: 'hover:bg-primary/5 active:bg-primary/10 transition',
+                    },
+                },
+            ],
+        },
     },
 });

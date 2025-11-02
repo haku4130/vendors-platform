@@ -18,7 +18,7 @@
         <!-- Прогресс -->
         <UProgress
           v-if="phase === 'form'"
-          v-model="step"
+          v-model="stepNumber"
           :max="totalSteps"
           color="neutral"
         />
@@ -26,21 +26,22 @@
         <div
           class="flex-1 flex flex-col items-center justify-center px-8 text-center"
         >
-          <!-- Форма (1–6 шаги) -->
+          <!-- Форма -->
           <template v-if="phase === 'form'">
             <p class="text-sm text-gray-700 mb-1">
-              Step {{ step }} / {{ totalSteps }}
+              Step {{ stepNumber }} / {{ totalSteps }}
             </p>
-            <h3 class="text-xl font-semibold text-gray-900 mb-6">
-              {{ currentStep.title }}
+            <h3 class="text-xl font-semibold text-gray-900 my-3">
+              {{ currentStep?.title }}
             </h3>
 
-            <slot
-              name="step"
-              :step="currentStep"
-              :answers="answers"
-              :step-index="step"
-            />
+            <div class="w-full max-w-xl">
+              <slot
+                :name="'step-' + stepNumber"
+                :step="currentStep"
+                :step-index="stepIndex"
+              />
+            </div>
           </template>
 
           <!-- Сводка проекта -->
@@ -64,14 +65,20 @@
     <template v-if="phase === 'form'" #footer>
       <UButton
         size="xl"
-        :disabled="step === 1"
+        :disabled="stepIndex === 0"
         class="hover:disabled:text-black"
+        leading-icon="material-symbols:chevron-left-rounded"
         @click="prevStep"
       >
         Back
       </UButton>
-      <UButton variant="solid" size="xl" @click="nextStep">
-        {{ step === totalSteps ? 'Finish' : 'Next' }}
+      <UButton
+        variant="solid"
+        trailing-icon="material-symbols:chevron-right-rounded"
+        size="xl"
+        @click="nextStep"
+      >
+        Next
       </UButton>
     </template>
     <template v-else-if="phase === 'summary'" #footer>
@@ -90,36 +97,64 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
-  title: { type: String, default: 'Project Brief' },
-  triggerLabel: { type: String, default: 'Start a Project' },
-  steps: { type: Array, required: true },
-});
+import type { Step } from '@/types/step';
+import type { AnswersType } from '@/types/answers';
+
+interface FormRef {
+  validate: () => Promise<boolean>;
+}
+
+interface Props {
+  title?: string;
+  triggerLabel?: string;
+  steps: Step[];
+  formRefs: Record<number, FormRef | null>;
+}
+
+const {
+  title = 'Project Brief',
+  triggerLabel = 'Start a Project',
+  steps,
+  formRefs,
+} = defineProps<Props>();
+
+const answers = defineModel<AnswersType>();
 
 const emit = defineEmits(['finish']);
 
 const open = ref(false);
-const step = ref(1);
-const totalSteps = computed(() => props.steps.length);
-const answers = ref<Record<number, any>>({});
+const stepIndex = ref(0);
+const stepNumber = computed(() => stepIndex.value + 1);
+const totalSteps = computed(() => steps.length);
+
 const phase = ref<'form' | 'summary' | 'vendors'>('form');
 
-const currentStep = computed(() => props.steps[step.value - 1]);
+const currentStep = computed(() => steps[stepIndex.value]);
 
-function nextStep() {
-  if (step.value < totalSteps.value) step.value++;
-  else {
-    phase.value = 'summary';
+async function nextStep() {
+  const currentForm = formRefs[stepIndex.value];
+  if (currentForm) {
+    try {
+      await currentForm.validate();
+    } catch {
+      // если выброшено исключение — валидация не пройдена
+      return;
+    }
   }
+
+  if (stepNumber.value < totalSteps.value) stepIndex.value++;
+  else phase.value = 'summary';
 }
+
 function prevStep() {
-  if (step.value > 1) step.value--;
+  if (stepIndex.value > 0) stepIndex.value--;
 }
 function handleEdit() {
   phase.value = 'form';
 }
 function goToVendors() {
   phase.value = 'vendors';
+  emit('finish', answers.value);
 }
 function finishAndClose() {
   open.value = false;
