@@ -252,7 +252,7 @@ const validate = (stepIndex: number): FormError[] => {
 
   // Если шаг — обычное текстовое поле
   if (typeof stepAnswers === 'string' && !step.checkboxLabel) {
-    if (!stepAnswers.trim()) {
+    if (step.required && !stepAnswers.trim()) {
       errors.push({
         name: stepKey,
         message: 'This field is required',
@@ -264,7 +264,7 @@ const validate = (stepIndex: number): FormError[] => {
   else if (step.checkboxLabel) {
     const value = answers[stepKey];
     const noWebsite = answers['noWebsite'];
-    if (!value && !noWebsite) {
+    if (step.required && !value && !noWebsite) {
       errors.push({
         name: stepKey,
         message: 'Either input a website or select [no website] option',
@@ -276,7 +276,10 @@ const validate = (stepIndex: number): FormError[] => {
   else if (step.fields && typeof stepAnswers === 'object') {
     for (const [fieldKey, field] of Object.entries(step.fields)) {
       const value = stepAnswers[fieldKey];
-      if (!value || (typeof value === 'string' && value.trim() === '')) {
+      if (
+        field.required &&
+        (!value || (typeof value === 'string' && value.trim() === ''))
+      ) {
         errors.push({
           name: `${stepKey}.${fieldKey}`,
           message: 'This field is required',
@@ -335,20 +338,24 @@ const steps: Step[] = [
     title: "What's your project about? What goals do you want to accomplish?",
     placeholder:
       'E.g., Optimize website for faster performance / Grow website traffic through targeted keyword optimization / Make my website navigation more user friendly.',
+    required: true,
   },
   {
     key: 'companyType',
     title: 'What kind of company are you looking for?',
     placeholder: 'Search for SEO, web development, etc.',
+    // required: true,
   },
   {
     key: 'startTime',
     title: 'When would you like to start this project?',
     options: ['Within 30 days', 'Within 60 days', 'After 60+ days'],
+    // required: true,
   },
   {
     key: 'locationPreference',
     title: "What's important to you about a provider's location?",
+    // required: true,
     options: [
       'No preference — just looking for the best providers',
       'Near me for in-person collaboration',
@@ -360,17 +367,22 @@ const steps: Step[] = [
     key: 'website',
     title: "What's your company's website?",
     placeholder: 'www.yourcompany.com',
+    // required: true,
     checkboxLabel: 'I don’t have a website yet',
   },
   {
     key: 'companyInfo',
     title: "What's your company name?",
     fields: {
-      companyName: { placeholder: 'Company Name' },
+      companyName: {
+        placeholder: 'Company Name',
+        required: true,
+      },
       companyAbout: {
         label: "What's your business about?",
         placeholder:
           'Consider including basic details like name, industry, and what makes your business unique and valuable to your target audience.',
+        // required: true,
       },
     },
   },

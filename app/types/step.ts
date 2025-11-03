@@ -2,6 +2,7 @@ export interface Step {
     key: string;
     title: string;
     placeholder?: string;
+    required?: boolean;
     options?: string[];
     optionsColumns?: boolean;
     checkboxLabel?: string;
@@ -10,6 +11,7 @@ export interface Step {
         {
             label?: string;
             placeholder: string;
+            required?: boolean;
         }
     >;
 }
