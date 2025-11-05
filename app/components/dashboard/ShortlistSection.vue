@@ -14,6 +14,7 @@
         <h3 class="text-lg font-semibold mb-6">How it works</h3>
 
         <UStepper
+          v-model="active"
           color="neutral"
           orientation="vertical"
           :items="items"
@@ -53,4 +54,12 @@ const items = ref<StepperItem[]>([
       'Compare proposals, pick your favorites, and choose who to work with.',
   },
 ]);
+
+const active = ref(0);
+
+onMounted(() => {
+  setInterval(() => {
+    active.value = (active.value + 1) % items.value.length;
+  }, 1500);
+});
 </script>

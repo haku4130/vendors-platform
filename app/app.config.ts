@@ -13,7 +13,7 @@ export default defineAppConfig({
                 {
                     color: 'primary',
                     variant: 'solid',
-                    class: 'border hover:bg-white hover:text-black active:bg-primary/10 active:text-black',
+                    class: 'border hover:bg-white hover:text-black active:bg-primary/10 active:text-black disabled:hover:text-white',
                 },
             ],
         },

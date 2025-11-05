@@ -1,6 +1,6 @@
 export interface AnswersType {
     projectDescription: string;
-    companyType: string;
+    servicesNeeded: string[];
     startTime: string;
     locationPreference: string;
     website: string;

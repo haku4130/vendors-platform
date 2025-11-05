@@ -26,9 +26,9 @@
       />
 
       <!-- Кнопка редактирования -->
-      <div class="pl-4">
+      <!-- <div class="pl-4">
         <UButton size="sm"> Edit Profile </UButton>
-      </div>
+      </div> -->
 
       <!-- Навигация -->
       <nav class="flex flex-col gap-1 w-full">
@@ -52,6 +52,9 @@
           </span>
         </button>
       </nav>
+    </template>
+    <template #footer>
+      <UButton> Profile </UButton>
     </template>
   </UDashboardSidebar>
 </template>

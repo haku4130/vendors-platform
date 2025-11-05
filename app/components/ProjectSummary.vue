@@ -39,17 +39,17 @@
           Outline
         </p>
         <button
-          v-for="(section, i) in outline"
+          v-for="(section, i) in links"
           :key="i"
           class="block text-left w-full px-3 py-1.5 rounded-md transition"
           :class="[
-            currentSection === section
+            currentSection === section.id
               ? 'bg-[#F4B98A] font-semibold'
               : 'hover:bg-[#F6C6A2]',
           ]"
-          @click="scrollToSection(section)"
+          @click="scrollToSection(section.id)"
         >
-          {{ section }}
+          {{ section.text }}
         </button>
       </div>
     </aside>
@@ -61,7 +61,7 @@
       </h1>
 
       <!-- Section: Key Information -->
-      <section ref="Key Information" class="mb-8">
+      <section id="key-information" class="mb-8">
         <SectionHeader title="Key Information" @edit="edit('keyInformation')" />
 
         <InfoTable
@@ -97,7 +97,7 @@
       </section>
 
       <!-- Section: Introduction -->
-      <section ref="Introduction" class="mb-8">
+      <section id="introduction" class="mb-8">
         <SectionHeader title="Introduction" @edit="edit('introduction')" />
         <p class="text-gray-700 leading-relaxed whitespace-pre-line">
           {{ data.introduction }}
@@ -105,7 +105,7 @@
       </section>
 
       <!-- Section: Objectives -->
-      <section ref="Objectives" class="mb-8">
+      <section id="objectives" class="mb-8">
         <SectionHeader title="Objectives" @edit="edit('objectives')" />
         <ul class="list-disc pl-6 text-gray-700 space-y-1">
           <li v-for="(obj, i) in data.objectives" :key="i">{{ obj }}</li>
@@ -120,7 +120,7 @@
       </section>
 
       <!-- Section: Services Needed -->
-      <section ref="Services Needed" class="mb-8">
+      <section id="services" class="mb-8">
         <SectionHeader title="Services Needed" @edit="edit('services')" />
         <div class="border border-gray-300 rounded-lg p-3">
           <div class="grid grid-cols-2 gap-4 text-sm">
@@ -137,7 +137,7 @@
       </section>
 
       <!-- Section: Key Deliverables -->
-      <section ref="Key Deliverables" class="mb-8">
+      <section id="key-deliverables" class="mb-8">
         <SectionHeader title="Key Deliverables" @edit="edit('deliverables')" />
         <ul class="list-disc pl-6 text-gray-700 space-y-1">
           <li v-for="(item, i) in data.deliverables" :key="i">{{ item }}</li>
@@ -145,7 +145,7 @@
       </section>
 
       <!-- Section: Questions -->
-      <section ref="Questions" class="mb-8">
+      <section id="questions" class="mb-8">
         <SectionHeader title="Questions" @edit="edit('questions')" />
         <ul class="list-disc pl-6 text-gray-700 space-y-1">
           <li v-for="(q, i) in data.questions" :key="i">{{ q }}</li>
@@ -153,7 +153,7 @@
       </section>
 
       <!-- Section: Requirements -->
-      <section ref="Requirements">
+      <section id="requirements">
         <SectionHeader title="Requirements" @edit="edit('requirements')" />
         <ul class="list-disc pl-6 text-gray-700 space-y-1">
           <li v-for="(r, i) in data.requirements" :key="i">{{ r }}</li>
@@ -197,23 +197,72 @@ To tackle this, we are seeking the expertise of a reliable service provider who 
 
 defineEmits(['edit', 'submit']);
 
-const outline = [
-  'Key Information',
-  'Introduction',
-  'Objectives',
-  'Services Needed',
-  'Key Deliverables',
-  'Questions',
-  'Requirements',
-];
+const links = ref([
+  {
+    id: 'key-information',
+    text: 'Key Information',
+  },
+  {
+    id: 'introduction',
+    text: 'Introduction',
+  },
+  {
+    id: 'objectives',
+    text: 'Objectives',
+  },
+  {
+    id: 'services',
+    text: 'Services Needed',
+  },
+  {
+    id: 'key-deliverables',
+    text: 'Key Deliverables',
+  },
+  {
+    id: 'questions',
+    text: 'Questions',
+  },
+  {
+    id: 'requirements',
+    text: 'Requirements',
+  },
+]);
 
-const currentSection = ref('Key Information');
+const currentSection = ref('key-information');
 
 function scrollToSection(section: string) {
   currentSection.value = section;
-  const el = document.querySelector(`[ref='${section}']`);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
+  const el = document.getElementById(section);
+  if (el) {
+    el.scrollIntoView({ behavior: 'smooth' });
+  }
 }
+
+onMounted(() => {
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visible[0]) {
+        currentSection.value = visible[0].target.id;
+      }
+    },
+    {
+      rootMargin: '0px 0px -90% 0px',
+    }
+  );
+
+  links.value.forEach((link) => {
+    const el = document.getElementById(link.id);
+    if (el) observer.observe(el);
+  });
+
+  onBeforeUnmount(() => {
+    observer.disconnect();
+  });
+});
 
 function edit(section: string) {
   // Можно открыть модалку с редактированием конкретного блока

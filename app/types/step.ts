@@ -6,6 +6,7 @@ export interface Step {
     options?: string[];
     optionsColumns?: boolean;
     checkboxLabel?: string;
+    maxSelections?: number;
     fields?: Record<
         string,
         {

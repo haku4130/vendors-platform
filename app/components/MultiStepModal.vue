@@ -24,7 +24,7 @@
         />
 
         <div
-          class="flex-1 flex flex-col items-center justify-center px-8 text-center"
+          class="flex-1 flex flex-col items-center justify-center px-8 my-4 text-center"
         >
           <!-- Форма -->
           <template v-if="phase === 'form'">
@@ -72,14 +72,24 @@
       >
         Back
       </UButton>
-      <UButton
-        variant="solid"
-        trailing-icon="material-symbols:chevron-right-rounded"
-        size="xl"
-        @click="nextStep"
+      <UTooltip
+        :delay-duration="0"
+        :text="
+          isValidCurrentStep
+            ? ''
+            : 'Please complete the current step before proceeding'
+        "
       >
-        Next
-      </UButton>
+        <UButton
+          variant="solid"
+          trailing-icon="material-symbols:chevron-right-rounded"
+          size="xl"
+          :disabled="!isValidCurrentStep"
+          @click="nextStep"
+        >
+          Next
+        </UButton>
+      </UTooltip>
     </template>
     <template v-else-if="phase === 'summary'" #footer>
       <div />
@@ -129,7 +139,14 @@ const totalSteps = computed(() => steps.length);
 
 const phase = ref<'form' | 'summary' | 'vendors'>('form');
 
-const currentStep = computed(() => steps[stepIndex.value]);
+const currentStep = computed<Step>(() => steps[stepIndex.value]);
+
+const isValidCurrentStep = computed(() => {
+  const currentForm = formRefs[stepIndex.value];
+  if (!currentForm) return currentStep.value.required ? false : true;
+  const errors = currentForm.getErrors?.();
+  return !errors || errors.length === 0;
+});
 
 async function nextStep() {
   const currentForm = formRefs[stepIndex.value];
@@ -154,7 +171,7 @@ function handleEdit() {
 }
 function goToVendors() {
   phase.value = 'vendors';
-  emit('finish', answers.value);
+  emit('finish');
 }
 function finishAndClose() {
   open.value = false;

@@ -76,10 +76,10 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step?.key">
+                <UFormField :name="step.key">
                   <UTextarea
-                    v-model="answers[step?.key] as string"
-                    :placeholder="step?.placeholder"
+                    v-model="answers[step.key] as string"
+                    :placeholder="step.placeholder"
                     size="xl"
                     :rows="5"
                     class="w-full"
@@ -94,12 +94,10 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step?.key">
-                  <UInput
-                    v-model="answers[step?.key]"
-                    :placeholder="step?.placeholder"
-                    size="xl"
-                    class="w-full"
+                <UFormField :name="step.key">
+                  <ServiceTagsSelect
+                    v-model="answers[step.key]"
+                    :placeholder="step.placeholder"
                   />
                 </UFormField>
               </UForm>
@@ -110,13 +108,13 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step?.key">
+                <UFormField :name="step.key">
                   <URadioGroup
-                    v-model="answers[step?.key] as string"
+                    v-model="answers[step.key] as string"
                     indicator="hidden"
                     variant="card"
                     orientation="horizontal"
-                    :items="step?.options"
+                    :items="step.options"
                     class="w-fit m-auto"
                   />
                 </UFormField>
@@ -128,12 +126,12 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step?.key">
+                <UFormField :name="step.key">
                   <URadioGroup
-                    v-model="answers[step?.key] as string"
+                    v-model="answers[step.key] as string"
                     indicator="hidden"
                     variant="card"
-                    :items="step?.options"
+                    :items="step.options"
                     class="w-fit m-auto"
                   />
                 </UFormField>
@@ -145,10 +143,10 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step?.key">
+                <UFormField :name="step.key">
                   <UInput
-                    v-model="answers[step?.key]"
-                    :placeholder="step?.placeholder"
+                    v-model="answers[step.key]"
+                    :placeholder="step.placeholder"
                     :disabled="answers['noWebsite']"
                     size="xl"
                   />
@@ -156,7 +154,7 @@
                 <UFormField>
                   <UCheckbox
                     v-model="answers['noWebsite']"
-                    :label="step?.checkboxLabel"
+                    :label="step.checkboxLabel"
                     class="w-fit m-auto mt-3"
                   />
                 </UFormField>
@@ -168,21 +166,21 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step?.key + '.companyName'">
+                <UFormField :name="step.key + '.companyName'">
                   <UInput
-                    v-model="answers[step?.key]['companyName']"
-                    :placeholder="step?.fields?.['companyName']?.placeholder"
+                    v-model="answers[step.key]['companyName']"
+                    :placeholder="step.fields?.['companyName']?.placeholder"
                     size="xl"
                     class="w-full"
                   />
                 </UFormField>
-                <UFormField :name="step?.key + '.companyAbout'">
+                <UFormField :name="step.key + '.companyAbout'">
                   <h3 class="text-xl font-semibold text-gray-900 mt-10 mb-3">
-                    {{ step?.fields?.['companyAbout']?.label }}
+                    {{ step.fields?.['companyAbout']?.label }}
                   </h3>
                   <UTextarea
-                    v-model="answers[step?.key]['companyAbout']"
-                    :placeholder="step?.fields?.['companyAbout']?.placeholder"
+                    v-model="answers[step.key]['companyAbout']"
+                    :placeholder="step.fields?.['companyAbout']?.placeholder"
                     size="xl"
                     :rows="4"
                     class="w-full"
@@ -272,6 +270,22 @@ const validate = (stepIndex: number): FormError[] => {
     }
   }
 
+  // Если шаг — выбор тегов
+  else if (Array.isArray(stepAnswers)) {
+    if (step.required && stepAnswers.length === 0) {
+      errors.push({
+        name: stepKey,
+        message: 'Please select at least one option',
+      });
+    }
+    if (step.maxSelections && stepAnswers.length > step.maxSelections) {
+      errors.push({
+        name: stepKey,
+        message: `You can select up to ${step.maxSelections} options`,
+      });
+    }
+  }
+
   // Если у шага есть fields (как в companyInfo)
   else if (step.fields && typeof stepAnswers === 'object') {
     for (const [fieldKey, field] of Object.entries(step.fields)) {
@@ -314,8 +328,8 @@ const myReviews = [
 
 const displayedReviews = computed(() => myReviews?.slice(0, 3) || []);
 
-function handleFinish(data: Record<string, unknown>) {
-  console.log('📦 Итоговые ответы:', data);
+function handleFinish() {
+  console.log('📦 Итоговые ответы:', answers);
 }
 
 // пример: отправка на сервер
@@ -338,59 +352,60 @@ const steps: Step[] = [
     title: "What's your project about? What goals do you want to accomplish?",
     placeholder:
       'E.g., Optimize website for faster performance / Grow website traffic through targeted keyword optimization / Make my website navigation more user friendly.',
+    // required: true,
+  },
+  {
+    key: 'servicesNeeded',
+    title: 'What kind of services are you looking for?',
+    placeholder: 'Search for Web Design, Web App Development, etc.',
     required: true,
+    maxSelections: 5,
   },
-  {
-    key: 'companyType',
-    title: 'What kind of company are you looking for?',
-    placeholder: 'Search for SEO, web development, etc.',
-    // required: true,
-  },
-  {
-    key: 'startTime',
-    title: 'When would you like to start this project?',
-    options: ['Within 30 days', 'Within 60 days', 'After 60+ days'],
-    // required: true,
-  },
-  {
-    key: 'locationPreference',
-    title: "What's important to you about a provider's location?",
-    // required: true,
-    options: [
-      'No preference — just looking for the best providers',
-      'Near me for in-person collaboration',
-      'I have specific countries in mind',
-    ],
-    optionsColumns: true,
-  },
-  {
-    key: 'website',
-    title: "What's your company's website?",
-    placeholder: 'www.yourcompany.com',
-    // required: true,
-    checkboxLabel: 'I don’t have a website yet',
-  },
-  {
-    key: 'companyInfo',
-    title: "What's your company name?",
-    fields: {
-      companyName: {
-        placeholder: 'Company Name',
-        required: true,
-      },
-      companyAbout: {
-        label: "What's your business about?",
-        placeholder:
-          'Consider including basic details like name, industry, and what makes your business unique and valuable to your target audience.',
-        // required: true,
-      },
-    },
-  },
+  // {
+  //   key: 'startTime',
+  //   title: 'When would you like to start this project?',
+  //   options: ['Within 30 days', 'Within 60 days', 'After 60+ days'],
+  //   // required: true,
+  // },
+  // {
+  //   key: 'locationPreference',
+  //   title: "What's important to you about a provider's location?",
+  //   // required: true,
+  //   options: [
+  //     'No preference — just looking for the best providers',
+  //     'Near me for in-person collaboration',
+  //     'I have specific countries in mind',
+  //   ],
+  //   optionsColumns: true,
+  // },
+  // {
+  //   key: 'website',
+  //   title: "What's your company's website?",
+  //   placeholder: 'www.yourcompany.com',
+  //   // required: true,
+  //   checkboxLabel: 'I don’t have a website yet',
+  // },
+  // {
+  //   key: 'companyInfo',
+  //   title: "What's your company name?",
+  //   fields: {
+  //     companyName: {
+  //       placeholder: 'Company Name',
+  //       required: true,
+  //     },
+  //     companyAbout: {
+  //       label: "What's your business about?",
+  //       placeholder:
+  //         'Consider including basic details like name, industry, and what makes your business unique and valuable to your target audience.',
+  //       // required: true,
+  //     },
+  //   },
+  // },
 ];
 
 const answers = reactive<AnswersType>({
   projectDescription: '',
-  companyType: '',
+  servicesNeeded: [],
   startTime: '',
   locationPreference: '',
   website: '',
@@ -406,8 +421,8 @@ watch(
   (checked) => {
     if (checked) {
       answers['website'] = '';
-      const form = formRefs[4]; // или formRefs[stepIndex], если знаешь индекс текущего шага
-      form?.setErrors([]); // очищает все ошибки
+      const form = formRefs[4];
+      form?.setErrors([]);
     }
   }
 );
