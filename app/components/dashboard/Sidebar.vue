@@ -32,25 +32,28 @@
 
       <!-- Навигация -->
       <nav class="flex flex-col gap-1 w-full">
-        <button
+        <UButton
           v-for="item in menuItems"
           :key="item.label"
-          :class="[
-            'flex items-center justify-between w-full py-2 px-4 rounded-lg font-medium transition',
-            activeTab === item.id
-              ? 'bg-gray-100 text-black font-semibold'
-              : 'hover:bg-gray-100 text-gray-800',
-          ]"
-          @click="handleSelect(item.id)"
+          :to="`/dashboard/${item.id}`"
+          :active="route.path.includes(`/dashboard/${item.id}`)"
+          variant="ghost"
+          class="hover:bg-gray-100"
+          active-class="font-semibold bg-gray-100"
+          size="lg"
         >
-          <div class="flex items-center gap-3">
+          <template #leading>
             <UIcon :name="item.icon" size="20" />
-            <span>{{ item.label }}</span>
-          </div>
-          <span v-if="item.count !== undefined" class="text-sm">
-            {{ item.count }}
-          </span>
-        </button>
+          </template>
+
+          {{ item.label }}
+
+          <template #trailing>
+            <span class="text-sm ml-auto">
+              {{ item.count }}
+            </span>
+          </template>
+        </UButton>
       </nav>
     </template>
     <template #footer>
@@ -60,10 +63,17 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute();
+
 // Список вкладок для компании
 const menuItems = [
   { id: 'projects', label: 'Projects', icon: 'mdi:layers-outline', count: 0 },
-  { id: 'messages', label: 'Messages', icon: 'mdi:message-outline', count: 0 },
+  {
+    id: 'messages',
+    label: 'Messages',
+    icon: 'mdi:message-reply-text-outline',
+    count: 0,
+  },
   {
     id: 'shortlist',
     label: 'Shortlist',
@@ -72,12 +82,4 @@ const menuItems = [
   },
   { id: 'reviews', label: 'Reviews', icon: 'mdi:star-outline', count: 0 },
 ];
-
-// Активная вкладка
-const activeTab = useState('activeTab', () => 'projects');
-
-// Обработка выбора
-function handleSelect(tab: string) {
-  activeTab.value = tab;
-}
 </script>
