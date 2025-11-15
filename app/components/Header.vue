@@ -1,17 +1,13 @@
 <template>
-  <header class="hidden w-full border-b-1 sticky top-0">
-    <!-- Top bar -->
+  <!-- <header class="hidden w-full border-b-1 sticky top-0">
     <div
       class="bg-gray-600 text-white flex items-center justify-between px-8 py-2"
     >
-      <!-- Logo -->
       <NuxtLink to="/" class="flex items-center">
         <img src="/favicon.ico" alt="Logo" class="h-8" />
       </NuxtLink>
 
-      <!-- Right side elements -->
       <div class="flex items-center gap-6">
-        <!-- Search -->
         <div class="flex items-center bg-white rounded-full">
           <UInput
             placeholder="Search"
@@ -22,11 +18,7 @@
           />
         </div>
 
-        <!-- Right links -->
         <nav class="flex items-center gap-6 text-sm font-medium">
-          <!-- <NuxtLink to="/vendors" class="hover:text-gray-300"
-            >For Vendors</NuxtLink
-          > -->
           <NuxtLink to="/reviews" class="hover:text-gray-300"
             >Leave a Review</NuxtLink
           >
@@ -43,7 +35,7 @@
       </div>
     </div>
 
-    <!-- Bottom navigation -->
+
     <div class="flex items-center justify-end bg-white px-8 py-3">
       <nav
         class="flex items-center gap-8 pr-6 text-sm font-semibold text-gray-800"
@@ -65,13 +57,13 @@
         Post a Project
       </NuxtLink>
     </div>
-  </header>
+  </header> -->
 
   <UHeader title="Vendor Platform" class="bg-gray-100">
     <template #right>
       <div class="flex items-center gap-6">
         <!-- Search -->
-        <div class="flex items-center bg-white rounded-lg border">
+        <!-- <div class="flex items-center bg-white rounded-lg border">
           <UInput
             placeholder="Search"
             icon="i-heroicons-magnifying-glass"
@@ -79,11 +71,12 @@
             trailing
             size="sm"
           />
-        </div>
+        </div> -->
 
         <!-- Right links -->
         <nav class="flex items-center gap-6 text-sm font-medium">
           <UButton to="/reviews" variant="link"> Leave a Review </UButton>
+          <UButton to="/dashboard" variant="link"> Dashboard </UButton>
           <UButton size="sm" label="Sign In" to="/sign-in" />
         </nav>
       </div>

@@ -115,7 +115,7 @@
       <!-- Кнопка справа -->
       <div class="flex justify-end mt-4">
         <button
-          class="bg-[#F7A86B] text-black font-semibold px-5 py-2 rounded-md border border-black hover:bg-[#f3a163] transition"
+          class="bg-[#FFB27B] text-black font-semibold px-5 py-2 rounded-md border border-black hover:bg-[#f3a163] transition"
           @click="selectVendor"
         >
           Request a quote

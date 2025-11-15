@@ -1,7 +1,7 @@
 <template>
   <div class="flex w-full max-w-5xl h-full gap-10 pb-6 text-start">
     <!-- Left Sidebar -->
-    <aside class="w-1/3 bg-[#F7A86B] py-10 flex flex-col">
+    <aside class="w-1/3 bg-[#FFB27B] py-10 flex flex-col">
       <h2 class="text-xl font-semibold mb-6 px-3">Your Project Brief</h2>
 
       <ul class="space-y-4 text-sm px-3 text-gray-800">
@@ -73,7 +73,7 @@
             },
             {
               icon: 'mdi:briefcase-outline',
-              title: 'Service Needed',
+              title: 'Project Name',
               value: data.serviceNeeded,
             },
             {
@@ -104,21 +104,6 @@
         </p>
       </section>
 
-      <!-- Section: Objectives -->
-      <section id="objectives" class="mb-8">
-        <SectionHeader title="Objectives" @edit="edit('objectives')" />
-        <ul class="list-disc pl-6 text-gray-700 space-y-1">
-          <li v-for="(obj, i) in data.objectives" :key="i">{{ obj }}</li>
-        </ul>
-        <UButton
-          icon="i-heroicons-plus"
-          label="Add an objective"
-          size="sm"
-          variant="outline"
-          class="mt-3"
-        />
-      </section>
-
       <!-- Section: Services Needed -->
       <section id="services" class="mb-8">
         <SectionHeader title="Services Needed" @edit="edit('services')" />
@@ -134,14 +119,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <!-- Section: Key Deliverables -->
-      <section id="key-deliverables" class="mb-8">
-        <SectionHeader title="Key Deliverables" @edit="edit('deliverables')" />
-        <ul class="list-disc pl-6 text-gray-700 space-y-1">
-          <li v-for="(item, i) in data.deliverables" :key="i">{{ item }}</li>
-        </ul>
       </section>
 
       <!-- Section: Questions -->
@@ -207,16 +184,8 @@ const links = ref([
     text: 'Introduction',
   },
   {
-    id: 'objectives',
-    text: 'Objectives',
-  },
-  {
     id: 'services',
     text: 'Services Needed',
-  },
-  {
-    id: 'key-deliverables',
-    text: 'Key Deliverables',
   },
   {
     id: 'questions',

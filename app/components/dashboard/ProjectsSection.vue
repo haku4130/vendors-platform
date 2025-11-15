@@ -2,7 +2,7 @@
   <div class="space-y-8">
     <!-- Top Search Block -->
     <section
-      class="bg-[#F7A86B] shadow-sm p-6 rounded-2xl flex flex-col lg:flex-row items-stretch gap-6"
+      class="bg-[#FFB27B] shadow-sm p-6 rounded-2xl flex flex-col lg:flex-row items-stretch gap-6"
     >
       <!-- Левая часть -->
       <div class="lg:w-1/3 flex items-center">
@@ -76,7 +76,10 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step.key">
+                <UFormField
+                  :name="step.key"
+                  help="What goals do you want to accomplish?"
+                >
                   <UTextarea
                     v-model="answers[step.key] as string"
                     :placeholder="step.placeholder"
@@ -128,12 +131,28 @@
               >
                 <UFormField :name="step.key">
                   <URadioGroup
-                    v-model="answers[step.key] as string"
+                    v-model="answers[step.key]"
                     indicator="hidden"
                     variant="card"
                     :items="step.options"
-                    class="w-fit m-auto"
+                    class="w-full"
+                    :ui="{ fieldset: 'gap-y-2' }"
                   />
+                  <UFormField
+                    v-if="answers[step.key] === step.options[2]"
+                    name="exactLocation"
+                  >
+                    <UInputMenu
+                      v-model="answers.exactLocation"
+                      placeholder="Select city"
+                      icon="i-lucide-map-pin"
+                      :items="locations"
+                      :loading="isFetchingLocations"
+                      class="w-full mt-2"
+                      size="lg"
+                      @update:search-term="(q) => (query = q)"
+                    />
+                  </UFormField>
                 </UFormField>
               </UForm>
             </template>
@@ -166,23 +185,12 @@
                 :ref="(el) => setFormRef(stepIndex, el)"
                 :validate="() => validate(stepIndex)"
               >
-                <UFormField :name="step.key + '.companyName'">
-                  <UInput
-                    v-model="answers[step.key]['companyName']"
-                    :placeholder="step.fields?.['companyName']?.placeholder"
-                    size="xl"
-                    class="w-full"
-                  />
-                </UFormField>
-                <UFormField :name="step.key + '.companyAbout'">
-                  <h3 class="text-xl font-semibold text-gray-900 mt-10 mb-3">
-                    {{ step.fields?.['companyAbout']?.label }}
-                  </h3>
+                <UFormField :name="step.key">
                   <UTextarea
-                    v-model="answers[step.key]['companyAbout']"
-                    :placeholder="step.fields?.['companyAbout']?.placeholder"
+                    v-model="answers[step.key] as string"
+                    :placeholder="step.placeholder"
                     size="xl"
-                    :rows="4"
+                    :rows="5"
                     class="w-full"
                     autoresize
                   />
@@ -224,6 +232,18 @@
 import type { Step } from '@/types/step';
 import type { AnswersType } from '@/types/answers';
 import type { FormError } from '@nuxt/ui';
+import { useDebounceFn } from '@vueuse/core';
+
+interface NominatimResult {
+  display_name: string;
+  name: string;
+  address?: {
+    city?: string;
+    town?: string;
+    village?: string;
+    country?: string;
+  };
+}
 
 interface FormRef {
   validate: () => Promise<boolean>;
@@ -247,6 +267,19 @@ const validate = (stepIndex: number): FormError[] => {
 
   const stepKey = step.key;
   const stepAnswers = answers[stepKey];
+
+  // Специальный кейс для шага выбора локации
+  if (stepKey === 'locationPreference') {
+    // Если выбрана третья опция — проверяем exactLocation
+    if (stepAnswers === step.options?.[2]) {
+      if (!answers.exactLocation || !answers.exactLocation.trim()) {
+        errors.push({
+          name: 'exactLocation',
+          message: 'Please specify your location',
+        });
+      }
+    }
+  }
 
   // Если шаг — обычное текстовое поле
   if (typeof stepAnswers === 'string' && !step.checkboxLabel) {
@@ -286,24 +319,95 @@ const validate = (stepIndex: number): FormError[] => {
     }
   }
 
-  // Если у шага есть fields (как в companyInfo)
-  else if (step.fields && typeof stepAnswers === 'object') {
-    for (const [fieldKey, field] of Object.entries(step.fields)) {
-      const value = stepAnswers[fieldKey];
-      if (
-        field.required &&
-        (!value || (typeof value === 'string' && value.trim() === ''))
-      ) {
-        errors.push({
-          name: `${stepKey}.${fieldKey}`,
-          message: 'This field is required',
-        });
-      }
-    }
-  }
-
   return errors;
 };
+
+const query = ref('');
+const locations = ref<string[]>([]);
+const isFetchingLocations = ref(false);
+
+const MIN_QUERY_LENGTH = 1;
+const LOCATION_FETCH_DEBOUNCE = 100;
+
+let locationAbortController: AbortController | null = null;
+let lastFetchedLocationTerm = '';
+
+async function fetchLocations(searchTerm: string) {
+  const normalizedTerm = searchTerm.trim();
+  if (normalizedTerm.length < MIN_QUERY_LENGTH) {
+    locations.value = [];
+    isFetchingLocations.value = false;
+    return;
+  }
+
+  if (locationAbortController) {
+    locationAbortController.abort();
+    locationAbortController = null;
+  }
+
+  if (normalizedTerm === lastFetchedLocationTerm) {
+    isFetchingLocations.value = false;
+    return;
+  }
+
+  isFetchingLocations.value = true;
+  const controller = new AbortController();
+  locationAbortController = controller;
+
+  try {
+    const data = await $fetch<NominatimResult[]>(
+      'https://nominatim.openstreetmap.org/search',
+      {
+        signal: controller.signal,
+        query: {
+          format: 'json',
+          q: normalizedTerm,
+          limit: 5,
+          addressdetails: 1,
+        },
+        headers: {
+          'Accept-Language': 'en',
+          'User-Agent': 'VendorPlatform/1.0 (vendor-platform.local)',
+        },
+      }
+    );
+
+    if (query.value.trim() !== normalizedTerm) {
+      return;
+    }
+
+    locations.value = Array.from(
+      new Set(
+        data.map((loc) => {
+          const address = loc.address || {};
+          const city =
+            address.city || address.town || address.village || loc.name || '';
+          const country = address.country || '';
+          return city && country ? `${city}, ${country}` : loc.display_name;
+        })
+      )
+    );
+
+    lastFetchedLocationTerm = normalizedTerm;
+  } catch (error) {
+    if (!controller.signal.aborted) {
+      console.warn('Failed to fetch locations', error);
+      locations.value = [];
+    }
+  } finally {
+    if (locationAbortController === controller) {
+      locationAbortController = null;
+    }
+
+    if (query.value.trim() === normalizedTerm) {
+      isFetchingLocations.value = false;
+    }
+  }
+}
+
+const debouncedFetch = useDebounceFn(fetchLocations, LOCATION_FETCH_DEBOUNCE);
+
+watch(query, debouncedFetch);
 
 const myReviews = [
   {
@@ -349,7 +453,7 @@ function handleFinish() {
 const steps: Step[] = [
   {
     key: 'projectDescription',
-    title: "What's your project about? What goals do you want to accomplish?",
+    title: 'Give your project a name as a short description.',
     placeholder:
       'E.g., Optimize website for faster performance / Grow website traffic through targeted keyword optimization / Make my website navigation more user friendly.',
     // required: true,
@@ -358,49 +462,40 @@ const steps: Step[] = [
     key: 'servicesNeeded',
     title: 'What kind of services are you looking for?',
     placeholder: 'Search for Web Design, Web App Development, etc.',
-    required: true,
+    // required: true,
     maxSelections: 5,
   },
-  // {
-  //   key: 'startTime',
-  //   title: 'When would you like to start this project?',
-  //   options: ['Within 30 days', 'Within 60 days', 'After 60+ days'],
-  //   // required: true,
-  // },
-  // {
-  //   key: 'locationPreference',
-  //   title: "What's important to you about a provider's location?",
-  //   // required: true,
-  //   options: [
-  //     'No preference — just looking for the best providers',
-  //     'Near me for in-person collaboration',
-  //     'I have specific countries in mind',
-  //   ],
-  //   optionsColumns: true,
-  // },
-  // {
-  //   key: 'website',
-  //   title: "What's your company's website?",
-  //   placeholder: 'www.yourcompany.com',
-  //   // required: true,
-  //   checkboxLabel: 'I don’t have a website yet',
-  // },
-  // {
-  //   key: 'companyInfo',
-  //   title: "What's your company name?",
-  //   fields: {
-  //     companyName: {
-  //       placeholder: 'Company Name',
-  //       required: true,
-  //     },
-  //     companyAbout: {
-  //       label: "What's your business about?",
-  //       placeholder:
-  //         'Consider including basic details like name, industry, and what makes your business unique and valuable to your target audience.',
-  //       // required: true,
-  //     },
-  //   },
-  // },
+  {
+    key: 'startTime',
+    title: 'When would you like to start this project?',
+    options: ['Within 30 days', 'Within 60 days', 'After 60+ days'],
+    // required: true,
+  },
+  {
+    key: 'locationPreference',
+    title: "What's important to you about a provider's location?",
+    required: true,
+    options: [
+      'No preference — just looking for the best providers',
+      'Near me for in-person collaboration',
+      'I have specific location in mind',
+    ],
+    optionsColumns: true,
+  },
+  {
+    key: 'website',
+    title: "What's your company's website?",
+    placeholder: 'www.yourcompany.com',
+    // required: true,
+    checkboxLabel: 'I don’t have a website yet',
+  },
+  {
+    key: 'projectIntroduction',
+    title: "What's your project about?",
+    placeholder:
+      'Briefly describe your company, the challenges you’re facing, and what you aim to achieve with this project.',
+    required: true,
+  },
 ];
 
 const answers = reactive<AnswersType>({
@@ -408,12 +503,10 @@ const answers = reactive<AnswersType>({
   servicesNeeded: [],
   startTime: '',
   locationPreference: '',
+  exactLocation: '',
   website: '',
   noWebsite: false,
-  companyInfo: {
-    companyName: '',
-    companyAbout: '',
-  },
+  projectIntroduction: '',
 });
 
 watch(

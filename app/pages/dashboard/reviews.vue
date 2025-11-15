@@ -5,7 +5,7 @@
     </template>
 
     <template #body>
-      <DashboardProjectsSection />
+      <DashboardReviewsSection />
     </template>
   </UDashboardPanel>
 </template>

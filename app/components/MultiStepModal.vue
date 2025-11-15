@@ -3,9 +3,9 @@
     v-model:open="open"
     :title="title"
     :ui="{
-      header: phase === 'form' ? 'bg-[#F7A86B]' : '',
+      header: phase === 'form' ? 'bg-[#FFB27B]' : '',
       footer: 'justify-between',
-      body: phase === 'form' ? '' : 'bg-[#F7A86B]',
+      body: phase === 'form' ? '' : 'bg-[#FFB27B]',
     }"
     fullscreen
   >

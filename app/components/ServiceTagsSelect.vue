@@ -52,7 +52,7 @@
           :class="[
             'px-3 py-1 border rounded-sm text-sm font-medium transition',
             isSelected(tag.id)
-              ? 'bg-[#F7A86B] text-black border-[#a68d66] hover:bg-[#eeb488]'
+              ? 'bg-[#FFB27B] text-black border-[#a68d66] hover:bg-[#eeb488]'
               : 'border-gray-400 text-gray-800 hover:bg-gray-100',
           ]"
           @click="toggleTag(tag.id)"

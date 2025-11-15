@@ -1,134 +1,147 @@
 <template>
-  <div class="flex items-center justify-center">
-    <div
-      class="bg-[#F7A86B] rounded-xl shadow-md p-8 w-full max-w-sm text-center"
-    >
-      <p class="text-xl font-semibold">Join us</p>
-
-      <hr class="my-4" />
-
-      <form class="space-y-5" @submit.prevent="onSubmit">
-        <!-- First Name -->
-        <div>
-          <label
-            for="firstName"
-            class="block font-semibold text-start text-gray-900 mb-1 pl-2"
-          >
-            First Name
-          </label>
-          <input
-            id="firstName"
-            v-model="form.firstName"
-            type="text"
-            class="w-full border border-black rounded-lg px-3 py-2 text-gray-900 bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-700"
-          />
-        </div>
-
-        <!-- Last Name -->
-        <div>
-          <label
-            for="lastName"
-            class="block font-semibold text-gray-900 mb-1 text-start pl-2"
-          >
-            Last Name
-          </label>
-          <input
-            id="lastName"
-            v-model="form.lastName"
-            type="text"
-            class="w-full border border-black rounded-lg px-3 py-2 text-gray-900 bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-700"
-          />
-        </div>
-
-        <!-- Work email -->
-        <div>
-          <label
-            for="email"
-            class="block font-semibold text-gray-900 mb-1 text-start pl-2"
-          >
-            Work email
-          </label>
-          <input
-            id="email"
-            v-model="form.email"
-            type="email"
-            class="w-full border border-black rounded-lg px-3 py-2 text-gray-900 bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-700"
-          />
-        </div>
-
-        <!-- Password -->
-        <div>
-          <label
-            for="password"
-            class="block font-semibold text-gray-900 mb-1 text-start pl-2"
-          >
-            Password
-          </label>
-          <input
-            id="password"
-            v-model="form.password"
-            type="password"
-            class="w-full border border-black rounded-lg px-3 py-2 text-gray-900 bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-700"
-          />
-        </div>
-
-        <!-- Confirm Password -->
-        <div>
-          <label
-            for="confirmPassword"
-            class="block font-semibold text-gray-900 mb-1 text-start pl-2"
-          >
-            Confirm Password
-          </label>
-          <input
-            id="confirmPassword"
-            v-model="form.confirmPassword"
-            type="password"
-            class="w-full border border-black rounded-lg px-3 py-2 text-gray-900 bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-700"
-          />
-        </div>
-
-        <!-- Submit button -->
-        <button
-          type="submit"
-          class="w-full bg-[#8B2E2E] hover:bg-[#A63B3B] text-white font-semibold py-2 rounded-lg transition"
-        >
-          Create account
-        </button>
-      </form>
-
-      <p class="text-sm text-gray-800 mt-4">
-        Have an account?
-        <NuxtLink
-          to="/login"
-          class="font-semibold underline hover:text-gray-900"
-        >
-          Sign In
-        </NuxtLink>
-      </p>
+  <AuthFormContainer>
+    <div class="text-start space-y-1">
+      <h2 class="text-xl font-semibold text-gray-800">Register</h2>
+      <h2 class="text-sm mb-6 text-gray-600">
+        Create an account to start using Vendor Platform
+      </h2>
     </div>
-  </div>
+
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+      <UFormField label="First Name" name="firstName">
+        <UInput v-model="state.firstName" class="w-full bg-transparent" />
+      </UFormField>
+      <UFormField label="Last Name" name="lastName">
+        <UInput v-model="state.lastName" class="w-full" />
+      </UFormField>
+      <UFormField label="Company Name" name="companyName">
+        <UInput v-model="state.companyName" class="w-full" />
+      </UFormField>
+      <UFormField label="Email" name="email">
+        <UInput v-model="state.email" class="w-full" />
+      </UFormField>
+
+      <UFormField label="Password" name="password">
+        <UInput
+          v-model="state.password"
+          class="w-full"
+          :type="show ? 'text' : 'password'"
+          :ui="{ trailing: 'pe-1' }"
+        >
+          <template #trailing>
+            <UButton
+              color="neutral"
+              variant="link"
+              size="sm"
+              :icon="show ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              :aria-label="show ? 'Hide password' : 'Show password'"
+              :aria-pressed="show"
+              aria-controls="password"
+              @click="show = !show"
+            />
+          </template>
+        </UInput>
+      </UFormField>
+      <UFormField label="Confirm Password" name="confirmPassword">
+        <UInput
+          v-model="state.confirmPassword"
+          class="w-full"
+          :type="show ? 'text' : 'password'"
+          :ui="{ trailing: 'pe-1' }"
+        >
+          <template #trailing>
+            <UButton
+              color="neutral"
+              variant="link"
+              size="sm"
+              :icon="show ? 'i-lucide-eye-off' : 'i-lucide-eye'"
+              :aria-label="show ? 'Hide password' : 'Show password'"
+              :aria-pressed="show"
+              aria-controls="password"
+              @click="show = !show"
+            />
+          </template>
+        </UInput>
+      </UFormField>
+
+      <UButton
+        variant="solid"
+        color="warning"
+        size="lg"
+        label="Create account"
+        class="font-semibold justify-center py-2 px-10 rounded-lg mt-4"
+        type="submit"
+      />
+    </UForm>
+
+    <p class="text-sm text-gray-800 mt-4">
+      Have an account?
+      <NuxtLink
+        to="/sign-in"
+        class="font-semibold underline hover:text-gray-900"
+      >
+        Sign In
+      </NuxtLink>
+    </p>
+  </AuthFormContainer>
 </template>
 
-<script setup>
-const props = defineProps({
-  role: {
-    type: String, // "vendor" или "client"
-    required: true,
-  },
-});
+<script setup lang="ts">
+import * as v from 'valibot';
+import type { FormSubmitEvent } from '@nuxt/ui';
+type UserStatus = 'vendor' | 'client';
 
-const form = ref({
+const router = useRouter();
+
+defineProps<{
+  role: UserStatus;
+}>();
+
+const state = ref({
   firstName: '',
   lastName: '',
+  companyName: '',
   email: '',
   password: '',
   confirmPassword: '',
 });
 
-function onSubmit() {
-  console.log(`Submitting form for ${props.role}`, form.value);
-  // здесь можно вызывать API:
-  // await $api.post(`/auth/register/${props.role}`, form.value)
+const schema =
+  process.env.NODE_ENV === 'development'
+    ? null
+    : v.pipe(
+        v.object({
+          firstName: v.pipe(v.string(), v.nonEmpty('This field is required')),
+          lastName: v.pipe(v.string(), v.nonEmpty('This field is required')),
+          companyName: v.pipe(v.string(), v.nonEmpty('This field is required')),
+          email: v.pipe(v.string(), v.email('Invalid email')),
+          password: v.pipe(
+            v.string(),
+            v.minLength(8, 'Must be at least 8 characters')
+          ),
+          confirmPassword: v.string(),
+        }),
+        v.forward(
+          v.partialCheck(
+            [['password'], ['confirmPassword']],
+            (input) => input.password === input.confirmPassword,
+            'Passwords do not match'
+          ),
+          ['confirmPassword']
+        )
+      );
+type Schema = v.InferOutput<typeof schema>;
+
+const toast = useToast();
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  toast.add({
+    title: 'Success',
+    description: 'The form has been submitted.',
+    color: 'success',
+  });
+  console.log(event.data);
+  router.push('/choose-role');
 }
+
+const show = ref(false);
 </script>

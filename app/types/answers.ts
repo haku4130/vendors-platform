@@ -3,10 +3,8 @@ export interface AnswersType {
     servicesNeeded: string[];
     startTime: string;
     locationPreference: string;
+    exactLocation: string;
     website: string;
     noWebsite: boolean;
-    companyInfo: {
-        companyName: string;
-        companyAbout: string;
-    };
+    projectIntroduction: string;
 }

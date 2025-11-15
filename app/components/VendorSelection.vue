@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#F7A86B] w-full max-w-5xl rounded-xl p-8">
+  <div class="bg-[#FFB27B] w-full max-w-5xl rounded-xl p-8">
     <h2 class="text-2xl font-semibold">
       Select service providers to bid on your project
     </h2>

@@ -2,7 +2,7 @@
   <div>
     <Header />
 
-    <UMain>
+    <UMain class="place-content-center">
       <slot />
     </UMain>
 

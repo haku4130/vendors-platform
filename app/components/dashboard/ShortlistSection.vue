@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-8">
     <!-- Top orange header -->
-    <section class="bg-[#F7A86B] p-6 rounded-2xl">
+    <section class="bg-[#FFB27B] p-6 rounded-2xl">
       <h2 class="text-xl font-semibold text-gray-900">
         Solve your business challenge faster with Shortlist
       </h2>
