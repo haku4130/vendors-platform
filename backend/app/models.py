@@ -14,15 +14,25 @@ class UserRole(str, enum.Enum):
     company = "company"
 
 
-class UserBase(SQLModel):
+class UserBaseRequired(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
-    company_name: str | None = Field(default=None, max_length=255)
-    location: str | None = Field(default=None, max_length=255)
+    company_name: str = Field(max_length=255)
+    location: str = Field(max_length=255)
+    role: UserRole
+    full_name: str = Field(max_length=255)
+
+
+class UserBaseOptional(SQLModel):
     logo_url: str | None = Field(default=None, max_length=255)
-    role: UserRole | None = None
+
+
+class UserBasePublic(UserBaseRequired, UserBaseOptional):
+    pass
+
+
+class UserBase(UserBaseRequired, UserBaseOptional):
     is_active: bool = True
     is_superuser: bool = False
-    full_name: str | None = Field(default=None, max_length=255)
 
 
 # Properties to receive via API on creation
@@ -30,14 +40,12 @@ class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
 
-class UserRegister(SQLModel):
-    email: EmailStr = Field(max_length=255)
+class UserRegister(UserBasePublic):
     password: str = Field(min_length=8, max_length=128)
-    full_name: str | None = Field(default=None, max_length=255)
 
 
 # Properties to receive via API on update, all are optional
-class UserUpdate(UserBase):
+class UserUpdate(UserBasePublic):
     email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore
     password: str | None = Field(default=None, min_length=8, max_length=128)
 
@@ -67,7 +75,7 @@ class User(UserBase, table=True):
 
 
 # Properties to return via API, id is always required
-class UserPublic(UserBase):
+class UserPublic(UserBasePublic):
     id: uuid.UUID
 
 
@@ -77,10 +85,14 @@ class UsersPublic(SQLModel):
 
 
 class VendorProfileBase(SQLModel):
-    employee_count: int | None = None
-    founded_year: int | None = None
-    turnover: float | None = None
-    description: str | None = Field(default=None, max_length=2000)
+    employee_count: int
+    founded_year: int
+    turnover: float
+    description: str = Field(max_length=2000)
+
+
+class VendorProfileCreate(VendorProfileBase):
+    service_ids: list[uuid.UUID] = Field(min_length=5, max_length=10)
 
 
 class VendorProfile(VendorProfileBase, table=True):
@@ -97,6 +109,7 @@ class VendorProfile(VendorProfileBase, table=True):
 class VendorProfilePublic(VendorProfileBase):
     id: uuid.UUID
     user_id: uuid.UUID
+    services: list["ServicePublic"]
 
 
 # Shared properties
@@ -144,6 +157,19 @@ class Category(CategoryBase, table=True):
     services: list["Service"] = Relationship(back_populates="category")
 
 
+class CategoryCreate(CategoryBase):
+    pass
+
+
+class CategoryUpdate(SQLModel):
+    label: str | None = None
+
+
+class CategoryPublic(CategoryBase):
+    id: uuid.UUID
+    services: list["ServicePublicShort"]
+
+
 class ServiceBase(SQLModel):
     label: str = Field(max_length=255)
 
@@ -153,7 +179,7 @@ class Service(ServiceBase, table=True):
     category_id: uuid.UUID = Field(
         foreign_key="category.id", ondelete="SET NULL", nullable=True
     )
-    category: Category | None = Relationship(back_populates="services")
+    category: Category = Relationship(back_populates="services")
 
     projects: list["Project"] = Relationship(
         back_populates="services", link_model=ProjectServiceLink
@@ -161,6 +187,23 @@ class Service(ServiceBase, table=True):
     vendors: list[VendorProfile] = Relationship(
         back_populates="services", link_model=VendorServiceLink
     )
+
+
+class ServiceCreate(ServiceBase):
+    category_id: uuid.UUID
+
+
+class ServiceUpdate(SQLModel):
+    label: str | None
+    category_id: uuid.UUID | None
+
+
+class ServicePublicShort(ServiceBase):
+    id: uuid.UUID
+
+
+class ServicePublic(ServicePublicShort):
+    category: Category
 
 
 class ProjectBase(SQLModel):
@@ -182,16 +225,19 @@ class Project(ProjectBase, table=True):
     )
 
 
+class ProjectCreate(ProjectBase):
+    service_ids: list[uuid.UUID] = Field(min_length=5, max_length=10)
+
+
 class ProjectPublic(ProjectBase):
     id: uuid.UUID
     owner_id: uuid.UUID
-    services: list[Service] | None = None
+    services: list[Service]
 
 
 class ProjectsPublic(SQLModel):
     data: list[ProjectPublic]
-    count: int
-    services: list[Service] | None = None
+    services: list[ServicePublic]
 
 
 # Generic message

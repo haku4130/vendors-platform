@@ -11,7 +11,7 @@ from sqlmodel import Session
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
-from app.models import TokenPayload, User
+from app.models import TokenPayload, User, UserRole
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -40,9 +40,13 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
         )
     user = session.get(User, token_data.sub)
     if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="User not found"
+        )
     if not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail="Inactive user"
+        )
     return user
 
 
@@ -52,6 +56,24 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 def get_current_active_superuser(current_user: CurrentUser) -> User:
     if not current_user.is_superuser:
         raise HTTPException(
-            status_code=403, detail="The user doesn't have enough privileges"
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="The user doesn't have enough privileges",
         )
     return current_user
+
+
+RequireSuperUser = Depends(get_current_active_superuser)
+CurrentSuperUser = Annotated[User, RequireSuperUser]
+
+
+def get_current_active_company_account(current_user: CurrentUser) -> User:
+    if current_user.role != UserRole.company:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Company account required to permit this operation",
+        )
+    return current_user
+
+
+RequireCompanyAccount = Depends(get_current_active_company_account)
+CurrentCompanyAccount = Annotated[User, RequireCompanyAccount]
