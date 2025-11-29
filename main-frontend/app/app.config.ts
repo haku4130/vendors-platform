@@ -33,5 +33,28 @@ export default defineAppConfig({
                 },
             ],
         },
+        formField: {
+            slots: {
+                error: 'text-start',
+            },
+        },
+        input: {
+            slots: {
+                trailingIcon: 'text-muted',
+                leadingIcon: 'text-muted',
+            },
+        },
+        inputMenu: {
+            slots: {
+                tagsInput: 'placeholder:text-normal',
+            },
+            variants: {
+                multiple: {
+                    false: {
+                        base: 'placeholder:text-normal',
+                    },
+                },
+            },
+        },
     },
 });

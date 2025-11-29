@@ -1,7 +1,9 @@
+import os
 import uuid
 from typing import Any
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from pathvalidate import sanitize_filename
 from sqlmodel import col, delete, func, select
 
 from app import crud
@@ -12,6 +14,14 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
+from app.file_utils import (
+    avatar_url_to_path,
+    delete_file_if_exists,
+    ensure_dir,
+    generate_avatar_filename,
+    save_file,
+    validate_image,
+)
 from app.models import (
     Item,
     Message,
@@ -115,6 +125,39 @@ def update_password_me(
     session.add(current_user)
     session.commit()
     return Message(message="Password updated successfully")
+
+
+@router.post("/me/avatar", response_model=UserPublic)
+async def upload_avatar(
+    session: SessionDep,
+    current_user: CurrentUser,
+    file: UploadFile,
+):
+    validate_image(file)
+
+    ext = (file.filename or "jpg").split(".")[-1].lower()
+    filename = generate_avatar_filename(
+        current_user.full_name, current_user.company_name, ext
+    )
+
+    save_dir = os.path.join(settings.MEDIA_ROOT, "avatar")
+    ensure_dir(save_dir)
+
+    file_path = os.path.join(save_dir, filename)
+
+    old_avatar_path = avatar_url_to_path(current_user.logo_url, settings.MEDIA_ROOT)
+    delete_file_if_exists(old_avatar_path)
+
+    await save_file(file_path, file)
+
+    avatar_url = f"{settings.MEDIA_HOST}/media/avatar/{filename}"
+
+    current_user.logo_url = avatar_url
+    session.add(current_user)
+    session.commit()
+    session.refresh(current_user)
+
+    return current_user
 
 
 @router.get("/me", response_model=UserPublic)

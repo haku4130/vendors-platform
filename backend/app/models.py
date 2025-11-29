@@ -1,10 +1,12 @@
+import datetime as dt
 import enum
 import uuid
-from datetime import date
 from typing import Optional
 
+import sqlalchemy as sa
 from pydantic import EmailStr
-from sqlmodel import Field, Relationship, SQLModel
+from sqlalchemy.dialects.postgresql import JSONB
+from sqlmodel import Column, Enum, Field, Relationship, SQLModel
 
 from .m2m_models import ProjectServiceLink, VendorServiceLink
 
@@ -12,6 +14,18 @@ from .m2m_models import ProjectServiceLink, VendorServiceLink
 class UserRole(str, enum.Enum):
     vendor = "vendor"
     company = "company"
+
+
+class ProjectStart(str, enum.Enum):
+    within_30_days = "Within 30 days"
+    within_60_days = "Within 60 days"
+    after_60_days = "After 60+ days"
+
+
+class RequestStatus(str, enum.Enum):
+    sent = "sent"
+    accepted = "accepted"
+    declined = "declined"
 
 
 class UserBaseRequired(SQLModel):
@@ -30,12 +44,11 @@ class UserBasePublic(UserBaseRequired, UserBaseOptional):
     pass
 
 
-class UserBase(UserBaseRequired, UserBaseOptional):
+class UserBase(UserBasePublic):
     is_active: bool = True
     is_superuser: bool = False
 
 
-# Properties to receive via API on creation
 class UserCreate(UserBase):
     password: str = Field(min_length=8, max_length=128)
 
@@ -44,7 +57,6 @@ class UserRegister(UserBasePublic):
     password: str = Field(min_length=8, max_length=128)
 
 
-# Properties to receive via API on update, all are optional
 class UserUpdate(UserBasePublic):
     email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore
     password: str | None = Field(default=None, min_length=8, max_length=128)
@@ -52,10 +64,8 @@ class UserUpdate(UserBasePublic):
 
 class UserUpdateMe(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
-    email: EmailStr | None = Field(default=None, max_length=255)
     location: str | None = Field(default=None, max_length=255)
     logo_url: str | None = Field(default=None, max_length=255)
-    company_name: str | None = Field(default=None, max_length=255)
 
 
 class UpdatePassword(SQLModel):
@@ -63,7 +73,6 @@ class UpdatePassword(SQLModel):
     new_password: str = Field(min_length=8, max_length=128)
 
 
-# Database model, database table inferred from class name
 class User(UserBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
@@ -74,9 +83,9 @@ class User(UserBase, table=True):
     projects: list["Project"] = Relationship(back_populates="owner")
 
 
-# Properties to return via API, id is always required
 class UserPublic(UserBasePublic):
     id: uuid.UUID
+    vendor_profile: "VendorProfilePublic | None"
 
 
 class UsersPublic(SQLModel):
@@ -85,10 +94,16 @@ class UsersPublic(SQLModel):
 
 
 class VendorProfileBase(SQLModel):
+    main_goal: str
+    sales_email: EmailStr
+    admin_contact_phone: str
     employee_count: int
+    company_website: str
     founded_year: int
     turnover: float
     description: str = Field(max_length=2000)
+    min_project_size: float
+    avg_hourly_rate: float
 
 
 class VendorProfileCreate(VendorProfileBase):
@@ -104,6 +119,7 @@ class VendorProfile(VendorProfileBase, table=True):
     services: list["Service"] = Relationship(
         back_populates="vendors", link_model=VendorServiceLink
     )
+    requests: list["ProjectVendorRequest"] = Relationship(back_populates="vendor")
 
 
 class VendorProfilePublic(VendorProfileBase):
@@ -112,23 +128,19 @@ class VendorProfilePublic(VendorProfileBase):
     services: list["ServicePublic"]
 
 
-# Shared properties
 class ItemBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
     description: str | None = Field(default=None, max_length=255)
 
 
-# Properties to receive on item creation
 class ItemCreate(ItemBase):
     pass
 
 
-# Properties to receive on item update
 class ItemUpdate(ItemBase):
     title: str | None = Field(default=None, min_length=1, max_length=255)  # type: ignore
 
 
-# Database model, database table inferred from class name
 class Item(ItemBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     owner_id: uuid.UUID = Field(
@@ -137,7 +149,6 @@ class Item(ItemBase, table=True):
     owner: User | None = Relationship(back_populates="items")
 
 
-# Properties to return via API, id is always required
 class ItemPublic(ItemBase):
     id: uuid.UUID
     owner_id: uuid.UUID
@@ -208,10 +219,23 @@ class ServicePublic(ServicePublicShort):
 
 class ProjectBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
-    description: str | None = Field(default=None, max_length=2000)
-    start_date: date | None = None
+    description: str = Field(max_length=2000)
+    start_date: ProjectStart = Field(
+        sa_column=Column(
+            Enum(ProjectStart, values_callable=lambda x: [e.value for e in x])
+        )
+    )
     location: str | None = Field(default=None, max_length=255)
     website: str | None = Field(default=None, max_length=255)
+    budget: float
+    questions: list[str] | None = Field(
+        default=None,
+        sa_column=sa.Column(JSONB),
+    )
+    requirements: list[str] | None = Field(
+        default=None,
+        sa_column=sa.Column(JSONB),
+    )
 
 
 class Project(ProjectBase, table=True):
@@ -223,6 +247,7 @@ class Project(ProjectBase, table=True):
     services: list[Service] = Relationship(
         back_populates="projects", link_model=ProjectServiceLink
     )
+    requests: list["ProjectVendorRequest"] = Relationship(back_populates="project")
 
 
 class ProjectCreate(ProjectBase):
@@ -231,27 +256,42 @@ class ProjectCreate(ProjectBase):
 
 class ProjectPublic(ProjectBase):
     id: uuid.UUID
-    owner_id: uuid.UUID
+    owner: UserPublic
     services: list[Service]
 
 
 class ProjectsPublic(SQLModel):
     data: list[ProjectPublic]
-    services: list[ServicePublic]
 
 
-# Generic message
+class ProjectVendorRequestBase(SQLModel):
+    status: RequestStatus = Field(default=RequestStatus.sent)
+    created_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
+    updated_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
+
+
+class ProjectVendorRequest(ProjectVendorRequestBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    vendor_id: uuid.UUID = Field(
+        foreign_key="project.id", ondelete="SET NULL", nullable=True
+    )
+    project_id: uuid.UUID = Field(
+        foreign_key="project.id", ondelete="SET NULL", nullable=True
+    )
+
+    project: Project = Relationship(back_populates="requests")
+    vendor: VendorProfile = Relationship(back_populates="requests")
+
+
 class Message(SQLModel):
     message: str
 
 
-# JSON payload containing access token
 class Token(SQLModel):
     access_token: str
     token_type: str = "bearer"
 
 
-# Contents of JWT token
 class TokenPayload(SQLModel):
     sub: str | None = None
 

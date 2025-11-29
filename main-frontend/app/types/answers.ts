@@ -1,10 +1,14 @@
+import type { ServicePublicShort } from '~/generated/api';
+
 export interface AnswersType {
-    projectDescription: string;
-    servicesNeeded: string[];
+    projectName: string;
+    servicesNeeded: ServicePublicShort[];
     startTime: string;
+    budget: number;
     locationPreference: string;
-    exactLocation: string;
+    exactLocation: string | null;
     website: string;
-    noWebsite: boolean;
     projectIntroduction: string;
+    questions: string[];
+    requirements: string[];
 }

@@ -21,3 +21,9 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   transition: background-color 5000s ease-in-out 0s;
 }
+
+@layer components {
+  .bg-vendor-gradient {
+    @apply bg-radial-[at_25%_25%] from-[#FFB27B] from-30% to-[#facaa8ba];
+  }
+}

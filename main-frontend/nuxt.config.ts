@@ -1,4 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+const backendApiUrl =
+    process?.env?.NUXT_PUBLIC_BACKEND_API_URL ?? 'http://localhost:8000';
+const backendStaticUrl =
+    process.env.NUXT_PUBLIC_BACKEND_STATIC_URL ??
+    'http://localhost:8000/static';
+
 export default defineNuxtConfig({
     compatibilityDate: '2025-07-15',
     devtools: { enabled: true },
@@ -17,5 +24,26 @@ export default defineNuxtConfig({
 
     ui: {
         colorMode: false,
+    },
+
+    runtimeConfig: {
+        public: {
+            backendApiUrl: backendApiUrl,
+            backendStaticUrl: backendStaticUrl,
+        },
+    },
+
+    nitro: {
+        routeRules: {
+            '/api/**': {
+                proxy: `${backendApiUrl}/api/v1/**`,
+            },
+            '/backend/static/**': {
+                proxy: `${backendStaticUrl}/**`,
+            },
+        },
+    },
+    icon: {
+        localApiEndpoint: '/icons',
     },
 });

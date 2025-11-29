@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-4">
-    <!-- Поисковое селект-поле сверху -->
     <UInputMenu
       v-model="selectedServices"
       :items="items"
@@ -8,34 +7,39 @@
       multiple
       icon="i-lucide-search"
       :placeholder="placeholder || 'Select services'"
+      :disabled="selectedServices.length > maxSelected - 1"
       :ui="{ tagsItem: 'hidden' }"
       class="w-full"
     />
+    <div v-if="errors[0]" class="text-error text-start mt-2">
+      {{ errors[0]?.message }}
+    </div>
+    <div v-else class="text-muted text-start mt-2">
+      Select up to {{ maxSelected }} services
+    </div>
   </div>
 
-  <template v-if="selectedServices.length > 0">
-    <USeparator label="Selected Services" class="my-5" />
+  <template v-if="selectedServices && selectedServices.length > 0">
+    <USeparator
+      :label="`Selected Services (${selectedServices.length}/${maxSelected})`"
+      class="my-5"
+    />
 
     <div
       class="flex flex-wrap gap-2 border border-gray-300 rounded-md p-3 min-h-[56px]"
+      :class="{ 'border-red-700': errors.length > 0 }"
     >
       <div
-        v-for="tagId in selectedServices"
-        :key="tagId"
+        v-for="tag in selectedServices"
+        :key="tag.id"
         class="px-3 py-1.5 rounded-sm inline-flex items-center gap-1.5 ring ring-inset ring-accented bg-elevated text-default data-disabled:cursor-not-allowed data-disabled:opacity-75 text-xs"
       >
         <span class="truncate">
-          {{
-            categories
-              .flatMap((cat) => cat.tags)
-              .find((tag) => tag.id === tagId)?.label || tagId
-          }}
+          {{ tag.label }}
         </span>
         <button
           class="inline-flex items-center rounded-xs text-dimmed hover:text-default hover:bg-accented/75 disabled:pointer-events-none transition-colors"
-          @click="
-            selectedServices = selectedServices.filter((id) => id !== tagId)
-          "
+          @click="toggleTag(tag)"
         >
           <UIcon name="i-lucide-x" class="w-3.5 h-3.5" />
         </button>
@@ -43,19 +47,22 @@
     </div>
   </template>
 
-  <UAccordion :items="accordionItems" class="px-2.5 mt-5">
+  <UAccordion :items="categories" class="px-0 mt-5">
     <template #body="{ item }">
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
         <button
-          v-for="tag in item.tags"
+          v-for="tag in item.services"
           :key="tag.id"
+          :disabled="
+            !isSelected(tag.id) && selectedServices.length >= maxSelected
+          "
           :class="[
-            'px-3 py-1 border rounded-sm text-sm font-medium transition',
+            'px-3 py-1 border rounded-sm text-sm font-medium disabled:cursor-not-allowed disabled:opacity-75 transition',
             isSelected(tag.id)
-              ? 'bg-[#FFB27B] text-black border-[#a68d66] hover:bg-[#eeb488]'
+              ? 'bg-vendor-gradient text-black border-[#a68d66] hover:bg-[#eeb488]'
               : 'border-gray-400 text-gray-800 hover:bg-gray-100',
           ]"
-          @click="toggleTag(tag.id)"
+          @click="toggleTag(tag)"
         >
           {{ tag.label }}
         </button>
@@ -65,136 +72,65 @@
 </template>
 
 <script setup lang="ts">
-import type { InputMenuItem } from '@nuxt/ui';
+import type { InputMenuItem, FormError } from '@nuxt/ui';
+import { catalogListCategories } from '~/generated/api';
+import type { CategoryPublic, ServicePublicShort } from '~/generated/api';
 
-defineProps<{
+const {
+  placeholder = 'Search here',
+  errors,
+  maxSelected = 5,
+} = defineProps<{
   placeholder?: string;
+  maxSelected?: number;
+  errors: FormError<string>[];
 }>();
 
-interface Tag {
-  id: string;
-  label: string;
-}
-interface Category {
-  id: string;
-  label: string;
-  tags: Tag[];
-}
+const selectedServices = defineModel<ServicePublicShort[]>({ required: true });
 
-const categories: Category[] = [
-  {
-    id: 'design',
-    label: 'Design',
-    tags: [
-      { id: 'web-design', label: 'Web Design' },
-      { id: 'ux-ui-design', label: 'UX/UI Design' },
-      { id: 'logo-design', label: 'Logo Design' },
-      { id: 'graphic-design', label: 'Graphic Design' },
-      { id: 'print-design', label: 'Print Design' },
-    ],
-  },
-  {
-    id: 'it-consulting',
-    label: 'IT Consulting',
-    tags: [
-      { id: 'it-strategy', label: 'IT Strategy' },
-      { id: 'cloud-consulting', label: 'Cloud Consulting' },
-      { id: 'cybersecurity-consulting', label: 'Cybersecurity Consulting' },
-      { id: 'devops-consulting', label: 'DevOps Consulting' },
-    ],
-  },
-  {
-    id: 'application-development',
-    label: 'Application Development',
-    tags: [
-      { id: 'mobile-app-development', label: 'Mobile App Development' },
-      { id: 'web-app-development', label: 'Web App Development' },
-      { id: 'backend-api-development', label: 'Backend & API Development' },
-      { id: 'frontend-development', label: 'Frontend Development' },
-      { id: 'fullstack-development', label: 'Fullstack Development' },
-    ],
-  },
-  {
-    id: 'artificial-intelligence',
-    label: 'Artificial Intelligence',
-    tags: [
-      { id: 'ai-development', label: 'AI Development' },
-      { id: 'ai-consulting', label: 'AI Consulting' },
-      { id: 'generative-ai', label: 'Generative AI' },
-      { id: 'ai-agents', label: 'AI Agents' },
-      { id: 'machine-learning', label: 'Machine Learning' },
-      { id: 'computer-vision', label: 'Computer Vision' },
-    ],
-  },
-  {
-    id: 'marketing-digital',
-    label: 'Digital Marketing',
-    tags: [
-      { id: 'social-media-marketing', label: 'Social Media Marketing' },
-      { id: 'ppc-advertising', label: 'PPC Advertising' },
-      { id: 'seo-services', label: 'SEO Services' },
-      { id: 'content-marketing', label: 'Content Marketing' },
-      { id: 'email-marketing', label: 'Email Marketing' },
-    ],
-  },
-  {
-    id: 'design-graphics',
-    label: 'Graphics & Design',
-    tags: [
-      { id: '3d-modeling', label: '3D Modeling' },
-      { id: 'motion-graphics', label: 'Motion Graphics' },
-      { id: 'illustration', label: 'Illustration' },
-      { id: 'branding', label: 'Branding' },
-      { id: 'ui-icon-design', label: 'UI / Icon Design' },
-    ],
-  },
-];
+const { data: categories } = await catalogListCategories();
 
-function buildInputMenuItems(categories: Category[]): InputMenuItem[] {
+const items = ref<InputMenuItem[]>(buildInputMenuItems(categories));
+
+function buildInputMenuItems(
+  categories: CategoryPublic[] | undefined
+): InputMenuItem[] {
+  if (!categories) {
+    return [];
+  }
+
   const items: InputMenuItem[] = [];
 
   categories.forEach((cat) => {
-    // добавить метку-категорию
     items.push({ type: 'label', label: cat.label });
-    // добавить теги категории
-    cat.tags.forEach((tag) => {
+    cat.services.forEach((service) => {
       items.push({
-        label: tag.label,
-        value: tag.id, // желательно добавить id как value, чтобы удобнее v-model
+        label: service.label,
+        value: service,
       });
     });
-    // разделитель
     items.push({ type: 'separator' });
   });
 
-  // Удалим последний разделитель, если не нужен
-  if (items.length > 0 && items[items.length - 1].type === 'separator') {
+  // Remove the last separator
+  if (items.length > 0) {
     items.pop();
   }
 
   return items;
 }
 
-const items = ref<InputMenuItem[]>(buildInputMenuItems(categories));
-const selectedServices = defineModel<string[]>();
-
-const accordionItems = computed(() => {
-  return categories.map((cat) => ({
-    label: cat.label,
-    tags: cat.tags,
-  }));
-});
-
-function toggleTag(tagId: string) {
-  const idx = selectedServices.value.indexOf(tagId);
-  if (idx === -1) {
-    selectedServices.value.push(tagId);
+function toggleTag(tag: ServicePublicShort) {
+  if (isSelected(tag.id)) {
+    selectedServices.value = selectedServices.value.filter(
+      (t) => t.id !== tag.id
+    );
   } else {
-    selectedServices.value.splice(idx, 1);
+    selectedServices.value = [...selectedServices.value, tag];
   }
 }
 
 function isSelected(tagId: string) {
-  return selectedServices.value.includes(tagId);
+  return selectedServices.value.some((tag) => tag.id === tagId);
 }
 </script>

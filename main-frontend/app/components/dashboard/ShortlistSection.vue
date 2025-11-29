@@ -1,7 +1,7 @@
 <template>
   <div class="space-y-8">
     <!-- Top orange header -->
-    <section class="bg-[#FFB27B] p-6 rounded-2xl">
+    <section class="bg-vendor-gradient p-6 rounded-2xl">
       <h2 class="text-xl font-semibold text-gray-900">
         Solve your business challenge faster with Shortlist
       </h2>
@@ -29,7 +29,9 @@
         <h3 class="text-lg font-semibold mb-4">
           You haven’t picked your favorites yet!
         </h3>
-        <UButton size="xl" class="w-fit"> Find a Vendor </UButton>
+        <UButton size="xl" class="w-fit" to="/dashboard/projects">
+          Find a Partner
+        </UButton>
       </div>
     </section>
   </div>

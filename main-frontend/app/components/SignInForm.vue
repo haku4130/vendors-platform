@@ -7,14 +7,19 @@
       </h2>
     </div>
 
-    <UForm :state="state" class="space-y-4" @submit="onSubmit">
+    <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
       <UFormField label="Email" name="email">
-        <UInput v-model="state.email" class="w-full" />
+        <UInput
+          v-model="state.email"
+          leading-icon="i-lucide-at-sign"
+          class="w-full"
+        />
       </UFormField>
 
       <UFormField label="Password" name="password">
         <UInput
           v-model="state.password"
+          leading-icon="i-lucide-lock"
           class="w-full"
           :type="show ? 'text' : 'password'"
           :ui="{ trailing: 'pe-1' }"
@@ -43,12 +48,14 @@
       </UFormField>
 
       <UButton
+        type="submit"
         variant="solid"
         color="warning"
         size="lg"
-        label="Continue"
         class="font-semibold justify-center py-2 px-10 rounded-lg my-4"
-      />
+      >
+        Continue
+      </UButton>
     </UForm>
 
     <p class="text-sm text-gray-800">
@@ -64,21 +71,68 @@
 </template>
 
 <script setup lang="ts">
+import * as v from 'valibot';
 import type { FormSubmitEvent } from '@nuxt/ui';
+import { loginLoginAccessToken } from '~/generated/api';
 
 const state = ref({
   email: '',
   password: '',
 });
 
+const schemaDefinition = v.pipe(
+  v.object({
+    email: v.pipe(v.string(), v.nonEmpty('This field is required')),
+    password: v.pipe(v.string(), v.nonEmpty('This field is required')),
+  })
+);
+
+type Schema = v.InferOutput<typeof schemaDefinition>;
+
+// const schema = process.env.NODE_ENV === 'development' ? null : schemaDefinition;
+const schema = schemaDefinition;
+
 const toast = useToast();
-async function onSubmit(event: FormSubmitEvent<typeof state.value>) {
-  toast.add({
-    title: 'Success',
-    description: 'The form has been submitted.',
-    color: 'success',
+
+async function onSubmit(event: FormSubmitEvent<Schema>) {
+  const res = await loginLoginAccessToken({
+    body: {
+      username: event.data.email,
+      password: event.data.password,
+    },
   });
-  console.log(event.data);
+
+  if (!res.error) {
+    const token = useCookie('access_token', {
+      maxAge: 60 * 60 * 24 * 7,
+      sameSite: 'strict',
+    });
+    token.value = res.data.access_token;
+
+    toast.add({
+      title: 'Success',
+      description: 'Logged in successfully!',
+      color: 'success',
+    });
+
+    navigateTo('/dashboard');
+  } else {
+    let detail: string;
+
+    if (typeof res.error.detail === 'string') {
+      detail = res.error.detail;
+    } else if (Array.isArray(res.error.detail)) {
+      detail = res.error.detail[0]?.msg ?? 'Something went wrong';
+    } else {
+      detail = 'Something went wrong';
+    }
+
+    toast.add({
+      title: 'Login failed',
+      description: detail,
+      color: 'error',
+    });
+  }
 }
 
 const show = ref(false);

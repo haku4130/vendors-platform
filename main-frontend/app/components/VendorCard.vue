@@ -2,31 +2,27 @@
   <div
     class="flex flex-col md:flex-row justify-between gap-6 p-6 border border-black rounded-2xl bg-white"
   >
-    <!-- Левая колонка -->
     <div class="flex flex-col md:w-fit">
-      <!-- Верхний блок: логотип и название -->
       <div class="flex items-center gap-4 mb-3">
         <UAvatar
           src="https://github.com/haku4130.png"
-          icon="mdi:camera-outline"
+          icon="i-lucide-camera"
           alt="Vendor logo"
           size="3xl"
         />
         <div>
-          <h3 class="text-lg font-semibold text-gray-900">
+          <h3 class="text-lg font-semibold">
             {{ data.name }}
           </h3>
         </div>
       </div>
 
-      <!-- Рейтинг -->
-      <div class="flex items-center gap-1 mb-3 text-gray-800">
+      <div class="flex items-center gap-1 mb-3 px-2.5">
         <span class="font-semibold">{{ data.rating }}</span>
         <StarRating :rating="data.rating" />
-        <span class="text-sm text-gray-600">({{ data.reviewsCount }})</span>
+        <span class="text-sm text-muted">({{ data.reviewsCount }})</span>
       </div>
 
-      <!-- Теги -->
       <div class="flex flex-wrap max-w-[16rem] gap-2 mb-4">
         <span
           v-for="tag in displayedTags"
@@ -43,46 +39,46 @@
         </button>
       </div>
 
-      <!-- Инфо-блок -->
-      <div class="space-y-2 w-fit border-y border-gray-400 pt-3 pr-10">
+      <div class="space-y-2 w-fit border-y border-gray-400 pt-3 pr-10 pl-2.5">
         <UTooltip :delay-duration="0" text="Minimum Project Price">
           <div class="flex items-center gap-2">
-            <UIcon name="mdi:tag-outline" class="text-gray-800" />
+            <UIcon name="i-lucide-tag" />
             <span>{{ data.minProjectSize }}</span>
           </div>
         </UTooltip>
         <UTooltip :delay-duration="0" text="Hourly Rate Range">
           <div class="flex items-center gap-2">
-            <UIcon name="mdi:clock-outline" class="text-gray-800" />
+            <UIcon name="i-lucide-clock" />
             <span>{{ data.rateRange }}</span>
           </div>
         </UTooltip>
-        <div class="flex items-center gap-2">
-          <UIcon name="mdi:account-group-outline" class="text-gray-800" />
-          <span>{{ data.employees }}</span>
-        </div>
+        <UTooltip :delay-duration="0" text="Number of Employees">
+          <div class="flex items-center gap-2">
+            <UIcon name="i-lucide-users" />
+            <span>{{ data.employees }}</span>
+          </div>
+        </UTooltip>
         <div class="flex items-center gap-2 pb-3">
-          <UIcon name="mdi:map-marker-outline" class="text-gray-800" />
+          <UIcon name="i-lucide-map-pin" />
           <span>{{ data.location }}</span>
         </div>
       </div>
 
-      <!-- Кнопка Add to shortlist -->
-      <button
-        class="flex items-center gap-2 text-sm mt-3 font-medium hover:underline"
+      <UButton
+        class="w-fit mt-2"
+        variant="link"
+        leading-icon="i-lucide-bookmark"
+        size="sm"
         @click="$emit('add-shortlist', data.id)"
       >
-        <UIcon name="mdi:bookmark-outline" />
         Add to Shortlist
-      </button>
+      </UButton>
     </div>
 
-    <!-- Правая колонка -->
     <div class="flex-1 flex flex-col justify-between text-start">
       <div>
-        <h4 class="font-semibold mb-2 text-gray-900">What clients have said</h4>
+        <h4 class="font-semibold mb-2">What clients have said</h4>
 
-        <!-- Сетка отзывов -->
         <div class="grid lg:grid-cols-2 gap-3">
           <div
             v-for="review in displayedReviews"
@@ -90,9 +86,7 @@
             class="border border-gray-300 rounded-lg p-3 bg-gray-50"
           >
             <div class="flex items-center justify-between mb-1">
-              <span class="font-semibold text-sm text-gray-900">{{
-                review.author
-              }}</span>
+              <span class="font-semibold text-sm">{{ review.author }}</span>
               <div class="flex items-center gap-0.5 text-yellow-500 text-xs">
                 <StarRating :rating="review.rating" />
               </div>
@@ -112,14 +106,8 @@
         </a>
       </div>
 
-      <!-- Кнопка справа -->
       <div class="flex justify-end mt-4">
-        <button
-          class="bg-[#FFB27B] text-black font-semibold px-5 py-2 rounded-md border border-black hover:bg-[#f3a163] transition"
-          @click="selectVendor"
-        >
-          Request a quote
-        </button>
+        <UButton @click="selectVendor"> Request a quote </UButton>
       </div>
     </div>
   </div>

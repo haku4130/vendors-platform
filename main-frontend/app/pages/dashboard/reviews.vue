@@ -1,17 +1,10 @@
 <template>
-  <UDashboardPanel>
-    <template #header>
-      <UDashboardNavbar title="Dashboard" />
-    </template>
-
-    <template #body>
-      <DashboardReviewsSection />
-    </template>
-  </UDashboardPanel>
+  <DashboardReviewsSection />
 </template>
 
 <script setup lang="ts">
 definePageMeta({
   layout: 'dashboard',
+  middleware: ['auth'],
 });
 </script>
