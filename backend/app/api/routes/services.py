@@ -2,9 +2,9 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from app import services_crud as crud
 from app.api.deps import RequireSuperUser, SessionDep
 from app.api.exceptions import AlreadyExistsError
+from app.crud import services as crud
 from app.models import (
     CategoryCreate,
     CategoryPublic,

@@ -2,8 +2,8 @@ import logging
 
 from sqlmodel import Session, create_engine, select
 
-from app import crud
 from app.core.config import settings
+from app.crud import users
 from app.models import User, UserCreate, UserRole
 
 logger = logging.getLogger(__name__)
@@ -38,4 +38,4 @@ def init_db(session: Session) -> None:
             full_name="Admin",
             is_superuser=True,
         )
-        user = crud.create_user(session=session, user_create=user_in)
+        user = users.create_user(session=session, user_create=user_in)

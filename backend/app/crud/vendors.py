@@ -5,7 +5,13 @@ from sqlmodel import Session, col, select
 from app.models import Service, VendorProfile, VendorProfileCreate
 
 
-def get_vendor_profile_by_id(
+def get_vendor_profile(
+    *, session: Session, vendor_profile_id: UUID
+) -> VendorProfile | None:
+    return session.get(VendorProfile, vendor_profile_id)
+
+
+def get_vendor_profile_by_user_id(
     *, session: Session, user_id: UUID
 ) -> VendorProfile | None:
     return session.exec(
@@ -27,7 +33,7 @@ def create_vendor_profile(
     return profile
 
 
-def set_services(session: Session, profile: VendorProfile, service_ids: list[UUID]):
+def set_services(*, session: Session, profile: VendorProfile, service_ids: list[UUID]):
     stmt = select(Service).where(col(Service.id).in_(service_ids))
     profile.services.extend(session.exec(stmt).all())
     session.add(profile)

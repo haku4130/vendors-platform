@@ -5,6 +5,7 @@ from app.api.routes import (
     login,
     private,
     projects,
+    requests,
     services,
     users,
     utils,
@@ -20,6 +21,7 @@ api_router.include_router(items.router)
 api_router.include_router(vendors.router)
 api_router.include_router(services.router)
 api_router.include_router(projects.router)
+api_router.include_router(requests.router)
 
 
 if settings.ENVIRONMENT == "local":

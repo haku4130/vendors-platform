@@ -2,9 +2,11 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from app import projects_crud as crud
 from app.api.deps import CurrentCompanyAccount, SessionDep
-from app.models import ProjectCreate, ProjectPublic
+from app.crud import projects as crud
+from app.crud import requests as requests_crud
+from app.crud import vendors as vendors_crud
+from app.models import ProjectCreate, ProjectPublic, ProjectVendorRequestPublic
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -33,3 +35,36 @@ def get_project_detail(
         raise HTTPException(status.HTTP_403_FORBIDDEN)
 
     return project
+
+
+@router.post(
+    "/{project_id}/request/{vendor_profile_id}",
+    response_model=ProjectVendorRequestPublic,
+)
+def send_project_request(
+    project_id: UUID,
+    vendor_profile_id: UUID,
+    session: SessionDep,
+    company_account: CurrentCompanyAccount,
+):
+    project = crud.get_project(session=session, project_id=project_id)
+    if not project or project.owner_id != company_account.id:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Project not found or not owned")
+
+    vendor_profile = vendors_crud.get_vendor_profile(
+        session=session, vendor_profile_id=vendor_profile_id
+    )
+    if not vendor_profile:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Vendor profile not found")
+
+    existing = requests_crud.get_request(
+        session=session, project_id=project_id, vendor_profile_id=vendor_profile_id
+    )
+
+    if existing:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Request already sent")
+
+    req = requests_crud.create_request(
+        session=session, project_id=project_id, vendor_profile_id=vendor_profile.id
+    )
+    return req

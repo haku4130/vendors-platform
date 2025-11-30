@@ -6,7 +6,7 @@ from typing import Optional
 import sqlalchemy as sa
 from pydantic import EmailStr
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlmodel import Column, Enum, Field, Relationship, SQLModel
+from sqlmodel import TIMESTAMP, Column, Enum, Field, Relationship, SQLModel
 
 from .m2m_models import ProjectServiceLink, VendorServiceLink
 
@@ -267,24 +267,30 @@ class ProjectsPublic(SQLModel):
 class ProjectVendorRequestBase(SQLModel):
     status: RequestStatus = Field(default=RequestStatus.sent)
     created_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
-    updated_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
+    updated_at: dt.datetime = Field(
+        default_factory=lambda: dt.datetime.now(dt.UTC),
+        sa_column_kwargs={
+            "onupdate": lambda: dt.datetime.now(dt.UTC),
+        },
+    )
 
 
 class ProjectVendorRequest(ProjectVendorRequestBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    vendor_id: uuid.UUID = Field(
+    vendor_profile_id: uuid.UUID | None = Field(
         foreign_key="vendorprofile.id", ondelete="SET NULL", nullable=True
     )
-    project_id: uuid.UUID = Field(
+    project_id: uuid.UUID | None = Field(
         foreign_key="project.id", ondelete="SET NULL", nullable=True
     )
 
-    project: Project = Relationship(back_populates="requests")
-    vendor: VendorProfile = Relationship(back_populates="requests")
+    project: Project | None = Relationship(back_populates="requests")
+    vendor: VendorProfile | None = Relationship(back_populates="requests")
 
 
 class ProjectVendorRequestPublic(ProjectVendorRequestBase):
-    vendor_id: uuid.UUID
+    id: uuid.UUID
+    vendor_profile_id: uuid.UUID
     project_id: uuid.UUID
 
 

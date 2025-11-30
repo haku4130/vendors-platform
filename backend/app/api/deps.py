@@ -77,3 +77,16 @@ def get_current_active_company_account(current_user: CurrentUser) -> User:
 
 RequireCompanyAccount = Depends(get_current_active_company_account)
 CurrentCompanyAccount = Annotated[User, RequireCompanyAccount]
+
+
+def get_current_active_vendor_account(current_user: CurrentUser) -> User:
+    if current_user.role != UserRole.vendor or not current_user.vendor_profile:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Vendor account required to permit this operation",
+        )
+    return current_user
+
+
+RequireVendorAccount = Depends(get_current_active_vendor_account)
+CurrentVendorAccount = Annotated[User, RequireVendorAccount]
