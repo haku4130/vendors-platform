@@ -273,7 +273,7 @@ class ProjectVendorRequestBase(SQLModel):
 class ProjectVendorRequest(ProjectVendorRequestBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     vendor_id: uuid.UUID = Field(
-        foreign_key="project.id", ondelete="SET NULL", nullable=True
+        foreign_key="vendorprofile.id", ondelete="SET NULL", nullable=True
     )
     project_id: uuid.UUID = Field(
         foreign_key="project.id", ondelete="SET NULL", nullable=True
@@ -281,6 +281,11 @@ class ProjectVendorRequest(ProjectVendorRequestBase, table=True):
 
     project: Project = Relationship(back_populates="requests")
     vendor: VendorProfile = Relationship(back_populates="requests")
+
+
+class ProjectVendorRequestPublic(ProjectVendorRequestBase):
+    vendor_id: uuid.UUID
+    project_id: uuid.UUID
 
 
 class Message(SQLModel):

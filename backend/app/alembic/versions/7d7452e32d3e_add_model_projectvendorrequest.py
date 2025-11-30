@@ -27,7 +27,7 @@ def upgrade():
     sa.Column('vendor_id', sa.Uuid(), nullable=True),
     sa.Column('project_id', sa.Uuid(), nullable=True),
     sa.ForeignKeyConstraint(['project_id'], ['project.id'], ondelete='SET NULL'),
-    sa.ForeignKeyConstraint(['vendor_id'], ['project.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['vendor_id'], ['vendorprofile.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###
