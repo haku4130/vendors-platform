@@ -45,7 +45,6 @@
 
     <UButton
       label="View Project Brief"
-      variant="ghost"
       class="w-full justify-center mt-4"
       :to="`/dashboard/projects/${item.id}`"
     />
