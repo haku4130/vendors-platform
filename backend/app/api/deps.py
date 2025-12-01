@@ -11,7 +11,7 @@ from sqlmodel import Session
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
-from app.models import TokenPayload, User, UserRole
+from app.models import TokenPayload, User, UserRole, VendorProfile
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -79,14 +79,14 @@ RequireCompanyAccount = Depends(get_current_active_company_account)
 CurrentCompanyAccount = Annotated[User, RequireCompanyAccount]
 
 
-def get_current_active_vendor_account(current_user: CurrentUser) -> User:
+def get_current_active_vendor_profile(current_user: CurrentUser) -> VendorProfile:
     if current_user.role != UserRole.vendor or not current_user.vendor_profile:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Vendor account required to permit this operation",
         )
-    return current_user
+    return current_user.vendor_profile
 
 
-RequireVendorAccount = Depends(get_current_active_vendor_account)
-CurrentVendorAccount = Annotated[User, RequireVendorAccount]
+RequireVendorProfile = Depends(get_current_active_vendor_profile)
+CurrentVendorProfile = Annotated[VendorProfile, RequireVendorProfile]

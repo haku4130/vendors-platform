@@ -6,7 +6,7 @@ from typing import Optional
 import sqlalchemy as sa
 from pydantic import EmailStr
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlmodel import TIMESTAMP, Column, Enum, Field, Relationship, SQLModel
+from sqlmodel import Column, Enum, Field, Relationship, SQLModel
 
 from .m2m_models import ProjectServiceLink, VendorServiceLink
 
@@ -26,6 +26,11 @@ class RequestStatus(str, enum.Enum):
     sent = "sent"
     accepted = "accepted"
     declined = "declined"
+
+
+class RequestInitiator(str, enum.Enum):
+    company = "company"
+    vendor = "vendor"
 
 
 class UserBaseRequired(SQLModel):
@@ -119,7 +124,7 @@ class VendorProfile(VendorProfileBase, table=True):
     services: list["Service"] = Relationship(
         back_populates="vendors", link_model=VendorServiceLink
     )
-    requests: list["ProjectVendorRequest"] = Relationship(back_populates="vendor")
+    requests: list["ProjectRequest"] = Relationship(back_populates="vendor")
 
 
 class VendorProfilePublic(VendorProfileBase):
@@ -247,7 +252,7 @@ class Project(ProjectBase, table=True):
     services: list[Service] = Relationship(
         back_populates="projects", link_model=ProjectServiceLink
     )
-    requests: list["ProjectVendorRequest"] = Relationship(back_populates="project")
+    requests: list["ProjectRequest"] = Relationship(back_populates="project")
 
 
 class ProjectCreate(ProjectBase):
@@ -264,7 +269,8 @@ class ProjectsPublic(SQLModel):
     data: list[ProjectPublic]
 
 
-class ProjectVendorRequestBase(SQLModel):
+class ProjectRequestBase(SQLModel):
+    initiator: RequestInitiator
     status: RequestStatus = Field(default=RequestStatus.sent)
     created_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
     updated_at: dt.datetime = Field(
@@ -275,7 +281,7 @@ class ProjectVendorRequestBase(SQLModel):
     )
 
 
-class ProjectVendorRequest(ProjectVendorRequestBase, table=True):
+class ProjectRequest(ProjectRequestBase, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     vendor_profile_id: uuid.UUID | None = Field(
         foreign_key="vendorprofile.id", ondelete="SET NULL", nullable=True
@@ -288,7 +294,7 @@ class ProjectVendorRequest(ProjectVendorRequestBase, table=True):
     vendor: VendorProfile | None = Relationship(back_populates="requests")
 
 
-class ProjectVendorRequestPublic(ProjectVendorRequestBase):
+class ProjectRequestPublic(ProjectRequestBase):
     id: uuid.UUID
     vendor_profile_id: uuid.UUID
     project_id: uuid.UUID

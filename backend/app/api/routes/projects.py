@@ -2,11 +2,16 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from app.api.deps import CurrentCompanyAccount, SessionDep
+from app.api.deps import CurrentCompanyAccount, CurrentVendorProfile, SessionDep
 from app.crud import projects as crud
 from app.crud import requests as requests_crud
 from app.crud import vendors as vendors_crud
-from app.models import ProjectCreate, ProjectPublic, ProjectVendorRequestPublic
+from app.models import (
+    ProjectCreate,
+    ProjectPublic,
+    ProjectRequestPublic,
+    RequestInitiator,
+)
 
 router = APIRouter(prefix="/projects", tags=["projects"])
 
@@ -38,10 +43,10 @@ def get_project_detail(
 
 
 @router.post(
-    "/{project_id}/request/{vendor_profile_id}",
-    response_model=ProjectVendorRequestPublic,
+    "/{project_id}/request/company/{vendor_profile_id}",
+    response_model=ProjectRequestPublic,
 )
-def send_project_request(
+def send_project_request_company(
     project_id: UUID,
     vendor_profile_id: UUID,
     session: SessionDep,
@@ -65,6 +70,40 @@ def send_project_request(
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Request already sent")
 
     req = requests_crud.create_request(
-        session=session, project_id=project_id, vendor_profile_id=vendor_profile.id
+        session=session,
+        project_id=project_id,
+        vendor_profile_id=vendor_profile.id,
+        initiator=RequestInitiator.company,
+    )
+    return req
+
+
+@router.post(
+    "/{project_id}/request/vendor",
+    response_model=ProjectRequestPublic,
+)
+def send_project_request_vendor(
+    project_id: UUID,
+    session: SessionDep,
+    current_vendor_profile: CurrentVendorProfile,
+):
+    project = crud.get_project(session=session, project_id=project_id)
+    if not project:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Project not found")
+
+    existing = requests_crud.get_request(
+        session=session,
+        project_id=project_id,
+        vendor_profile_id=current_vendor_profile.id,
+    )
+
+    if existing:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Request already sent")
+
+    req = requests_crud.create_request(
+        session=session,
+        project_id=project_id,
+        vendor_profile_id=current_vendor_profile.id,
+        initiator=RequestInitiator.vendor,
     )
     return req

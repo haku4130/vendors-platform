@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, status
 
-from app.api.deps import CurrentUser, CurrentVendorAccount, SessionDep
+from app.api.deps import CurrentUser, CurrentVendorProfile, SessionDep
 from app.crud import vendors as crud
 from app.models import UserRole, VendorProfileCreate, VendorProfilePublic
 
@@ -8,8 +8,8 @@ router = APIRouter(prefix="/vendors", tags=["vendors"])
 
 
 @router.get("/me", response_model=VendorProfilePublic)
-def get_my_vendor_profile(current_vendor: CurrentVendorAccount):
-    return current_vendor.vendor_profile
+def get_my_vendor_profile(current_vendor_profile: CurrentVendorProfile):
+    return current_vendor_profile
 
 
 @router.post("/me", response_model=VendorProfilePublic)

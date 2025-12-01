@@ -3,30 +3,43 @@ from uuid import UUID
 from fastapi import APIRouter, HTTPException, status
 from sqlmodel import Session
 
-from app.api.deps import CurrentVendorAccount, SessionDep
+from app.api.deps import CurrentUser, SessionDep
 from app.crud import requests as crud
 from app.models import (
-    ProjectVendorRequest,
-    ProjectVendorRequestPublic,
+    ProjectRequest,
+    ProjectRequestPublic,
+    RequestInitiator,
     RequestStatus,
     User,
+    UserRole,
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
 
 
-def base_process_request(
+def process_request_status_change(
     *,
     request_id: UUID,
     session: Session,
-    current_vendor: User,
-) -> ProjectVendorRequest:
+    current_user: User,
+) -> ProjectRequest:
     req = crud.get_request_by_id(session=session, request_id=request_id)
     if not req:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Request not found")
 
-    if not req.vendor or req.vendor.user_id != current_vendor.id:
-        raise HTTPException(status.HTTP_403_FORBIDDEN)
+    if req.initiator == RequestInitiator.company:
+        if (
+            not current_user.role == UserRole.vendor
+            or not current_user.vendor_profile
+            or req.vendor_profile_id != current_user.vendor_profile.id
+        ):
+            raise HTTPException(status.HTTP_403_FORBIDDEN)
+
+    if req.initiator == RequestInitiator.vendor:
+        if not current_user.role == UserRole.company or (
+            req.project and req.project.owner_id != current_user.id
+        ):
+            raise HTTPException(status.HTTP_403_FORBIDDEN)
 
     if req.status != RequestStatus.sent:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Request already processed")
@@ -34,16 +47,16 @@ def base_process_request(
     return req
 
 
-@router.post("/{request_id}/accept", response_model=ProjectVendorRequestPublic)
+@router.post("/{request_id}/accept", response_model=ProjectRequestPublic)
 def accept_project(
     request_id: UUID,
     session: SessionDep,
-    current_vendor: CurrentVendorAccount,
+    current_user: CurrentUser,
 ):
-    req = base_process_request(
+    req = process_request_status_change(
         request_id=request_id,
         session=session,
-        current_vendor=current_vendor,
+        current_user=current_user,
     )
 
     req = crud.update_request_status(
@@ -55,16 +68,16 @@ def accept_project(
     return req
 
 
-@router.post("/{request_id}/decline", response_model=ProjectVendorRequestPublic)
+@router.post("/{request_id}/decline", response_model=ProjectRequestPublic)
 def decline_project(
     request_id: UUID,
     session: SessionDep,
-    current_vendor: CurrentVendorAccount,
+    current_user: CurrentUser,
 ):
-    req = base_process_request(
+    req = process_request_status_change(
         request_id=request_id,
         session=session,
-        current_vendor=current_vendor,
+        current_user=current_user,
     )
 
     req = crud.update_request_status(
