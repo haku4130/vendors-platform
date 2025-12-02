@@ -1,6 +1,7 @@
+from collections.abc import Sequence
 from uuid import UUID
 
-from sqlmodel import Session, select
+from sqlmodel import Session, col, select
 
 from app.models import ProjectRequest, RequestInitiator, RequestStatus
 
@@ -54,3 +55,30 @@ def update_request_status(
     session.refresh(request)
 
     return request
+
+
+def get_requests_for_project(
+    *, session: Session, project_id: UUID
+) -> Sequence[ProjectRequest]:
+    stmt = (
+        select(ProjectRequest)
+        .where(ProjectRequest.project_id == project_id)
+        .order_by(col(ProjectRequest.created_at).desc())
+    )
+
+    return session.exec(stmt).all()
+
+
+def get_incoming_requests_for_vendor(
+    *, session: Session, vendor_profile_id: UUID
+) -> Sequence[ProjectRequest]:
+    stmt = (
+        select(ProjectRequest)
+        .where(
+            ProjectRequest.vendor_profile_id == vendor_profile_id,
+            ProjectRequest.initiator == RequestInitiator.company,
+        )
+        .order_by(col(ProjectRequest.created_at).desc())
+    )
+
+    return session.exec(stmt).all()

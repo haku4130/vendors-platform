@@ -1,8 +1,14 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.api.deps import CurrentUser, CurrentVendorProfile, SessionDep
+from app.crud import requests as requests_crud
 from app.crud import vendors as crud
-from app.models import UserRole, VendorProfileCreate, VendorProfilePublic
+from app.models import (
+    ProjectRequestPublic,
+    UserRole,
+    VendorProfileCreate,
+    VendorProfilePublic,
+)
 
 router = APIRouter(prefix="/vendors", tags=["vendors"])
 
@@ -29,3 +35,19 @@ def create_vendor_profile(
     return crud.create_vendor_profile(
         session=session, user_id=current_user.id, data=data
     )
+
+
+@router.get(
+    "/me/requests/incoming",
+    response_model=list[ProjectRequestPublic],
+)
+def get_incoming_requests_for_vendor(
+    session: SessionDep,
+    current_vendor: CurrentVendorProfile,
+):
+    vendor_profile_id = current_vendor.id
+    requests = requests_crud.get_incoming_requests_for_vendor(
+        session=session,
+        vendor_profile_id=vendor_profile_id,
+    )
+    return requests

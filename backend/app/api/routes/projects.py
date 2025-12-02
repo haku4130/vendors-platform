@@ -2,7 +2,11 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, status
 
-from app.api.deps import CurrentCompanyAccount, CurrentVendorProfile, SessionDep
+from app.api.deps import (
+    CurrentCompanyAccount,
+    CurrentVendorProfile,
+    SessionDep,
+)
 from app.crud import projects as crud
 from app.crud import requests as requests_crud
 from app.crud import vendors as vendors_crud
@@ -107,3 +111,25 @@ def send_project_request_vendor(
         initiator=RequestInitiator.vendor,
     )
     return req
+
+
+@router.get(
+    "/{project_id}/requests",
+    response_model=list[ProjectRequestPublic],
+)
+def get_project_requests(
+    project_id: UUID,
+    session: SessionDep,
+    company_account: CurrentCompanyAccount,
+):
+    project = crud.get_project(session=session, project_id=project_id)
+    if not project:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Project not found")
+
+    if project.owner_id != company_account.id:
+        raise HTTPException(status.HTTP_403_FORBIDDEN)
+
+    return requests_crud.get_requests_for_project(
+        session=session,
+        project_id=project_id,
+    )
