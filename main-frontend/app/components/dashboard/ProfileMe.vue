@@ -74,16 +74,9 @@ async function saveProfile() {
   saving.value = false;
 
   if (res.error) {
-    const detail =
-      typeof res.error.detail === 'string'
-        ? res.error.detail
-        : Array.isArray(res.error.detail)
-          ? (res.error.detail[0]?.msg ?? 'Could not update profile')
-          : 'Could not update profile';
-
     toast.add({
       title: 'Error',
-      description: detail,
+      description: extractErrorMessage(res.error, 'Could not update profile'),
       color: 'error',
     });
     return;

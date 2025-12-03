@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses } from './types.gen';
+import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -477,6 +477,22 @@ export const vendorsCreateVendorProfile = <ThrowOnError extends boolean = false>
 };
 
 /**
+ * Get Incoming Requests For Vendor
+ */
+export const vendorsGetIncomingRequestsForVendor = <ThrowOnError extends boolean = false>(options?: Options<VendorsGetIncomingRequestsForVendorData, ThrowOnError>) => {
+    return (options?.client ?? client).get<VendorsGetIncomingRequestsForVendorResponses, unknown, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/vendors/me/requests/incoming',
+        ...options
+    });
+};
+
+/**
  * List Categories
  */
 export const catalogListCategories = <ThrowOnError extends boolean = false>(options?: Options<CatalogListCategoriesData, ThrowOnError>) => {
@@ -630,6 +646,96 @@ export const projectsGetProjectDetail = <ThrowOnError extends boolean = false>(o
             }
         ],
         url: '/api/v1/projects/{project_id}',
+        ...options
+    });
+};
+
+/**
+ * Get Matching Vendors
+ */
+export const projectsGetMatchingVendors = <ThrowOnError extends boolean = false>(options: Options<ProjectsGetMatchingVendorsData, ThrowOnError>) => {
+    return (options.client ?? client).get<ProjectsGetMatchingVendorsResponses, ProjectsGetMatchingVendorsErrors, ThrowOnError>({
+        url: '/api/v1/projects/{project_id}/vendors/matching',
+        ...options
+    });
+};
+
+/**
+ * Send Project Request Company
+ */
+export const projectsSendProjectRequestCompany = <ThrowOnError extends boolean = false>(options: Options<ProjectsSendProjectRequestCompanyData, ThrowOnError>) => {
+    return (options.client ?? client).post<ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestCompanyErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/projects/{project_id}/request/company/{vendor_profile_id}',
+        ...options
+    });
+};
+
+/**
+ * Send Project Request Vendor
+ */
+export const projectsSendProjectRequestVendor = <ThrowOnError extends boolean = false>(options: Options<ProjectsSendProjectRequestVendorData, ThrowOnError>) => {
+    return (options.client ?? client).post<ProjectsSendProjectRequestVendorResponses, ProjectsSendProjectRequestVendorErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/projects/{project_id}/request/vendor',
+        ...options
+    });
+};
+
+/**
+ * Get Project Requests
+ */
+export const projectsGetProjectRequests = <ThrowOnError extends boolean = false>(options: Options<ProjectsGetProjectRequestsData, ThrowOnError>) => {
+    return (options.client ?? client).get<ProjectsGetProjectRequestsResponses, ProjectsGetProjectRequestsErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/projects/{project_id}/requests',
+        ...options
+    });
+};
+
+/**
+ * Accept Project
+ */
+export const requestsAcceptProject = <ThrowOnError extends boolean = false>(options: Options<RequestsAcceptProjectData, ThrowOnError>) => {
+    return (options.client ?? client).post<RequestsAcceptProjectResponses, RequestsAcceptProjectErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/requests/{request_id}/accept',
+        ...options
+    });
+};
+
+/**
+ * Decline Project
+ */
+export const requestsDeclineProject = <ThrowOnError extends boolean = false>(options: Options<RequestsDeclineProjectData, ThrowOnError>) => {
+    return (options.client ?? client).post<RequestsDeclineProjectResponses, RequestsDeclineProjectErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/requests/{request_id}/decline',
         ...options
     });
 };

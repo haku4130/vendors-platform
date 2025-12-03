@@ -21,7 +21,7 @@
         />
 
         <div
-          class="flex-1 flex flex-col items-center justify-center px-8 my-4 text-center"
+          class="flex-1 flex flex-col items-center justify-center my-4 text-center"
         >
           <template v-if="phase === 'form'">
             <p class="text-sm text-gray-700 mb-1">
@@ -46,7 +46,7 @@
           </template>
 
           <template v-else-if="phase === 'vendors'">
-            <VendorSelection :project-data="answers" @send="$emit('finish')" />
+            <VendorSelection :project-id="createdProjectId" />
           </template>
         </div>
       </div>
@@ -101,19 +101,19 @@ const {
   title = 'Project Brief',
   triggerLabel = 'Start a Project',
   stepIndex,
-  phase,
 } = defineProps<{
   title?: string;
   triggerLabel?: string;
   stepIndex: number;
   totalSteps: number;
   isValidCurrentStep: boolean;
+  createdProjectId: string;
   phase: 'form' | 'summary' | 'vendors';
 }>();
 
 const answers = defineModel<AnswersType>({ required: true });
 
-defineEmits(['next-step', 'prev-step', 'finish-create', 'finish']);
+defineEmits(['next-step', 'prev-step', 'finish-create']);
 
 const open = ref(false);
 const stepNumber = computed(() => stepIndex + 1);

@@ -69,6 +69,16 @@ def get_requests_for_project(
     return session.exec(stmt).all()
 
 
+def get_vendor_ids_from_project_requests(
+    *, session: Session, project_id: UUID
+) -> Sequence[UUID] | Sequence[None]:
+    stmt = select(ProjectRequest.vendor_profile_id).where(
+        ProjectRequest.project_id == project_id
+    )
+
+    return session.exec(stmt).all()
+
+
 def get_incoming_requests_for_vendor(
     *, session: Session, vendor_profile_id: UUID
 ) -> Sequence[ProjectRequest]:

@@ -129,7 +129,7 @@ class VendorProfile(VendorProfileBase, table=True):
 
 class VendorProfilePublic(VendorProfileBase):
     id: uuid.UUID
-    user_id: uuid.UUID
+    user: User | None
     services: list["ServicePublic"]
 
 

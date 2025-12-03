@@ -30,13 +30,13 @@
         <UButton
           label="Explore Vendors"
           class="w-full justify-center"
-          :to="`/dashboard/projects/${item.id}`"
+          :to="`/dashboard/projects/${item.id}/explore`"
         />
         <UButton
           label="Compare Quotes"
           class="w-full justify-center"
           variant="solid"
-          :to="`/dashboard/projects/${item.id}`"
+          :to="`/dashboard/projects/${item.id}/compare`"
         />
       </div>
     </template>

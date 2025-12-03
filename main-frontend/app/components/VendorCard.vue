@@ -1,75 +1,71 @@
 <template>
   <div
-    class="flex flex-col md:flex-row justify-between gap-6 p-6 border border-black rounded-2xl bg-white"
+    class="flex flex-col md:flex-row justify-between gap-6 p-6 border border-gray-300 rounded-2xl bg-white shadow-md"
   >
     <div class="flex flex-col md:w-fit">
-      <div class="flex items-center gap-4 mb-3">
-        <UAvatar
-          src="https://github.com/haku4130.png"
-          icon="i-lucide-camera"
-          alt="Vendor logo"
+      <div class="mb-3">
+        <UUser
+          :name="vendor.user?.company_name"
+          :description="vendor.user?.full_name"
+          :avatar="{
+            src: vendor.user?.logo_url || undefined,
+            icon: 'i-lucide-camera',
+          }"
+          :ui="{ avatar: 'rounded-lg border border-black' }"
           size="3xl"
+          class="text-start"
         />
-        <div>
-          <h3 class="text-lg font-semibold">
-            {{ data.name }}
-          </h3>
-        </div>
       </div>
 
-      <div class="flex items-center gap-1 mb-3 px-2.5">
-        <span class="font-semibold">{{ data.rating }}</span>
-        <StarRating :rating="data.rating" />
-        <span class="text-sm text-muted">({{ data.reviewsCount }})</span>
+      <div class="flex items-center gap-1 mb-3">
+        <span class="font-semibold">{{ vendor.rating || 4.7 }}</span>
+        <StarRating :rating="vendor.rating || 4.7" />
+        <span class="text-sm text-muted"
+          >({{ vendor.reviewsCount || 56 }})</span
+        >
       </div>
 
       <div class="flex flex-wrap max-w-[16rem] gap-2 mb-4">
         <span
-          v-for="tag in displayedTags"
-          :key="tag"
+          v-for="tag in vendor.services"
+          :key="tag.id"
           class="bg-gray-200 px-3 py-1 rounded-full text-sm font-medium"
         >
-          {{ tag }}
+          {{ tag.label }}
         </span>
-        <button
-          v-if="extraTagsCount > 0"
-          class="text-gray-700 text-sm font-medium hover:underline"
-        >
-          + {{ extraTagsCount }} more
-        </button>
       </div>
 
-      <div class="space-y-2 w-fit border-y border-gray-400 pt-3 pr-10 pl-2.5">
+      <div class="space-y-2 w-full border-y border-gray-400 pt-3">
         <UTooltip :delay-duration="0" text="Minimum Project Price">
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-tag" />
-            <span>{{ data.minProjectSize }}</span>
+            <span>${{ vendor.min_project_size }}</span>
           </div>
         </UTooltip>
-        <UTooltip :delay-duration="0" text="Hourly Rate Range">
+        <UTooltip :delay-duration="0" text="Avarage Hourly Rate">
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-clock" />
-            <span>{{ data.rateRange }}</span>
+            <span>${{ vendor.avg_hourly_rate }}</span>
           </div>
         </UTooltip>
         <UTooltip :delay-duration="0" text="Number of Employees">
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-users" />
-            <span>{{ data.employees }}</span>
+            <span>{{ vendor.employee_count }} people</span>
           </div>
         </UTooltip>
         <div class="flex items-center gap-2 pb-3">
           <UIcon name="i-lucide-map-pin" />
-          <span>{{ data.location }}</span>
+          <span>{{ vendor.user?.location }}</span>
         </div>
       </div>
 
       <UButton
-        class="w-fit mt-2"
+        class="w-fit mt-2 px-0"
         variant="link"
         leading-icon="i-lucide-bookmark"
         size="sm"
-        @click="$emit('add-shortlist', data.id)"
+        @click="addToShortlist(vendor.id)"
       >
         Add to Shortlist
       </UButton>
@@ -98,8 +94,8 @@
         </div>
 
         <a
-          v-if="data.reviewLink"
-          :href="data.reviewLink"
+          v-if="vendor.reviewLink"
+          :href="vendor.reviewLink"
           class="inline-block mt-3 text-blue-600 text-sm font-medium hover:underline"
         >
           See all Reviews
@@ -107,33 +103,80 @@
       </div>
 
       <div class="flex justify-end mt-4">
-        <UButton @click="selectVendor"> Request a quote </UButton>
+        <UButton :disabled="alreadySent" @click="handleVendorSelect(vendor.id)">
+          {{ alreadySent ? 'Sent!' : 'Request a quote' }}
+        </UButton>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const emit = defineEmits(['select', 'add-shortlist']);
+import type { VendorProfilePublic } from '~/generated/api';
 
-const props = defineProps({
-  data: {
-    type: Object,
-    required: true,
-  },
-});
+import { projectsSendProjectRequestCompany } from '~/generated/api';
 
-// показываем только первые 3 тега
-const displayedTags = computed(() => props.data.tags?.slice(0, 3) || []);
-const extraTagsCount = computed(() =>
-  props.data.tags?.length > 3 ? props.data.tags.length - 3 : 0
-);
+defineEmits(['select', 'add-shortlist']);
 
-// показываем только 3 последних отзыва
-const displayedReviews = computed(() => props.data.reviews?.slice(0, 3) || []);
+const { vendor, currentProjectId } = defineProps<{
+  vendor: VendorProfilePublic;
+  currentProjectId: string;
+}>();
 
-// при выборе вендора
-function selectVendor() {
-  emit('select', props.data);
+const alreadySent = ref(false);
+const toast = useToast();
+
+async function handleVendorSelect(vendorId: string) {
+  const res = await projectsSendProjectRequestCompany({
+    path: {
+      project_id: currentProjectId,
+      vendor_profile_id: vendorId,
+    },
+  });
+
+  if (res.error) {
+    toast.add({
+      title: 'Error',
+      description: extractErrorMessage(res.error, 'Failed to send request'),
+      color: 'error',
+    });
+    return;
+  }
+
+  toast.add({
+    title: 'Request sent',
+    description: 'The vendor has been notified.',
+    color: 'success',
+  });
+  alreadySent.value = true;
 }
+
+async function addToShortlist(vendorId: string) {}
+
+const displayedReviews = computed(() => [
+  {
+    id: 1,
+    author: 'Alex P.',
+    rating: 5,
+    text: 'They delivered our project ahead of time and exceeded expectations.',
+  },
+  {
+    id: 2,
+    author: 'Marta K.',
+    rating: 4,
+    text: 'Very professional team, great communication throughout the process.',
+  },
+  {
+    id: 3,
+    author: 'John D.',
+    rating: 5,
+    text: 'Excellent work on our UI/UX design — creative and detail-oriented.',
+  },
+  {
+    id: 4,
+    author: 'John D.',
+    rating: 5,
+    text: 'Excellent work on our UI/UX design — creative and detail-oriented.',
+  },
+]);
 </script>

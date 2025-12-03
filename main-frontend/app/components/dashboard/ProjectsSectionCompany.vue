@@ -47,6 +47,7 @@
         :step-index="stepIndex"
         :total-steps="totalSteps"
         :is-valid-current-step="isValidCurrentStep"
+        :created-project-id="createdProjectId"
         :phase="phase"
         title="Project Brief"
         @next-step="nextStep"
@@ -434,29 +435,19 @@ async function handleCreateFinish() {
       color: 'success',
     });
 
+    createdProjectId.value = res.data.id;
+
     phase.value = 'vendors';
   } else {
-    let detail: string;
-
-    if (typeof res.error.detail === 'string') {
-      detail = res.error.detail;
-    } else if (Array.isArray(res.error.detail)) {
-      detail = res.error.detail[0]?.msg ?? 'Something went wrong';
-    } else {
-      detail = 'Something went wrong';
-    }
-
     toast.add({
       title: 'Project creation failed',
-      description: detail,
+      description: extractErrorMessage(res.error),
       color: 'error',
     });
   }
 }
 
-function handleFinish() {
-  console.log('📦 Итоговые ответы:', answers);
-}
+function handleFinish() {}
 
 const answers = reactive<AnswersType>({
   projectName: '',

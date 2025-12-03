@@ -15,6 +15,7 @@ from app.models import (
     ProjectPublic,
     ProjectRequestPublic,
     RequestInitiator,
+    VendorProfilePublic,
 )
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -44,6 +45,24 @@ def get_project_detail(
         raise HTTPException(status.HTTP_403_FORBIDDEN)
 
     return project
+
+
+@router.get("/{project_id}/vendors/matching", response_model=list[VendorProfilePublic])
+def get_matching_vendors(
+    project_id: UUID, session: SessionDep, skip: int = 0, limit: int = 100
+):
+    project = crud.get_project(session=session, project_id=project_id)
+    if not project:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Project not found"
+        )
+
+    ranked = vendors_crud.get_ranked_vendors_for_project(
+        session=session, project=project, skip=skip, limit=limit
+    )
+
+    vendors = [vendor for vendor, score in ranked]
+    return vendors
 
 
 @router.post(

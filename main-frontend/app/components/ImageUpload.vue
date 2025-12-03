@@ -79,16 +79,9 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
   });
 
   if (res.error) {
-    const detail =
-      typeof res.error.detail === 'string'
-        ? res.error.detail
-        : Array.isArray(res.error.detail)
-          ? (res.error.detail[0]?.msg ?? 'Upload failed')
-          : 'Upload failed';
-
     toast.add({
       title: 'Upload failed',
-      description: detail,
+      description: extractErrorMessage(res.error),
       color: 'error',
     });
     return;

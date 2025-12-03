@@ -445,19 +445,9 @@ async function handleFinish() {
     await useAuth().loadUser();
     navigateTo('/dashboard');
   } else {
-    let detail: string;
-
-    if (typeof res.error.detail === 'string') {
-      detail = res.error.detail;
-    } else if (Array.isArray(res.error.detail)) {
-      detail = res.error.detail[0]?.msg ?? 'Something went wrong';
-    } else {
-      detail = 'Something went wrong';
-    }
-
     toast.add({
       title: 'Vendor Profile creation failed',
-      description: detail,
+      description: extractErrorMessage(res.error),
       color: 'error',
     });
   }

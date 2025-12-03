@@ -8,7 +8,7 @@ export default defineAppConfig({
                 {
                     color: 'primary',
                     variant: 'outline',
-                    class: 'hover:bg-primary hover:text-white active:bg-primary/75 active:text-white',
+                    class: 'hover:bg-primary hover:text-white disabled:text-black active:bg-primary/75 active:text-white',
                 },
                 {
                     color: 'primary',

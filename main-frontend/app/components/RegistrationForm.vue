@@ -221,16 +221,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   });
 
   if (register.error) {
-    const detail =
-      typeof register.error.detail === 'string'
-        ? register.error.detail
-        : Array.isArray(register.error.detail)
-          ? (register.error.detail[0]?.msg ?? 'Registration failed')
-          : 'Registration failed';
-
     toast.add({
       title: 'Registration failed',
-      description: detail,
+      description: extractErrorMessage(register.error),
       color: 'error',
     });
     return;

@@ -300,9 +300,47 @@ export type ProjectPublic = {
 };
 
 /**
+ * ProjectRequestPublic
+ */
+export type ProjectRequestPublic = {
+    initiator: RequestInitiator;
+    status?: RequestStatus;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Vendor Profile Id
+     */
+    vendor_profile_id: string;
+    /**
+     * Project Id
+     */
+    project_id: string;
+};
+
+/**
  * ProjectStart
  */
 export type ProjectStart = 'Within 30 days' | 'Within 60 days' | 'After 60+ days';
+
+/**
+ * RequestInitiator
+ */
+export type RequestInitiator = 'company' | 'vendor';
+
+/**
+ * RequestStatus
+ */
+export type RequestStatus = 'sent' | 'accepted' | 'declined';
 
 /**
  * Service
@@ -405,6 +443,49 @@ export type UpdatePassword = {
      * New Password
      */
     new_password: string;
+};
+
+/**
+ * User
+ */
+export type User = {
+    /**
+     * Logo Url
+     */
+    logo_url?: string | null;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Company Name
+     */
+    company_name: string;
+    /**
+     * Location
+     */
+    location: string;
+    role: UserRole;
+    /**
+     * Full Name
+     */
+    full_name: string;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+    /**
+     * Is Superuser
+     */
+    is_superuser?: boolean;
+    /**
+     * Id
+     */
+    id?: string;
+    /**
+     * Hashed Password
+     */
+    hashed_password: string;
 };
 
 /**
@@ -693,10 +774,7 @@ export type VendorProfilePublic = {
      * Id
      */
     id: string;
-    /**
-     * User Id
-     */
-    user_id: string;
+    user: User | null;
     /**
      * Services
      */
@@ -1348,6 +1426,24 @@ export type VendorsCreateVendorProfileResponses = {
 
 export type VendorsCreateVendorProfileResponse = VendorsCreateVendorProfileResponses[keyof VendorsCreateVendorProfileResponses];
 
+export type VendorsGetIncomingRequestsForVendorData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/vendors/me/requests/incoming';
+};
+
+export type VendorsGetIncomingRequestsForVendorResponses = {
+    /**
+     * Response Vendors-Get Incoming Requests For Vendor
+     *
+     * Successful Response
+     */
+    200: Array<ProjectRequestPublic>;
+};
+
+export type VendorsGetIncomingRequestsForVendorResponse = VendorsGetIncomingRequestsForVendorResponses[keyof VendorsGetIncomingRequestsForVendorResponses];
+
 export type CatalogListCategoriesData = {
     body?: never;
     path?: never;
@@ -1578,6 +1674,203 @@ export type ProjectsGetProjectDetailResponses = {
 };
 
 export type ProjectsGetProjectDetailResponse = ProjectsGetProjectDetailResponses[keyof ProjectsGetProjectDetailResponses];
+
+export type ProjectsGetMatchingVendorsData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+    };
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/projects/{project_id}/vendors/matching';
+};
+
+export type ProjectsGetMatchingVendorsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProjectsGetMatchingVendorsError = ProjectsGetMatchingVendorsErrors[keyof ProjectsGetMatchingVendorsErrors];
+
+export type ProjectsGetMatchingVendorsResponses = {
+    /**
+     * Response Projects-Get Matching Vendors
+     *
+     * Successful Response
+     */
+    200: Array<VendorProfilePublic>;
+};
+
+export type ProjectsGetMatchingVendorsResponse = ProjectsGetMatchingVendorsResponses[keyof ProjectsGetMatchingVendorsResponses];
+
+export type ProjectsSendProjectRequestCompanyData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+        /**
+         * Vendor Profile Id
+         */
+        vendor_profile_id: string;
+    };
+    query?: never;
+    url: '/api/v1/projects/{project_id}/request/company/{vendor_profile_id}';
+};
+
+export type ProjectsSendProjectRequestCompanyErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProjectsSendProjectRequestCompanyError = ProjectsSendProjectRequestCompanyErrors[keyof ProjectsSendProjectRequestCompanyErrors];
+
+export type ProjectsSendProjectRequestCompanyResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProjectRequestPublic;
+};
+
+export type ProjectsSendProjectRequestCompanyResponse = ProjectsSendProjectRequestCompanyResponses[keyof ProjectsSendProjectRequestCompanyResponses];
+
+export type ProjectsSendProjectRequestVendorData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+    };
+    query?: never;
+    url: '/api/v1/projects/{project_id}/request/vendor';
+};
+
+export type ProjectsSendProjectRequestVendorErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProjectsSendProjectRequestVendorError = ProjectsSendProjectRequestVendorErrors[keyof ProjectsSendProjectRequestVendorErrors];
+
+export type ProjectsSendProjectRequestVendorResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProjectRequestPublic;
+};
+
+export type ProjectsSendProjectRequestVendorResponse = ProjectsSendProjectRequestVendorResponses[keyof ProjectsSendProjectRequestVendorResponses];
+
+export type ProjectsGetProjectRequestsData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+    };
+    query?: never;
+    url: '/api/v1/projects/{project_id}/requests';
+};
+
+export type ProjectsGetProjectRequestsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProjectsGetProjectRequestsError = ProjectsGetProjectRequestsErrors[keyof ProjectsGetProjectRequestsErrors];
+
+export type ProjectsGetProjectRequestsResponses = {
+    /**
+     * Response Projects-Get Project Requests
+     *
+     * Successful Response
+     */
+    200: Array<ProjectRequestPublic>;
+};
+
+export type ProjectsGetProjectRequestsResponse = ProjectsGetProjectRequestsResponses[keyof ProjectsGetProjectRequestsResponses];
+
+export type RequestsAcceptProjectData = {
+    body?: never;
+    path: {
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
+    query?: never;
+    url: '/api/v1/requests/{request_id}/accept';
+};
+
+export type RequestsAcceptProjectErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RequestsAcceptProjectError = RequestsAcceptProjectErrors[keyof RequestsAcceptProjectErrors];
+
+export type RequestsAcceptProjectResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProjectRequestPublic;
+};
+
+export type RequestsAcceptProjectResponse = RequestsAcceptProjectResponses[keyof RequestsAcceptProjectResponses];
+
+export type RequestsDeclineProjectData = {
+    body?: never;
+    path: {
+        /**
+         * Request Id
+         */
+        request_id: string;
+    };
+    query?: never;
+    url: '/api/v1/requests/{request_id}/decline';
+};
+
+export type RequestsDeclineProjectErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type RequestsDeclineProjectError = RequestsDeclineProjectErrors[keyof RequestsDeclineProjectErrors];
+
+export type RequestsDeclineProjectResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProjectRequestPublic;
+};
+
+export type RequestsDeclineProjectResponse = RequestsDeclineProjectResponses[keyof RequestsDeclineProjectResponses];
 
 export type PrivateCreateUserData = {
     body: PrivateUserCreate;
