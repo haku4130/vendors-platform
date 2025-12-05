@@ -113,12 +113,13 @@ const {
 
 const answers = defineModel<AnswersType>({ required: true });
 
-defineEmits(['next-step', 'prev-step', 'finish-create']);
+const emit = defineEmits(['next-step', 'prev-step', 'finish-create', 'finish']);
 
 const open = ref(false);
 const stepNumber = computed(() => stepIndex + 1);
 
 function finishAndClose() {
   open.value = false;
+  emit('finish');
 }
 </script>

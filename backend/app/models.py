@@ -1,7 +1,7 @@
 import datetime as dt
 import enum
 import uuid
-from typing import Optional
+from typing import Any, Optional
 
 import sqlalchemy as sa
 from pydantic import EmailStr
@@ -31,6 +31,11 @@ class RequestStatus(str, enum.Enum):
 class RequestInitiator(str, enum.Enum):
     company = "company"
     vendor = "vendor"
+
+
+class PaginatedResponse(SQLModel):
+    result: list[Any]
+    total: int
 
 
 class UserBaseRequired(SQLModel):
@@ -124,13 +129,17 @@ class VendorProfile(VendorProfileBase, table=True):
     services: list["Service"] = Relationship(
         back_populates="vendors", link_model=VendorServiceLink
     )
-    requests: list["ProjectRequest"] = Relationship(back_populates="vendor")
+    requests: list["ProjectRequest"] = Relationship(back_populates="vendor_profile")
 
 
 class VendorProfilePublic(VendorProfileBase):
     id: uuid.UUID
     user: User | None
     services: list["ServicePublic"]
+
+
+class PaginatedVendorProfilesPublic(PaginatedResponse):
+    result: list[VendorProfilePublic]
 
 
 class ItemBase(SQLModel):
@@ -263,6 +272,7 @@ class ProjectPublic(ProjectBase):
     id: uuid.UUID
     owner: UserPublic
     services: list[Service]
+    incoming_count: int = 0
 
 
 class ProjectsPublic(SQLModel):
@@ -291,13 +301,33 @@ class ProjectRequest(ProjectRequestBase, table=True):
     )
 
     project: Project | None = Relationship(back_populates="requests")
-    vendor: VendorProfile | None = Relationship(back_populates="requests")
+    vendor_profile: VendorProfile | None = Relationship(back_populates="requests")
 
 
 class ProjectRequestPublic(ProjectRequestBase):
     id: uuid.UUID
     vendor_profile_id: uuid.UUID
     project_id: uuid.UUID
+
+
+class ProjectRequestPublicVendorFull(ProjectRequestBase):
+    id: uuid.UUID
+    vendor_profile: VendorProfilePublic
+    project_id: uuid.UUID
+
+
+class PaginatedProjectRequestsPublicVendorFull(PaginatedResponse):
+    result: list[ProjectRequestPublicVendorFull]
+
+
+class ProjectRequestPublicProjectFull(ProjectRequestBase):
+    id: uuid.UUID
+    vendor_profile_id: uuid.UUID
+    project: ProjectPublic
+
+
+class PaginatedProjectRequestsPublicProjectFull(PaginatedResponse):
+    result: list[ProjectRequestPublicProjectFull]
 
 
 class Message(SQLModel):

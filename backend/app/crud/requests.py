@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from uuid import UUID
 
-from sqlmodel import Session, col, select
+from sqlmodel import Session, col, func, select
 
 from app.models import ProjectRequest, RequestInitiator, RequestStatus
 
@@ -58,15 +58,34 @@ def update_request_status(
 
 
 def get_requests_for_project(
-    *, session: Session, project_id: UUID
-) -> Sequence[ProjectRequest]:
+    *,
+    session: Session,
+    project_id: UUID,
+    initiator: RequestInitiator | None = None,
+    status: RequestStatus | None = None,
+    skip: int = 0,
+    limit: int = 100,
+) -> tuple[Sequence[ProjectRequest], int]:
+    filters = [ProjectRequest.project_id == project_id]
+
+    if initiator is not None:
+        filters.append(ProjectRequest.initiator == initiator)
+    if status is not None:
+        filters.append(ProjectRequest.status == status)
+
+    total = session.exec(
+        select(func.count()).select_from(ProjectRequest).where(*filters)
+    ).one()
+
     stmt = (
         select(ProjectRequest)
-        .where(ProjectRequest.project_id == project_id)
+        .where(*filters)
         .order_by(col(ProjectRequest.created_at).desc())
+        .offset(skip)
+        .limit(limit)
     )
 
-    return session.exec(stmt).all()
+    return session.exec(stmt).all(), total
 
 
 def get_vendor_ids_from_project_requests(
@@ -80,8 +99,17 @@ def get_vendor_ids_from_project_requests(
 
 
 def get_incoming_requests_for_vendor(
-    *, session: Session, vendor_profile_id: UUID
-) -> Sequence[ProjectRequest]:
+    *, session: Session, vendor_profile_id: UUID, skip: int, limit: int
+) -> tuple[Sequence[ProjectRequest], int]:
+    total = session.exec(
+        select(func.count())
+        .select_from(ProjectRequest)
+        .where(
+            ProjectRequest.vendor_profile_id == vendor_profile_id,
+            ProjectRequest.initiator == RequestInitiator.company,
+        )
+    ).one()
+
     stmt = (
         select(ProjectRequest)
         .where(
@@ -89,6 +117,8 @@ def get_incoming_requests_for_vendor(
             ProjectRequest.initiator == RequestInitiator.company,
         )
         .order_by(col(ProjectRequest.created_at).desc())
+        .offset(skip)
+        .limit(limit)
     )
 
-    return session.exec(stmt).all()
+    return session.exec(stmt).all(), total

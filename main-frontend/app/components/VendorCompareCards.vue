@@ -10,9 +10,9 @@
       <div v-if="loading">Loading...</div>
       <div v-else-if="!vendors.length">
         <UEmpty
-          icon="i-lucide-search-x"
-          title="No matching vendors found"
-          description="However, vendors have received your request. Their responses will appear soon."
+          icon="i-lucide-hourglass"
+          title="Awaiting vendor requests"
+          description="We’ll list their requests here as soon as they come in."
           class="w-fit mx-auto"
         />
       </div>
@@ -22,8 +22,12 @@
 
 <script setup lang="ts">
 import { useInfiniteScroll } from '@vueuse/core';
-import { projectsGetMatchingVendors } from '~/generated/api';
-import type { VendorProfilePublic } from '~/generated/api';
+import { projectsGetProjectRequests } from '~/generated/api';
+import type {
+  VendorProfilePublic,
+  RequestInitiator,
+  RequestStatus,
+} from '~/generated/api';
 
 const { projectId } = defineProps<{
   projectId: string;
@@ -41,11 +45,13 @@ async function loadMore() {
   loading.value = true;
 
   const offset = vendors.value.length;
-  const res = await projectsGetMatchingVendors({
+  const res = await projectsGetProjectRequests({
     path: {
       project_id: projectId,
     },
     query: {
+      initiator: 'vendor' as RequestInitiator,
+      request_status: 'sent' as RequestStatus,
       skip: offset,
       limit: 5,
     },
@@ -58,7 +64,7 @@ async function loadMore() {
       color: 'error',
     });
   } else {
-    vendors.value.push(...res.data.result);
+    vendors.value.push(...res.data.result.map((req) => req.vendor_profile));
     total.value = res.data.total;
   }
 

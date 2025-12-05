@@ -195,6 +195,48 @@ export type NewPassword = {
 };
 
 /**
+ * PaginatedProjectRequestsPublicProjectFull
+ */
+export type PaginatedProjectRequestsPublicProjectFull = {
+    /**
+     * Result
+     */
+    result: Array<ProjectRequestPublicProjectFull>;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * PaginatedProjectRequestsPublicVendorFull
+ */
+export type PaginatedProjectRequestsPublicVendorFull = {
+    /**
+     * Result
+     */
+    result: Array<ProjectRequestPublicVendorFull>;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
+ * PaginatedVendorProfilesPublic
+ */
+export type PaginatedVendorProfilesPublic = {
+    /**
+     * Result
+     */
+    result: Array<VendorProfilePublic>;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * PrivateUserCreate
  */
 export type PrivateUserCreate = {
@@ -297,6 +339,10 @@ export type ProjectPublic = {
      * Services
      */
     services: Array<Service>;
+    /**
+     * Incoming Count
+     */
+    incoming_count?: number;
 };
 
 /**
@@ -321,6 +367,56 @@ export type ProjectRequestPublic = {
      * Vendor Profile Id
      */
     vendor_profile_id: string;
+    /**
+     * Project Id
+     */
+    project_id: string;
+};
+
+/**
+ * ProjectRequestPublicProjectFull
+ */
+export type ProjectRequestPublicProjectFull = {
+    initiator: RequestInitiator;
+    status?: RequestStatus;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Vendor Profile Id
+     */
+    vendor_profile_id: string;
+    project: ProjectPublic;
+};
+
+/**
+ * ProjectRequestPublicVendorFull
+ */
+export type ProjectRequestPublicVendorFull = {
+    initiator: RequestInitiator;
+    status?: RequestStatus;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Updated At
+     */
+    updated_at?: string;
+    /**
+     * Id
+     */
+    id: string;
+    vendor_profile: VendorProfilePublic;
     /**
      * Project Id
      */
@@ -1429,17 +1525,33 @@ export type VendorsCreateVendorProfileResponse = VendorsCreateVendorProfileRespo
 export type VendorsGetIncomingRequestsForVendorData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
     url: '/api/v1/vendors/me/requests/incoming';
 };
 
+export type VendorsGetIncomingRequestsForVendorErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsGetIncomingRequestsForVendorError = VendorsGetIncomingRequestsForVendorErrors[keyof VendorsGetIncomingRequestsForVendorErrors];
+
 export type VendorsGetIncomingRequestsForVendorResponses = {
     /**
-     * Response Vendors-Get Incoming Requests For Vendor
-     *
      * Successful Response
      */
-    200: Array<ProjectRequestPublic>;
+    200: PaginatedProjectRequestsPublicProjectFull;
 };
 
 export type VendorsGetIncomingRequestsForVendorResponse = VendorsGetIncomingRequestsForVendorResponses[keyof VendorsGetIncomingRequestsForVendorResponses];
@@ -1707,11 +1819,9 @@ export type ProjectsGetMatchingVendorsError = ProjectsGetMatchingVendorsErrors[k
 
 export type ProjectsGetMatchingVendorsResponses = {
     /**
-     * Response Projects-Get Matching Vendors
-     *
      * Successful Response
      */
-    200: Array<VendorProfilePublic>;
+    200: PaginatedVendorProfilesPublic;
 };
 
 export type ProjectsGetMatchingVendorsResponse = ProjectsGetMatchingVendorsResponses[keyof ProjectsGetMatchingVendorsResponses];
@@ -1788,7 +1898,24 @@ export type ProjectsGetProjectRequestsData = {
          */
         project_id: string;
     };
-    query?: never;
+    query?: {
+        /**
+         * Initiator
+         */
+        initiator?: RequestInitiator | null;
+        /**
+         * Request Status
+         */
+        request_status?: RequestStatus | null;
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
     url: '/api/v1/projects/{project_id}/requests';
 };
 
@@ -1803,11 +1930,9 @@ export type ProjectsGetProjectRequestsError = ProjectsGetProjectRequestsErrors[k
 
 export type ProjectsGetProjectRequestsResponses = {
     /**
-     * Response Projects-Get Project Requests
-     *
      * Successful Response
      */
-    200: Array<ProjectRequestPublic>;
+    200: PaginatedProjectRequestsPublicVendorFull;
 };
 
 export type ProjectsGetProjectRequestsResponse = ProjectsGetProjectRequestsResponses[keyof ProjectsGetProjectRequestsResponses];

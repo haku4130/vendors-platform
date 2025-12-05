@@ -8,7 +8,11 @@
     >
       <template #incoming>
         <UContainer class="flex justify-center">
-          <ProjectGrid :items="projects" class="p-4 sm:p-6 w-full max-w-5xl" />
+          <ProjectGrid
+            ref="listEl"
+            :items="projects"
+            class="p-4 sm:p-6 w-full max-w-5xl"
+          />
         </UContainer>
       </template>
 
@@ -18,200 +22,48 @@
 </template>
 
 <script setup lang="ts">
+import { useInfiniteScroll } from '@vueuse/core';
+import { vendorsGetIncomingRequestsForVendor } from '~/generated/api';
 import type { ProjectPublic } from '~/generated/api';
 
-const projects: ProjectPublic[] = [
-  {
-    id: '12',
-    owner: {
-      company_name: 'Company 1',
-      logo_url: null,
-      email: 'email@example.com',
-      location: 'Moscow, Russia',
-      role: 'vendor',
-      full_name: 'John Doe',
-      id: '12345',
+const listEl = ref<HTMLElement | null>(null);
+const projects = ref<ProjectPublic[]>([]);
+const loading = ref(false);
+const total = ref<number | null>(null);
+
+const toast = useToast();
+
+async function loadMore() {
+  if (loading.value) return;
+  loading.value = true;
+
+  const offset = projects.value.length;
+  const res = await vendorsGetIncomingRequestsForVendor({
+    query: {
+      skip: offset,
+      limit: 5,
     },
-    title: 'Custom Software Development',
-    budget: 1000,
-    start_date: 'Within 60 days',
-    description: 'Description of the project',
-    services: [
-      {
-        id: 'f329ebbf-0d65-4919-b0da-1f0016be0b58',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Web Design',
-      },
-      {
-        id: '37c43588-b0f1-4f9b-a1e3-160179eb8d27',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Logo Design',
-      },
-      {
-        id: 'afc10fd1-898a-4ec1-a9a4-c9bcd6f540d0',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Graphic Design',
-      },
-      {
-        id: '13beca1f-f4f3-4777-98cb-8d03711a2b04',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Print Design',
-      },
-    ],
-  },
-  {
-    id: '12',
-    owner: {
-      company_name: 'Company 1',
-      logo_url: null,
-      email: 'email@example.com',
-      location: 'Moscow, Russia',
-      role: 'vendor',
-      full_name: 'John Doe',
-      id: '12345',
-    },
-    title: 'Custom Software Development',
-    budget: 1000,
-    start_date: 'Within 60 days',
-    description: 'Description of the project',
-    services: [
-      {
-        id: 'f329ebbf-0d65-4919-b0da-1f0016be0b58',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Web Design',
-      },
-      {
-        id: '37c43588-b0f1-4f9b-a1e3-160179eb8d27',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Logo Design',
-      },
-      {
-        id: 'afc10fd1-898a-4ec1-a9a4-c9bcd6f540d0',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Graphic Design',
-      },
-      {
-        id: '13beca1f-f4f3-4777-98cb-8d03711a2b04',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Print Design',
-      },
-    ],
-  },
-  {
-    id: '12',
-    owner: {
-      company_name: 'Company 1',
-      logo_url: null,
-      email: 'email@example.com',
-      location: 'Moscow, Russia',
-      role: 'vendor',
-      full_name: 'John Doe',
-      id: '12345',
-    },
-    title: 'Custom Software Development',
-    budget: 1000,
-    start_date: 'Within 60 days',
-    description: 'Description of the project',
-    services: [
-      {
-        id: 'f329ebbf-0d65-4919-b0da-1f0016be0b58',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Web Design',
-      },
-      {
-        id: '37c43588-b0f1-4f9b-a1e3-160179eb8d27',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Logo Design',
-      },
-      {
-        id: 'afc10fd1-898a-4ec1-a9a4-c9bcd6f540d0',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Graphic Design',
-      },
-      {
-        id: '13beca1f-f4f3-4777-98cb-8d03711a2b04',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Print Design',
-      },
-    ],
-  },
-  {
-    id: '12',
-    owner: {
-      company_name: 'Company 1',
-      logo_url: null,
-      email: 'email@example.com',
-      location: 'Moscow, Russia',
-      role: 'vendor',
-      full_name: 'John Doe',
-      id: '12345',
-    },
-    title: 'Custom Software Development',
-    budget: 1000,
-    start_date: 'Within 60 days',
-    description: 'Description of the project',
-    services: [
-      {
-        id: 'f329ebbf-0d65-4919-b0da-1f0016be0b58',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Web Design',
-      },
-      {
-        id: '37c43588-b0f1-4f9b-a1e3-160179eb8d27',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Logo Design',
-      },
-      {
-        id: 'afc10fd1-898a-4ec1-a9a4-c9bcd6f540d0',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Graphic Design',
-      },
-      {
-        id: '13beca1f-f4f3-4777-98cb-8d03711a2b04',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Print Design',
-      },
-    ],
-  },
-  {
-    id: '12',
-    owner: {
-      company_name: 'Company 1',
-      logo_url: null,
-      email: 'email@example.com',
-      location: 'Moscow, Russia',
-      role: 'vendor',
-      full_name: 'John Doe',
-      id: '12345',
-    },
-    title: 'Custom Software Development',
-    budget: 1000,
-    start_date: 'Within 60 days',
-    description: 'Description of the project',
-    services: [
-      {
-        id: 'f329ebbf-0d65-4919-b0da-1f0016be0b58',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Web Design',
-      },
-      {
-        id: '37c43588-b0f1-4f9b-a1e3-160179eb8d27',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Logo Design',
-      },
-      {
-        id: 'afc10fd1-898a-4ec1-a9a4-c9bcd6f540d0',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Graphic Design',
-      },
-      {
-        id: '13beca1f-f4f3-4777-98cb-8d03711a2b04',
-        category_id: '537eb2df-7b5c-44db-8530-440eb51e25c0',
-        label: 'Print Design',
-      },
-    ],
-  },
-];
+  });
+
+  if (res.error) {
+    toast.add({
+      title: "Can't get incoming projects",
+      description: extractErrorMessage(res.error),
+      color: 'error',
+    });
+  } else {
+    projects.value.push(...res.data.map((req) => req.project));
+    total.value = res.total;
+  }
+
+  loading.value = false;
+}
+
+useInfiniteScroll(listEl, loadMore, {
+  distance: 100,
+  canLoadMore: () =>
+    total.value === null || projects.value.length < (total.value ?? 0),
+});
 
 const tabs = [
   {

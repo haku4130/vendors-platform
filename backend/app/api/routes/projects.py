@@ -11,11 +11,13 @@ from app.crud import projects as crud
 from app.crud import requests as requests_crud
 from app.crud import vendors as vendors_crud
 from app.models import (
+    PaginatedProjectRequestsPublicVendorFull,
+    PaginatedVendorProfilesPublic,
     ProjectCreate,
     ProjectPublic,
     ProjectRequestPublic,
     RequestInitiator,
-    VendorProfilePublic,
+    RequestStatus,
 )
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -47,9 +49,14 @@ def get_project_detail(
     return project
 
 
-@router.get("/{project_id}/vendors/matching", response_model=list[VendorProfilePublic])
+@router.get(
+    "/{project_id}/vendors/matching", response_model=PaginatedVendorProfilesPublic
+)
 def get_matching_vendors(
-    project_id: UUID, session: SessionDep, skip: int = 0, limit: int = 100
+    project_id: UUID,
+    session: SessionDep,
+    skip: int = 0,
+    limit: int = 100,
 ):
     project = crud.get_project(session=session, project_id=project_id)
     if not project:
@@ -57,12 +64,13 @@ def get_matching_vendors(
             status_code=status.HTTP_404_NOT_FOUND, detail="Project not found"
         )
 
-    ranked = vendors_crud.get_ranked_vendors_for_project(
+    ranked, total = vendors_crud.get_ranked_vendors_for_project(
         session=session, project=project, skip=skip, limit=limit
     )
 
     vendors = [vendor for vendor, score in ranked]
-    return vendors
+
+    return {"result": vendors, "total": total}
 
 
 @router.post(
@@ -134,12 +142,16 @@ def send_project_request_vendor(
 
 @router.get(
     "/{project_id}/requests",
-    response_model=list[ProjectRequestPublic],
+    response_model=PaginatedProjectRequestsPublicVendorFull,
 )
 def get_project_requests(
     project_id: UUID,
     session: SessionDep,
     company_account: CurrentCompanyAccount,
+    initiator: RequestInitiator | None = None,
+    request_status: RequestStatus | None = None,
+    skip: int = 0,
+    limit: int = 100,
 ):
     project = crud.get_project(session=session, project_id=project_id)
     if not project:
@@ -148,7 +160,13 @@ def get_project_requests(
     if project.owner_id != company_account.id:
         raise HTTPException(status.HTTP_403_FORBIDDEN)
 
-    return requests_crud.get_requests_for_project(
+    result, total = requests_crud.get_requests_for_project(
         session=session,
         project_id=project_id,
+        initiator=initiator,
+        status=request_status,
+        skip=skip,
+        limit=limit,
     )
+
+    return {"result": result, "total": total}

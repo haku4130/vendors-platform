@@ -4,7 +4,7 @@ from app.api.deps import CurrentUser, CurrentVendorProfile, SessionDep
 from app.crud import requests as requests_crud
 from app.crud import vendors as crud
 from app.models import (
-    ProjectRequestPublic,
+    PaginatedProjectRequestsPublicProjectFull,
     UserRole,
     VendorProfileCreate,
     VendorProfilePublic,
@@ -39,15 +39,20 @@ def create_vendor_profile(
 
 @router.get(
     "/me/requests/incoming",
-    response_model=list[ProjectRequestPublic],
+    response_model=PaginatedProjectRequestsPublicProjectFull,
 )
 def get_incoming_requests_for_vendor(
     session: SessionDep,
     current_vendor: CurrentVendorProfile,
+    skip: int = 0,
+    limit: int = 100,
 ):
     vendor_profile_id = current_vendor.id
-    requests = requests_crud.get_incoming_requests_for_vendor(
+    requests, total = requests_crud.get_incoming_requests_for_vendor(
         session=session,
         vendor_profile_id=vendor_profile_id,
+        skip=skip,
+        limit=limit,
     )
-    return requests
+
+    return {"result": requests, "total": total}

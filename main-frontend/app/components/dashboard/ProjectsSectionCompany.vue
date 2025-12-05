@@ -351,7 +351,9 @@ import {
 
 const auth = useAuth();
 
-const { data: projects } = await projectsListMyProjects();
+let { data: projects } = await projectsListMyProjects();
+
+const createdProjectId = ref('');
 
 const stepIndex = ref(0);
 const totalSteps = ref(7);
@@ -436,6 +438,7 @@ async function handleCreateFinish() {
     });
 
     createdProjectId.value = res.data.id;
+    projects = (await projectsListMyProjects()).data;
 
     phase.value = 'vendors';
   } else {
@@ -447,9 +450,12 @@ async function handleCreateFinish() {
   }
 }
 
-function handleFinish() {}
+function handleFinish() {
+  resetAnswers();
+  phase.value = 'form';
+}
 
-const answers = reactive<AnswersType>({
+const answersInitialValue = {
   projectName: '',
   servicesNeeded: [],
   startTime: '',
@@ -460,5 +466,12 @@ const answers = reactive<AnswersType>({
   projectIntroduction: '',
   questions: [],
   requirements: [],
-});
+};
+
+const answers = reactive<AnswersType>(answersInitialValue);
+
+function resetAnswers() {
+  Object.assign(answers, answersInitialValue);
+  stepIndex.value = 0;
+}
 </script>

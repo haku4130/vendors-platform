@@ -26,18 +26,24 @@
     </template>
 
     <template #footer>
-      <div class="flex w-full gap-2">
+      <div class="grid grid-cols-1 sm:grid-cols-2 w-full gap-2">
         <UButton
           label="Explore Vendors"
-          class="w-full justify-center"
+          class="justify-center"
           :to="`/dashboard/projects/${item.id}/explore`"
         />
-        <UButton
-          label="Compare Quotes"
-          class="w-full justify-center"
-          variant="solid"
-          :to="`/dashboard/projects/${item.id}/compare`"
-        />
+        <UChip
+          :show="(item.incoming_count ?? 0) > 0"
+          color="warning"
+          size="3xl"
+        >
+          <UButton
+            label="Compare Quotes"
+            variant="solid"
+            class="w-full justify-center"
+            :to="`/dashboard/projects/${item.id}/compare`"
+          />
+        </UChip>
       </div>
     </template>
   </UCard>
