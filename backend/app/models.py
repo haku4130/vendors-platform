@@ -250,6 +250,7 @@ class ProjectBase(SQLModel):
         default=None,
         sa_column=sa.Column(JSONB),
     )
+    created_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
 
 
 class Project(ProjectBase, table=True):
