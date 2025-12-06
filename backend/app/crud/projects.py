@@ -22,6 +22,7 @@ def get_projects_for_owner(*, session: Session, owner_id: UUID) -> Sequence[Proj
         select(ProjectRequest.project_id, func.count())
         .where(col(ProjectRequest.project_id).in_(project_ids))
         .where(ProjectRequest.initiator == "vendor")
+        .where(ProjectRequest.status == "sent")
         .group_by(col(ProjectRequest.project_id))
     ).all()
 

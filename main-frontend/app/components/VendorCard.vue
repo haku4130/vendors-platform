@@ -65,7 +65,7 @@
         variant="link"
         leading-icon="i-lucide-bookmark"
         size="sm"
-        @click="addToShortlist(vendor.id)"
+        @click="addToShortlist"
       >
         Add to Shortlist
       </UButton>
@@ -103,9 +103,26 @@
       </div>
 
       <div class="flex justify-end mt-4">
-        <UButton :disabled="alreadySent" @click="handleVendorSelect(vendor.id)">
+        <UButton
+          v-if="!incoming"
+          :disabled="alreadySent"
+          @click="handleVendorSelect(vendor.id)"
+        >
           {{ alreadySent ? 'Sent!' : 'Request a quote' }}
         </UButton>
+
+        <div v-else-if="!alreadyProcessed" class="flex gap-2">
+          <UButton variant="solid" size="lg" @click="handleVendorAccept">
+            Accept
+          </UButton>
+          <UButton size="lg" @click="handleVendorDeny"> Deny </UButton>
+        </div>
+
+        <div v-else>
+          <UButton disabled>
+            {{ alreadyProcessed }}
+          </UButton>
+        </div>
       </div>
     </div>
   </div>
@@ -114,16 +131,23 @@
 <script setup lang="ts">
 import type { VendorProfilePublic } from '~/generated/api';
 
-import { projectsSendProjectRequestCompany } from '~/generated/api';
+import {
+  projectsSendProjectRequestCompany,
+  requestsAcceptProject,
+  requestsDeclineProject,
+} from '~/generated/api';
 
 defineEmits(['select', 'add-shortlist']);
 
-const { vendor, currentProjectId } = defineProps<{
+const { currentProjectId, requestId } = defineProps<{
   vendor: VendorProfilePublic;
   currentProjectId: string;
+  requestId: string;
+  incoming?: boolean;
 }>();
 
 const alreadySent = ref(false);
+const alreadyProcessed = ref();
 const toast = useToast();
 
 async function handleVendorSelect(vendorId: string) {
@@ -151,7 +175,55 @@ async function handleVendorSelect(vendorId: string) {
   alreadySent.value = true;
 }
 
-async function addToShortlist(vendorId: string) {}
+async function handleVendorAccept() {
+  const res = await requestsAcceptProject({
+    path: {
+      request_id: requestId,
+    },
+  });
+
+  if (res.error) {
+    toast.add({
+      title: 'Error',
+      description: extractErrorMessage(res.error, 'Failed to accept request'),
+      color: 'error',
+    });
+    return;
+  }
+
+  toast.add({
+    title: 'Request accepted!',
+    description: 'The vendor has been notified.',
+    color: 'success',
+  });
+  alreadyProcessed.value = 'Accepted';
+}
+
+async function handleVendorDeny() {
+  const res = await requestsDeclineProject({
+    path: {
+      request_id: requestId,
+    },
+  });
+
+  if (res.error) {
+    toast.add({
+      title: 'Error',
+      description: extractErrorMessage(res.error, 'Failed to decline request'),
+      color: 'error',
+    });
+    return;
+  }
+
+  toast.add({
+    title: 'Request declined',
+    description: 'The vendor has been notified.',
+    color: 'success',
+  });
+  alreadyProcessed.value = 'Denied';
+}
+
+async function addToShortlist() {}
 
 const displayedReviews = computed(() => [
   {

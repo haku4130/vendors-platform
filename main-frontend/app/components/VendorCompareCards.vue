@@ -2,13 +2,15 @@
   <div class="space-y-6">
     <div ref="listEl" class="space-y-4">
       <VendorCard
-        v-for="vendor in vendors"
-        :key="vendor.id"
-        :vendor="vendor"
+        v-for="request in requests"
+        :key="request.id"
+        :request-id="request.id"
+        :vendor="request.vendor_profile"
+        :incoming="incoming"
         :current-project-id="projectId"
       />
       <div v-if="loading">Loading...</div>
-      <div v-else-if="!vendors.length">
+      <div v-else-if="!requests.length">
         <UEmpty
           icon="i-lucide-hourglass"
           title="Awaiting vendor requests"
@@ -24,17 +26,18 @@
 import { useInfiniteScroll } from '@vueuse/core';
 import { projectsGetProjectRequests } from '~/generated/api';
 import type {
-  VendorProfilePublic,
   RequestInitiator,
   RequestStatus,
+  ProjectRequestPublicVendorFull,
 } from '~/generated/api';
 
 const { projectId } = defineProps<{
   projectId: string;
+  incoming?: boolean;
 }>();
 
 const listEl = ref<HTMLElement | null>(null);
-const vendors = ref<VendorProfilePublic[]>([]);
+const requests = ref<ProjectRequestPublicVendorFull[]>([]);
 const loading = ref(false);
 const total = ref<number | null>(null);
 
@@ -44,7 +47,7 @@ async function loadMore() {
   if (loading.value) return;
   loading.value = true;
 
-  const offset = vendors.value.length;
+  const offset = requests.value.length;
   const res = await projectsGetProjectRequests({
     path: {
       project_id: projectId,
@@ -64,7 +67,7 @@ async function loadMore() {
       color: 'error',
     });
   } else {
-    vendors.value.push(...res.data.result.map((req) => req.vendor_profile));
+    requests.value.push(...res.data.result);
     total.value = res.data.total;
   }
 
@@ -74,6 +77,6 @@ async function loadMore() {
 useInfiniteScroll(listEl, loadMore, {
   distance: 100,
   canLoadMore: () =>
-    total.value === null || vendors.value.length < (total.value ?? 0),
+    total.value === null || requests.value.length < (total.value ?? 0),
 });
 </script>
