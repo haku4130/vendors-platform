@@ -3,7 +3,12 @@ from uuid import UUID
 
 from sqlmodel import Session, col, func, select
 
-from app.models import Project, ProjectCreate, ProjectRequest, Service
+from app.models import (
+    Project,
+    ProjectCreate,
+    ProjectRequest,
+    Service,
+)
 
 
 def get_project(*, session: Session, project_id: UUID) -> Project | None:

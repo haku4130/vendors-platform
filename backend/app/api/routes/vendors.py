@@ -5,6 +5,7 @@ from app.crud import requests as requests_crud
 from app.crud import vendors as crud
 from app.models import (
     PaginatedProjectRequestsPublicProjectFull,
+    PaginatedProjectsPublic,
     UserRole,
     VendorProfileCreate,
     VendorProfilePublic,
@@ -35,6 +36,26 @@ def create_vendor_profile(
     return crud.create_vendor_profile(
         session=session, user_id=current_user.id, data=data
     )
+
+
+@router.get(
+    "/available-projects",
+    response_model=PaginatedProjectsPublic,
+)
+def get_available_projects_for_vendor(
+    session: SessionDep,
+    current_vendor: CurrentVendorProfile,
+    skip: int = 0,
+    limit: int = 50,
+):
+    rows, total = crud.get_available_ranked_projects_for_vendor(
+        session=session,
+        vendor_profile_id=current_vendor.id,
+        skip=skip,
+        limit=limit,
+    )
+
+    return {"result": [project for project, _ in rows], "total": total}
 
 
 @router.get(

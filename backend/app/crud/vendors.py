@@ -1,9 +1,20 @@
+from collections.abc import Sequence
 from uuid import UUID
 
-from sqlmodel import Session, col, select
+from sqlalchemy import and_, not_
+from sqlalchemy.orm import selectinload
+from sqlmodel import Session, col, func, select
 
 from app.crud import requests as requests_crud
-from app.models import Project, Service, VendorProfile, VendorProfileCreate
+from app.models import (
+    Project,
+    ProjectRequest,
+    ProjectServiceLink,
+    Service,
+    VendorProfile,
+    VendorProfileCreate,
+    VendorServiceLink,
+)
 
 
 def get_vendor_profile(
@@ -70,3 +81,65 @@ def get_ranked_vendors_for_project(
     ranked.sort(key=lambda x: (-x[1], -len({s.id for s in x[0].services})))
 
     return ranked[skip : skip + limit], len(ranked)
+
+
+def get_available_ranked_projects_for_vendor(
+    *,
+    session: Session,
+    vendor_profile_id: UUID,
+    skip: int,
+    limit: int,
+) -> tuple[Sequence[tuple[Project, int]], int]:
+    # Алиасы для удобства
+    P = Project
+    PSL = ProjectServiceLink
+    R = ProjectRequest
+    VSL = VendorServiceLink
+
+    # Подзапрос: существуют ли заявки между этим проектом и этим вендором?
+    subq_exists = (
+        select(R.id)
+        .where(
+            R.project_id == P.id,
+            R.vendor_profile_id == vendor_profile_id,
+        )
+        .exists()
+    )
+
+    total = session.exec(
+        select(func.count()).select_from(P).where(not_(subq_exists))
+    ).one()
+
+    # Счётчик пересечений сервисов
+    similarity_count = func.count(col(VSL.service_id)).label("similarity_score")
+
+    stmt = (
+        select(P, similarity_count)
+        .join(PSL, col(PSL.project_id) == P.id, isouter=True)
+        .join(
+            VSL,
+            and_(
+                col(VSL.service_id) == PSL.service_id,
+                col(VSL.vendor_profile_id) == vendor_profile_id,
+            ),
+            isouter=True,
+        )
+        .where(
+            not_(subq_exists),  # нет существующих заявок с этой компанией
+        )
+        .group_by(col(P.id))
+        .order_by(
+            similarity_count.desc(),
+            col(P.created_at).desc(),
+        )
+        .offset(skip)
+        .limit(limit)
+        .options(
+            selectinload(P.services),  # type: ignore
+            selectinload(P.owner),  # type: ignore
+        )
+    )
+
+    rows = session.exec(stmt).all()
+
+    return rows, total

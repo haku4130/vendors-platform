@@ -223,6 +223,20 @@ export type PaginatedProjectRequestsPublicVendorFull = {
 };
 
 /**
+ * PaginatedProjectsPublic
+ */
+export type PaginatedProjectsPublic = {
+    /**
+     * Result
+     */
+    result: Array<ProjectPublic>;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * PaginatedVendorProfilesPublic
  */
 export type PaginatedVendorProfilesPublic = {
@@ -292,6 +306,10 @@ export type ProjectCreate = {
      */
     requirements?: Array<string> | null;
     /**
+     * Created At
+     */
+    created_at?: string;
+    /**
      * Service Ids
      */
     service_ids: Array<string>;
@@ -331,6 +349,10 @@ export type ProjectPublic = {
      */
     requirements?: Array<string> | null;
     /**
+     * Created At
+     */
+    created_at?: string;
+    /**
      * Id
      */
     id: string;
@@ -339,10 +361,6 @@ export type ProjectPublic = {
      * Services
      */
     services: Array<Service>;
-    /**
-     * Incoming Count
-     */
-    incoming_count?: number;
 };
 
 /**
@@ -427,6 +445,58 @@ export type ProjectRequestPublicVendorFull = {
  * ProjectStart
  */
 export type ProjectStart = 'Within 30 days' | 'Within 60 days' | 'After 60+ days';
+
+/**
+ * ProjectWithIncomingCount
+ */
+export type ProjectWithIncomingCount = {
+    /**
+     * Title
+     */
+    title: string;
+    /**
+     * Description
+     */
+    description: string;
+    start_date: ProjectStart;
+    /**
+     * Location
+     */
+    location?: string | null;
+    /**
+     * Website
+     */
+    website?: string | null;
+    /**
+     * Budget
+     */
+    budget: number;
+    /**
+     * Questions
+     */
+    questions?: Array<string> | null;
+    /**
+     * Requirements
+     */
+    requirements?: Array<string> | null;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Id
+     */
+    id: string;
+    owner: UserPublic;
+    /**
+     * Services
+     */
+    services: Array<Service>;
+    /**
+     * Incoming Count
+     */
+    incoming_count?: number;
+};
 
 /**
  * RequestInitiator
@@ -1522,6 +1592,40 @@ export type VendorsCreateVendorProfileResponses = {
 
 export type VendorsCreateVendorProfileResponse = VendorsCreateVendorProfileResponses[keyof VendorsCreateVendorProfileResponses];
 
+export type VendorsGetAvailableProjectsForVendorData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/vendors/available-projects';
+};
+
+export type VendorsGetAvailableProjectsForVendorErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsGetAvailableProjectsForVendorError = VendorsGetAvailableProjectsForVendorErrors[keyof VendorsGetAvailableProjectsForVendorErrors];
+
+export type VendorsGetAvailableProjectsForVendorResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedProjectsPublic;
+};
+
+export type VendorsGetAvailableProjectsForVendorResponse = VendorsGetAvailableProjectsForVendorResponses[keyof VendorsGetAvailableProjectsForVendorResponses];
+
 export type VendorsGetIncomingRequestsForVendorData = {
     body?: never;
     path?: never;
@@ -1727,7 +1831,7 @@ export type ProjectsListMyProjectsResponses = {
      *
      * Successful Response
      */
-    200: Array<ProjectPublic>;
+    200: Array<ProjectWithIncomingCount>;
 };
 
 export type ProjectsListMyProjectsResponse = ProjectsListMyProjectsResponses[keyof ProjectsListMyProjectsResponses];

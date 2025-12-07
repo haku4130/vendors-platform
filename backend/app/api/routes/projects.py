@@ -16,6 +16,7 @@ from app.models import (
     ProjectCreate,
     ProjectPublic,
     ProjectRequestPublic,
+    ProjectWithIncomingCount,
     RequestInitiator,
     RequestStatus,
 )
@@ -23,7 +24,7 @@ from app.models import (
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
-@router.get("/", response_model=list[ProjectPublic])
+@router.get("/", response_model=list[ProjectWithIncomingCount])
 def list_my_projects(session: SessionDep, company_account: CurrentCompanyAccount):
     return crud.get_projects_for_owner(session=session, owner_id=company_account.id)
 

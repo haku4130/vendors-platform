@@ -273,11 +273,14 @@ class ProjectPublic(ProjectBase):
     id: uuid.UUID
     owner: UserPublic
     services: list[Service]
+
+
+class ProjectWithIncomingCount(ProjectPublic):
     incoming_count: int = 0
 
 
-class ProjectsPublic(SQLModel):
-    data: list[ProjectPublic]
+class PaginatedProjectsPublic(PaginatedResponse):
+    result: list[ProjectPublic]
 
 
 class ProjectRequestBase(SQLModel):
