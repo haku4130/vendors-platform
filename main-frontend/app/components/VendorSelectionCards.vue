@@ -6,6 +6,7 @@
         :key="vendor.id"
         :vendor="vendor"
         :current-project-id="projectId"
+        :request-id="''"
       />
       <div v-if="loading">Loading...</div>
       <div v-else-if="!vendors.length">

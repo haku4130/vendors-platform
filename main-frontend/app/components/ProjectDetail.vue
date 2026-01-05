@@ -62,7 +62,7 @@
               currency: 'USD',
             }"
           />
-          <span v-else class="flex items-center">{{ data.budget }}</span>
+          <span v-else class="flex items-center">${{ data.budget }}</span>
         </div>
 
         <div class="flex justify-between px-4 py-3 min-h-16">

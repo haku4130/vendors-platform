@@ -1,9 +1,13 @@
 <template>
   <UCard class="rounded-2xl shadow-md">
     <template #header>
-      <span class="flex w-full py-1 rounded-sm text-xl font-semibold">
+      <ULink
+        :to="`/dashboard/projects/${item.id}`"
+        inactive-class="text-normal"
+        class="flex w-full py-1 rounded-sm text-xl font-semibold"
+      >
         {{ item.title }}
-      </span>
+      </ULink>
     </template>
 
     <template #default>

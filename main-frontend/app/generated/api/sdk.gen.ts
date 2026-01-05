@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetAvailableProjectsForVendorData, VendorsGetAvailableProjectsForVendorErrors, VendorsGetAvailableProjectsForVendorResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorErrors, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses } from './types.gen';
+import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetAvailableProjectsForVendorData, VendorsGetAvailableProjectsForVendorErrors, VendorsGetAvailableProjectsForVendorResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorErrors, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyAcceptedProjectsData, VendorsGetMyAcceptedProjectsErrors, VendorsGetMyAcceptedProjectsResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -509,6 +509,22 @@ export const vendorsGetIncomingRequestsForVendor = <ThrowOnError extends boolean
 };
 
 /**
+ * Get My Accepted Projects
+ */
+export const vendorsGetMyAcceptedProjects = <ThrowOnError extends boolean = false>(options?: Options<VendorsGetMyAcceptedProjectsData, ThrowOnError>) => {
+    return (options?.client ?? client).get<VendorsGetMyAcceptedProjectsResponses, VendorsGetMyAcceptedProjectsErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/vendors/me/accepted-projects',
+        ...options
+    });
+};
+
+/**
  * List Categories
  */
 export const catalogListCategories = <ThrowOnError extends boolean = false>(options?: Options<CatalogListCategoriesData, ThrowOnError>) => {
@@ -655,12 +671,6 @@ export const projectsCreateNewProject = <ThrowOnError extends boolean = false>(o
  */
 export const projectsGetProjectDetail = <ThrowOnError extends boolean = false>(options: Options<ProjectsGetProjectDetailData, ThrowOnError>) => {
     return (options.client ?? client).get<ProjectsGetProjectDetailResponses, ProjectsGetProjectDetailErrors, ThrowOnError>({
-        security: [
-            {
-                scheme: 'bearer',
-                type: 'http'
-            }
-        ],
         url: '/api/v1/projects/{project_id}',
         ...options
     });

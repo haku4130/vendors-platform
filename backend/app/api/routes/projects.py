@@ -37,15 +37,10 @@ def create_new_project(
 
 
 @router.get("/{project_id}", response_model=ProjectPublic)
-def get_project_detail(
-    project_id: UUID, session: SessionDep, company_account: CurrentCompanyAccount
-):
+def get_project_detail(project_id: UUID, session: SessionDep):
     project = crud.get_project(session=session, project_id=project_id)
     if not project:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Project not found")
-
-    if project.owner_id != company_account.id:
-        raise HTTPException(status.HTTP_403_FORBIDDEN)
 
     return project
 

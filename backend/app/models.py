@@ -93,8 +93,11 @@ class User(UserBase, table=True):
     projects: list["Project"] = Relationship(back_populates="owner")
 
 
-class UserPublic(UserBasePublic):
+class UserPublicShort(UserBasePublic):
     id: uuid.UUID
+
+
+class UserPublic(UserPublicShort):
     vendor_profile: "VendorProfilePublic | None"
 
 
@@ -130,11 +133,12 @@ class VendorProfile(VendorProfileBase, table=True):
         back_populates="vendors", link_model=VendorServiceLink
     )
     requests: list["ProjectRequest"] = Relationship(back_populates="vendor_profile")
+    projects: list["Project"] = Relationship(back_populates="vendor_profile")
 
 
 class VendorProfilePublic(VendorProfileBase):
     id: uuid.UUID
-    user: User | None
+    user: UserPublicShort | None
     services: list["ServicePublic"]
 
 
@@ -263,6 +267,10 @@ class Project(ProjectBase, table=True):
         back_populates="projects", link_model=ProjectServiceLink
     )
     requests: list["ProjectRequest"] = Relationship(back_populates="project")
+    vendor_profile_id: uuid.UUID | None = Field(
+        default=None, foreign_key="vendorprofile.id", nullable=True
+    )
+    vendor_profile: Optional["VendorProfile"] = Relationship(back_populates="projects")
 
 
 class ProjectCreate(ProjectBase):
@@ -273,6 +281,7 @@ class ProjectPublic(ProjectBase):
     id: uuid.UUID
     owner: UserPublic
     services: list[Service]
+    vendor_profile: VendorProfilePublic | None
 
 
 class ProjectWithIncomingCount(ProjectPublic):

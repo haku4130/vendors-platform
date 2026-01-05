@@ -8,14 +8,15 @@
     >
       <template #incoming>
         <UContainer class="flex justify-center">
-          <ProjectGrid
-            ref="incomingProjectsEl"
-            :items="incomingProjects"
+          <RequestGrid
+            ref="incomingRequestsEl"
+            :items="incomingRequests"
+            to-url-postfix="incoming-request"
             class="p-4 sm:p-6 w-full max-w-5xl"
           />
         </UContainer>
         <UEmpty
-          v-if="!incomingProjects.length"
+          v-if="!incomingRequests.length"
           icon="i-lucide-hourglass"
           title="Awaiting companies requests"
           description="We’ll list their requests here as soon as they come in."
@@ -28,6 +29,7 @@
           <ProjectGrid
             ref="exploreProjectsEl"
             :items="exploreProjects"
+            to-url-postfix="proposal"
             class="p-4 sm:p-6 w-full max-w-5xl"
           />
         </UContainer>
@@ -36,6 +38,23 @@
           icon="i-lucide-hourglass"
           title="Awaiting companies projects"
           description="We’ll list their projects here as soon as they come in."
+          class="w-fit mx-auto my-8"
+        />
+      </template>
+
+      <template #accepted>
+        <UContainer class="flex justify-center">
+          <ProjectGrid
+            ref="acceptedProjectsEl"
+            :items="acceptedProjects"
+            class="p-4 sm:p-6 w-full max-w-5xl"
+          />
+        </UContainer>
+        <UEmpty
+          v-if="!acceptedProjects.length"
+          icon="i-lucide-search-x"
+          title="You have no active projects"
+          description="We’ll list your accepted projects here as soon as they come in."
           class="w-fit mx-auto my-8"
         />
       </template>
@@ -48,20 +67,29 @@ import { useInfiniteScroll } from '@vueuse/core';
 import {
   vendorsGetIncomingRequestsForVendor,
   vendorsGetAvailableProjectsForVendor,
+  vendorsGetMyAcceptedProjects,
 } from '~/generated/api';
-import type { ProjectPublic } from '~/generated/api';
+import type {
+  ProjectPublic,
+  ProjectRequestPublicProjectFull,
+} from '~/generated/api';
 
-const incomingProjectsEl = useTemplateRef('incomingProjectsEl');
-const incomingProjects = ref<ProjectPublic[]>([]);
+const incomingRequestsEl = useTemplateRef('incomingRequestsEl');
+const incomingRequests = ref<ProjectRequestPublicProjectFull[]>([]);
+const totalIncoming = ref<number | null>(null);
+
 const exploreProjectsEl = useTemplateRef('exploreProjectsEl');
 const exploreProjects = ref<ProjectPublic[]>([]);
-const totalIncoming = ref<number | null>(null);
 const totalExplore = ref<number | null>(null);
+
+const acceptedProjectsEl = useTemplateRef('acceptedProjectsEl');
+const acceptedProjects = ref<ProjectPublic[]>([]);
+const totalAccepted = ref<number | null>(null);
 
 const toast = useToast();
 
 async function loadMoreIncoming() {
-  const offset = incomingProjects.value.length;
+  const offset = incomingRequests.value.length;
   const res = await vendorsGetIncomingRequestsForVendor({
     query: {
       skip: offset,
@@ -76,7 +104,7 @@ async function loadMoreIncoming() {
       color: 'error',
     });
   } else {
-    incomingProjects.value.push(...res.data.result.map((req) => req.project));
+    incomingRequests.value.push(...res.data.result);
     totalIncoming.value = res.data.total;
   }
 }
@@ -102,17 +130,44 @@ async function loadMoreExplore() {
   }
 }
 
-useInfiniteScroll(incomingProjectsEl, loadMoreIncoming, {
+async function loadMoreAccepted() {
+  const offset = acceptedProjects.value.length;
+  const res = await vendorsGetMyAcceptedProjects({
+    query: {
+      skip: offset,
+      limit: 5,
+    },
+  });
+
+  if (res.error) {
+    toast.add({
+      title: "Can't get projects",
+      description: extractErrorMessage(res.error),
+      color: 'error',
+    });
+  } else {
+    acceptedProjects.value.push(...res.data.result);
+    totalAccepted.value = res.data.total;
+  }
+}
+
+useInfiniteScroll(incomingRequestsEl, loadMoreIncoming, {
   distance: 10,
   canLoadMore: () =>
     totalIncoming.value === null ||
-    incomingProjects.value.length < (totalIncoming.value ?? 0),
+    incomingRequests.value.length < (totalIncoming.value ?? 0),
 });
 useInfiniteScroll(exploreProjectsEl, loadMoreExplore, {
   distance: 10,
   canLoadMore: () =>
     totalExplore.value === null ||
     exploreProjects.value.length < (totalExplore.value ?? 0),
+});
+useInfiniteScroll(acceptedProjectsEl, loadMoreAccepted, {
+  distance: 10,
+  canLoadMore: () =>
+    totalAccepted.value === null ||
+    acceptedProjects.value.length < (totalAccepted.value ?? 0),
 });
 
 const tabs = [
@@ -125,6 +180,11 @@ const tabs = [
     label: 'Find a Project',
     icon: 'i-lucide-compass',
     slot: 'search',
+  },
+  {
+    label: 'Accepted Projects',
+    icon: 'i-lucide-clipboard-check',
+    slot: 'accepted',
   },
 ];
 </script>

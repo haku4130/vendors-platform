@@ -361,6 +361,7 @@ export type ProjectPublic = {
      * Services
      */
     services: Array<Service>;
+    vendor_profile: VendorProfilePublic | null;
 };
 
 /**
@@ -492,6 +493,7 @@ export type ProjectWithIncomingCount = {
      * Services
      */
     services: Array<Service>;
+    vendor_profile: VendorProfilePublic | null;
     /**
      * Incoming Count
      */
@@ -612,49 +614,6 @@ export type UpdatePassword = {
 };
 
 /**
- * User
- */
-export type User = {
-    /**
-     * Logo Url
-     */
-    logo_url?: string | null;
-    /**
-     * Email
-     */
-    email: string;
-    /**
-     * Company Name
-     */
-    company_name: string;
-    /**
-     * Location
-     */
-    location: string;
-    role: UserRole;
-    /**
-     * Full Name
-     */
-    full_name: string;
-    /**
-     * Is Active
-     */
-    is_active?: boolean;
-    /**
-     * Is Superuser
-     */
-    is_superuser?: boolean;
-    /**
-     * Id
-     */
-    id?: string;
-    /**
-     * Hashed Password
-     */
-    hashed_password: string;
-};
-
-/**
  * UserCreate
  */
 export type UserCreate = {
@@ -723,6 +682,37 @@ export type UserPublic = {
      */
     id: string;
     vendor_profile: VendorProfilePublic | null;
+};
+
+/**
+ * UserPublicShort
+ */
+export type UserPublicShort = {
+    /**
+     * Logo Url
+     */
+    logo_url?: string | null;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Company Name
+     */
+    company_name: string;
+    /**
+     * Location
+     */
+    location: string;
+    role: UserRole;
+    /**
+     * Full Name
+     */
+    full_name: string;
+    /**
+     * Id
+     */
+    id: string;
 };
 
 /**
@@ -940,7 +930,7 @@ export type VendorProfilePublic = {
      * Id
      */
     id: string;
-    user: User | null;
+    user: UserPublicShort | null;
     /**
      * Services
      */
@@ -1659,6 +1649,40 @@ export type VendorsGetIncomingRequestsForVendorResponses = {
 };
 
 export type VendorsGetIncomingRequestsForVendorResponse = VendorsGetIncomingRequestsForVendorResponses[keyof VendorsGetIncomingRequestsForVendorResponses];
+
+export type VendorsGetMyAcceptedProjectsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/vendors/me/accepted-projects';
+};
+
+export type VendorsGetMyAcceptedProjectsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsGetMyAcceptedProjectsError = VendorsGetMyAcceptedProjectsErrors[keyof VendorsGetMyAcceptedProjectsErrors];
+
+export type VendorsGetMyAcceptedProjectsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedProjectsPublic;
+};
+
+export type VendorsGetMyAcceptedProjectsResponse = VendorsGetMyAcceptedProjectsResponses[keyof VendorsGetMyAcceptedProjectsResponses];
 
 export type CatalogListCategoriesData = {
     body?: never;

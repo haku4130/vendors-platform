@@ -12,7 +12,7 @@
       Select from best fit vendors for your project
     </h1>
 
-    <VendorSelectionCards :project-id="$route.params.id" />
+    <VendorCompareCards :project-id="$route.params.project_id" incoming />
   </UContainer>
 </template>
 

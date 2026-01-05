@@ -1,6 +1,7 @@
 from collections.abc import Sequence
 from uuid import UUID
 
+from fastapi import HTTPException, status
 from sqlmodel import Session, col, func, select
 
 from app.models import ProjectRequest, RequestInitiator, RequestStatus
@@ -43,12 +44,30 @@ def create_request(
 
 
 def update_request_status(
-    *, session: Session, request_id: UUID, new_status: RequestStatus
+    *,
+    session: Session,
+    request_id: UUID,
+    request: ProjectRequest | None,
+    new_status: RequestStatus,
 ) -> ProjectRequest:
-    request = session.get(ProjectRequest, request_id)
+    request = request or session.get(ProjectRequest, request_id)
     if not request:
-        raise
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Request not found")
     request.status = new_status
+
+    if new_status == RequestStatus.accepted:
+        if not request.project:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "Request has no project assigned and is probably deleted",
+            )
+
+        if request.project.vendor_profile_id is not None:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST, "Project already has an assigned vendor"
+            )
+
+        request.project.vendor_profile_id = request.vendor_profile_id
 
     session.add(request)
     session.commit()
@@ -107,6 +126,7 @@ def get_incoming_requests_for_vendor(
         .where(
             ProjectRequest.vendor_profile_id == vendor_profile_id,
             ProjectRequest.initiator == RequestInitiator.company,
+            ProjectRequest.status == RequestStatus.sent,
         )
     ).one()
 
@@ -115,6 +135,7 @@ def get_incoming_requests_for_vendor(
         .where(
             ProjectRequest.vendor_profile_id == vendor_profile_id,
             ProjectRequest.initiator == RequestInitiator.company,
+            ProjectRequest.status == RequestStatus.sent,
         )
         .order_by(col(ProjectRequest.created_at).desc())
         .offset(skip)

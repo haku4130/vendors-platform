@@ -2,6 +2,7 @@
   <UCard class="rounded-2xl shadow-md flex flex-col justify-between">
     <UUser
       :name="item.owner.company_name"
+      :description="item.owner.full_name"
       :avatar="{
         src: item.owner.logo_url || undefined,
         icon: 'i-lucide-camera',
@@ -46,7 +47,7 @@
     <UButton
       label="View Project Brief"
       class="w-full justify-center mt-4"
-      :to="`/dashboard/projects/${item.id}`"
+      :to="`/dashboard/projects/${item.id}/${toUrlPostfix}`"
     />
   </UCard>
 </template>
@@ -54,5 +55,8 @@
 <script setup lang="ts">
 import type { ProjectPublic } from '~/generated/api';
 
-defineProps<{ item: ProjectPublic }>();
+const { toUrlPostfix = '' } = defineProps<{
+  item: ProjectPublic;
+  toUrlPostfix?: string;
+}>();
 </script>

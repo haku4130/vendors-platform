@@ -3,17 +3,17 @@
     <ProjectCard
       v-for="item in items"
       :key="item.id"
-      :item="item"
-      :to-url-postfix="toUrlPostfix"
+      :item="item.project"
+      :to-url-postfix="`${toUrlPostfix}/${item.id}`"
     />
   </UPageGrid>
 </template>
 
 <script setup lang="ts">
-import type { ProjectPublic } from '~/generated/api';
+import type { ProjectRequestPublicProjectFull } from '~/generated/api';
 
 const { toUrlPostfix = '' } = defineProps<{
-  items: ProjectPublic[];
+  items: ProjectRequestPublicProjectFull[];
   toUrlPostfix?: string;
 }>();
 </script>

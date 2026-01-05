@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from app.api.deps import CurrentUser, CurrentVendorProfile, SessionDep
+from app.crud import projects as projects_crud
 from app.crud import requests as requests_crud
 from app.crud import vendors as crud
 from app.models import (
@@ -77,3 +78,23 @@ def get_incoming_requests_for_vendor(
     )
 
     return {"result": requests, "total": total}
+
+
+@router.get(
+    "/me/accepted-projects",
+    response_model=PaginatedProjectsPublic,
+)
+def get_my_accepted_projects(
+    session: SessionDep,
+    current_vendor: CurrentVendorProfile,
+    skip: int = 0,
+    limit: int = 50,
+):
+    projects, total = projects_crud.get_accepted_projects_for_vendor(
+        session=session,
+        vendor_profile_id=current_vendor.id,
+        skip=skip,
+        limit=limit,
+    )
+
+    return {"result": projects, "total": total}

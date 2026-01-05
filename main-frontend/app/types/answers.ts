@@ -7,7 +7,7 @@ export interface AnswersType {
     budget: number;
     locationPreference: string;
     exactLocation: string | null;
-    website: string;
+    website: string | null;
     projectIntroduction: string;
     questions: string[];
     requirements: string[];

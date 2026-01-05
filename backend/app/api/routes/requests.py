@@ -44,6 +44,12 @@ def process_request_status_change(
     if req.status != RequestStatus.sent:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Request already processed")
 
+    project = req.project
+    if project and project.vendor_profile_id is not None:
+        raise HTTPException(
+            status.HTTP_400_BAD_REQUEST, "This project already has an assigned vendor"
+        )
+
     return req
 
 
@@ -54,14 +60,15 @@ def accept_project(
     current_user: CurrentUser,
 ):
     req = process_request_status_change(
-        request_id=request_id,
         session=session,
+        request_id=request_id,
         current_user=current_user,
     )
 
     req = crud.update_request_status(
         session=session,
         request_id=req.id,
+        request=req,
         new_status=RequestStatus.accepted,
     )
 
@@ -75,14 +82,15 @@ def decline_project(
     current_user: CurrentUser,
 ):
     req = process_request_status_change(
-        request_id=request_id,
         session=session,
+        request_id=request_id,
         current_user=current_user,
     )
 
     req = crud.update_request_status(
         session=session,
         request_id=req.id,
+        request=req,
         new_status=RequestStatus.declined,
     )
 
