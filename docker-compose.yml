@@ -56,6 +56,7 @@ services:
     command: bash scripts/prestart.sh
     env_file:
       - .env
+      - .env.${ENVIRONMENT}
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
@@ -91,6 +92,7 @@ services:
       - media-data:${MEDIA_ROOT}
     env_file:
       - .env
+      - .env.${ENVIRONMENT}
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
