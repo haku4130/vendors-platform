@@ -1,4 +1,4 @@
-# Stage 0, "build-stage", based on Node.js, to build and compile the frontend
+# Stage 0, "build-stage", based on Node.js, to build and compile the dashboard
 FROM node:24 AS build-stage
 
 WORKDIR /app
@@ -14,7 +14,7 @@ ARG VITE_API_URL=${VITE_API_URL}
 RUN npm run build
 
 
-# Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
+# Stage 1, based on Nginx, to have only the compiled dashboard, ready for production with Nginx
 FROM nginx:1
 
 COPY --from=build-stage /app/dist/ /usr/share/nginx/html

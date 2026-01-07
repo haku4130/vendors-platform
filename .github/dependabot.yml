@@ -16,18 +16,18 @@ updates:
       prefix: ⬆
   # npm
   - package-ecosystem: npm
-    directory: /frontend
+    directory: /dashboard
     schedule:
       interval: weekly
     commit-message:
       prefix: ⬆
     ignore:
-      - dependency-name: "@hey-api/openapi-ts"
+      - dependency-name: '@hey-api/openapi-ts'
   # Docker
   - package-ecosystem: docker
     directories:
       - /backend
-      - /frontend
+      - /dashboard
     schedule:
       interval: weekly
     commit-message:
