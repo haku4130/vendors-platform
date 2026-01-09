@@ -59,6 +59,8 @@ services:
     restart: "no"
     ports:
       - "8000:8000"
+    # Remove image for local development to avoid conflicts
+    image: null
     build:
       context: ./backend
     # command: sleep infinity  # Infinite loop to keep container alive doing nothing
@@ -96,11 +98,30 @@ services:
     restart: "no"
     ports:
       - "5173:80"
+    # Remove image for local development to avoid conflicts
+    image: null
     build:
       context: ./dashboard
       args:
         - VITE_API_URL=http://localhost:8000
         - NODE_ENV=development
+
+  frontend:
+    restart: "no"
+    ports:
+      - "3000:3000"
+    # Remove image for local development to avoid conflicts
+    image: null
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - NUXT_PUBLIC_BACKEND_API_URL=http://localhost:8000
+      - NUXT_PUBLIC_BACKEND_STATIC_URL=http://localhost:8088
+      - NODE_ENV=development
 
   media-nginx:
     ports:
