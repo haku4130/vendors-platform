@@ -1,8 +1,7 @@
 <template>
-  <UDashboardNavbar title="Dashboard" class="bg-gray-100">
+  <UDashboardNavbar title="Dashboard" class="bg-gray-100" toggle-side="right">
     <template #right>
-      <div class="flex gap-6">
-        <UButton to="/send-review" variant="link"> Leave a Review </UButton>
+      <div class="hidden lg:flex gap-6">
         <UButton
           class="w-fit"
           to="/dashboard/profile"

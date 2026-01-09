@@ -37,20 +37,19 @@
           active-class="font-semibold bg-gray-100"
           size="lg"
         >
-          <template #leading>
-            <UIcon :name="item.icon" size="20" />
-          </template>
-
           {{ item.label }}
 
           <template #trailing>
-            <span class="text-sm ml-auto"> 0 </span>
+            <UIcon :name="item.icon" size="20" class="text-sm ml-auto" />
           </template>
         </UButton>
       </nav>
     </template>
     <template #footer>
-      <UButton to="/logout"> Log Out </UButton>
+      <div class="flex justify-between w-full">
+        <UButton to="/logout"> Log Out </UButton>
+        <UButton to="/send-review" variant="link"> Leave a Review </UButton>
+      </div>
     </template>
   </UDashboardSidebar>
 </template>
