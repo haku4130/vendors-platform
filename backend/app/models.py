@@ -140,6 +140,8 @@ class VendorProfilePublic(VendorProfileBase):
     id: uuid.UUID
     user: UserPublicShort | None
     services: list["ServicePublic"]
+    rating: float | None = None
+    reviewsCount: int = 0
 
 
 class PaginatedVendorProfilesPublic(PaginatedResponse):
@@ -359,3 +361,47 @@ class TokenPayload(SQLModel):
 class NewPassword(SQLModel):
     token: str
     new_password: str = Field(min_length=8, max_length=128)
+
+
+class ReviewBase(SQLModel):
+    rating: int = Field(ge=1, le=5)
+    text: str = Field(min_length=1, max_length=2000)
+    created_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
+
+
+class Review(ReviewBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    reviewed_user_id: uuid.UUID = Field(
+        foreign_key="user.id", ondelete="CASCADE", nullable=False
+    )
+    reviewed_user: User | None = Relationship(
+        sa_relationship_kwargs={"foreign_keys": "Review.reviewed_user_id"}
+    )
+    author_id: uuid.UUID = Field(
+        foreign_key="user.id", ondelete="CASCADE", nullable=False
+    )
+    author: User = Relationship(
+        sa_relationship_kwargs={"foreign_keys": "Review.author_id"}
+    )
+    project_id: uuid.UUID | None = Field(
+        foreign_key="project.id", ondelete="SET NULL", nullable=True
+    )
+
+
+class ReviewCreate(SQLModel):
+    reviewed_user_id: uuid.UUID
+    rating: int = Field(ge=1, le=5)
+    text: str = Field(min_length=1, max_length=2000)
+    project_id: uuid.UUID | None = None
+
+
+class ReviewPublic(ReviewBase):
+    id: uuid.UUID
+    reviewed_user_id: uuid.UUID
+    reviewed_user: UserPublicShort
+    author: UserPublicShort
+    project_id: uuid.UUID | None
+
+
+class PaginatedReviewsPublic(PaginatedResponse):
+    result: list[ReviewPublic]

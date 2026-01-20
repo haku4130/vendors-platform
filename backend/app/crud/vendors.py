@@ -6,6 +6,7 @@ from sqlalchemy.orm import selectinload
 from sqlmodel import Session, col, func, select
 
 from app.crud import requests as requests_crud
+from app.crud import reviews as reviews_crud
 from app.models import (
     Project,
     ProjectRequest,
@@ -13,6 +14,7 @@ from app.models import (
     Service,
     VendorProfile,
     VendorProfileCreate,
+    VendorProfilePublic,
     VendorServiceLink,
 )
 
@@ -143,3 +145,28 @@ def get_available_ranked_projects_for_vendor(
     rows = session.exec(stmt).all()
 
     return rows, total
+
+
+def enrich_vendor_profile_with_reviews(
+    *, session: Session, vendor_profile: VendorProfile
+) -> VendorProfilePublic:
+    """Enrich VendorProfile with rating and reviews count"""
+    # Ensure relationships are loaded
+    session.refresh(vendor_profile, ["user", "services"])  # type: ignore
+
+    if not vendor_profile.user_id:
+        vendor_public = VendorProfilePublic.model_validate(vendor_profile)
+        vendor_public.rating = None
+        vendor_public.reviewsCount = 0
+        return vendor_public
+
+    rating, reviews_count = reviews_crud.get_user_rating_stats(
+        session=session, user_id=vendor_profile.user_id
+    )
+
+    # Convert to VendorProfilePublic
+    vendor_public = VendorProfilePublic.model_validate(vendor_profile)
+    vendor_public.rating = rating
+    vendor_public.reviewsCount = reviews_count
+
+    return vendor_public

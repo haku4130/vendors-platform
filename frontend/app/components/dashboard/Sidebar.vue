@@ -66,11 +66,11 @@ const menuItems =
           label: 'Projects',
           icon: 'i-lucide-layers-2',
         },
-        {
-          id: 'messages',
-          label: 'Messages',
-          icon: 'i-lucide-message-square-text',
-        },
+        // {
+        //   id: 'messages',
+        //   label: 'Messages',
+        //   icon: 'i-lucide-message-square-text',
+        // },
         {
           id: 'shortlist',
           label: 'Shortlist',
@@ -84,11 +84,11 @@ const menuItems =
           label: 'Projects',
           icon: 'i-lucide-layers-2',
         },
-        {
-          id: 'messages',
-          label: 'Messages',
-          icon: 'i-lucide-message-square-text',
-        },
+        // {
+        //   id: 'messages',
+        //   label: 'Messages',
+        //   icon: 'i-lucide-message-square-text',
+        // },
         { id: 'portfolio', label: 'Portfolio', icon: 'i-lucide-file-user' },
         { id: 'reviews', label: 'Reviews', icon: 'i-lucide-star' },
         { id: 'analytics', label: 'Analytics', icon: 'i-lucide-bar-chart-2' },

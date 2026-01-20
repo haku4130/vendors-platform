@@ -64,7 +64,12 @@ def get_matching_vendors(
         session=session, project=project, skip=skip, limit=limit
     )
 
-    vendors = [vendor for vendor, score in ranked]
+    vendors = [
+        vendors_crud.enrich_vendor_profile_with_reviews(
+            session=session, vendor_profile=vendor
+        )
+        for vendor, score in ranked
+    ]
 
     return {"result": vendors, "total": total}
 

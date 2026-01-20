@@ -4,7 +4,7 @@
       <ULink
         :to="`/dashboard/projects/${item.id}`"
         inactive-class="text-normal"
-        class="flex w-full py-1 rounded-sm text-xl font-semibold"
+        class="flex w-full py-1 rounded-sm text-xl font-semibold line-clamp-1"
       >
         {{ item.title }}
       </ULink>
@@ -30,7 +30,15 @@
     </template>
 
     <template #footer>
-      <div class="grid grid-cols-1 sm:grid-cols-2 w-full gap-2">
+      <div v-if="item.vendor_profile">
+        <UButton
+          label="Selected Vendor"
+          class="w-full justify-center"
+          color="success"
+          :to="`/vendors/${item.vendor_profile.id}`"
+        />
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 w-full gap-2">
         <UButton
           label="Explore Vendors"
           class="justify-center"

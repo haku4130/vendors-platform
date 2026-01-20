@@ -237,6 +237,20 @@ export type PaginatedProjectsPublic = {
 };
 
 /**
+ * PaginatedReviewsPublic
+ */
+export type PaginatedReviewsPublic = {
+    /**
+     * Result
+     */
+    result: Array<ReviewPublic>;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * PaginatedVendorProfilesPublic
  */
 export type PaginatedVendorProfilesPublic = {
@@ -509,6 +523,60 @@ export type RequestInitiator = 'company' | 'vendor';
  * RequestStatus
  */
 export type RequestStatus = 'sent' | 'accepted' | 'declined';
+
+/**
+ * ReviewCreate
+ */
+export type ReviewCreate = {
+    /**
+     * Reviewed User Id
+     */
+    reviewed_user_id: string;
+    /**
+     * Rating
+     */
+    rating: number;
+    /**
+     * Text
+     */
+    text: string;
+    /**
+     * Project Id
+     */
+    project_id?: string | null;
+};
+
+/**
+ * ReviewPublic
+ */
+export type ReviewPublic = {
+    /**
+     * Rating
+     */
+    rating: number;
+    /**
+     * Text
+     */
+    text: string;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * Reviewed User Id
+     */
+    reviewed_user_id: string;
+    reviewed_user: UserPublicShort;
+    author: UserPublicShort;
+    /**
+     * Project Id
+     */
+    project_id: string | null;
+};
 
 /**
  * Service
@@ -935,6 +1003,14 @@ export type VendorProfilePublic = {
      * Services
      */
     services: Array<ServicePublic>;
+    /**
+     * Rating
+     */
+    rating?: number | null;
+    /**
+     * Reviewscount
+     */
+    reviewsCount?: number;
 };
 
 export type LoginLoginAccessTokenData = {
@@ -1582,6 +1658,36 @@ export type VendorsCreateVendorProfileResponses = {
 
 export type VendorsCreateVendorProfileResponse = VendorsCreateVendorProfileResponses[keyof VendorsCreateVendorProfileResponses];
 
+export type VendorsGetVendorProfileData = {
+    body?: never;
+    path: {
+        /**
+         * Vendor Profile Id
+         */
+        vendor_profile_id: string;
+    };
+    query?: never;
+    url: '/api/v1/vendors/{vendor_profile_id}';
+};
+
+export type VendorsGetVendorProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsGetVendorProfileError = VendorsGetVendorProfileErrors[keyof VendorsGetVendorProfileErrors];
+
+export type VendorsGetVendorProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: VendorProfilePublic;
+};
+
+export type VendorsGetVendorProfileResponse = VendorsGetVendorProfileResponses[keyof VendorsGetVendorProfileResponses];
+
 export type VendorsGetAvailableProjectsForVendorData = {
     body?: never;
     path?: never;
@@ -2124,6 +2230,177 @@ export type RequestsDeclineProjectResponses = {
 };
 
 export type RequestsDeclineProjectResponse = RequestsDeclineProjectResponses[keyof RequestsDeclineProjectResponses];
+
+export type ReviewsCreateReviewData = {
+    body: ReviewCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/reviews/';
+};
+
+export type ReviewsCreateReviewErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReviewsCreateReviewError = ReviewsCreateReviewErrors[keyof ReviewsCreateReviewErrors];
+
+export type ReviewsCreateReviewResponses = {
+    /**
+     * Successful Response
+     */
+    200: ReviewPublic;
+};
+
+export type ReviewsCreateReviewResponse = ReviewsCreateReviewResponses[keyof ReviewsCreateReviewResponses];
+
+export type ReviewsGetReviewsForUserData = {
+    body?: never;
+    path: {
+        /**
+         * User Id
+         */
+        user_id: string;
+    };
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/reviews/user/{user_id}';
+};
+
+export type ReviewsGetReviewsForUserErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReviewsGetReviewsForUserError = ReviewsGetReviewsForUserErrors[keyof ReviewsGetReviewsForUserErrors];
+
+export type ReviewsGetReviewsForUserResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedReviewsPublic;
+};
+
+export type ReviewsGetReviewsForUserResponse = ReviewsGetReviewsForUserResponses[keyof ReviewsGetReviewsForUserResponses];
+
+export type ReviewsGetReviewsForVendorData = {
+    body?: never;
+    path: {
+        /**
+         * Vendor Profile Id
+         */
+        vendor_profile_id: string;
+    };
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/reviews/vendor/{vendor_profile_id}';
+};
+
+export type ReviewsGetReviewsForVendorErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReviewsGetReviewsForVendorError = ReviewsGetReviewsForVendorErrors[keyof ReviewsGetReviewsForVendorErrors];
+
+export type ReviewsGetReviewsForVendorResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedReviewsPublic;
+};
+
+export type ReviewsGetReviewsForVendorResponse = ReviewsGetReviewsForVendorResponses[keyof ReviewsGetReviewsForVendorResponses];
+
+export type ReviewsGetMyReviewsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/reviews/me';
+};
+
+export type ReviewsGetMyReviewsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReviewsGetMyReviewsError = ReviewsGetMyReviewsErrors[keyof ReviewsGetMyReviewsErrors];
+
+export type ReviewsGetMyReviewsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedReviewsPublic;
+};
+
+export type ReviewsGetMyReviewsResponse = ReviewsGetMyReviewsResponses[keyof ReviewsGetMyReviewsResponses];
+
+export type ReviewsGetReviewsReceivedByMeData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/reviews/me/received';
+};
+
+export type ReviewsGetReviewsReceivedByMeErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ReviewsGetReviewsReceivedByMeError = ReviewsGetReviewsReceivedByMeErrors[keyof ReviewsGetReviewsReceivedByMeErrors];
+
+export type ReviewsGetReviewsReceivedByMeResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedReviewsPublic;
+};
+
+export type ReviewsGetReviewsReceivedByMeResponse = ReviewsGetReviewsReceivedByMeResponses[keyof ReviewsGetReviewsReceivedByMeResponses];
 
 export type PrivateCreateUserData = {
     body: PrivateUserCreate;

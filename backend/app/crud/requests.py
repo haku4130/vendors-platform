@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import HTTPException, status
 from sqlmodel import Session, col, func, select
 
-from app.models import ProjectRequest, RequestInitiator, RequestStatus
+from app.models import Project, ProjectRequest, RequestInitiator, RequestStatus
 
 
 def get_request(
@@ -120,23 +120,24 @@ def get_vendor_ids_from_project_requests(
 def get_incoming_requests_for_vendor(
     *, session: Session, vendor_profile_id: UUID, skip: int, limit: int
 ) -> tuple[Sequence[ProjectRequest], int]:
+    filters = [
+        ProjectRequest.vendor_profile_id == vendor_profile_id,
+        ProjectRequest.initiator == RequestInitiator.company,
+        ProjectRequest.status == RequestStatus.sent,
+        col(Project.vendor_profile_id).is_(None),
+    ]
+
     total = session.exec(
         select(func.count())
         .select_from(ProjectRequest)
-        .where(
-            ProjectRequest.vendor_profile_id == vendor_profile_id,
-            ProjectRequest.initiator == RequestInitiator.company,
-            ProjectRequest.status == RequestStatus.sent,
-        )
+        .join(Project, col(ProjectRequest.project_id) == Project.id)
+        .where(*filters)  # type: ignore
     ).one()
 
     stmt = (
         select(ProjectRequest)
-        .where(
-            ProjectRequest.vendor_profile_id == vendor_profile_id,
-            ProjectRequest.initiator == RequestInitiator.company,
-            ProjectRequest.status == RequestStatus.sent,
-        )
+        .join(Project, col(ProjectRequest.project_id) == Project.id)
+        .where(*filters)  # type: ignore
         .order_by(col(ProjectRequest.created_at).desc())
         .offset(skip)
         .limit(limit)

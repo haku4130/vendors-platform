@@ -20,7 +20,7 @@
           icon="i-lucide-hourglass"
           title="Awaiting companies requests"
           description="We’ll list their requests here as soon as they come in."
-          class="w-fit mx-auto my-8"
+          class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
 
@@ -38,7 +38,7 @@
           icon="i-lucide-hourglass"
           title="Awaiting companies projects"
           description="We’ll list their projects here as soon as they come in."
-          class="w-fit mx-auto my-8"
+          class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
 
@@ -55,7 +55,7 @@
           icon="i-lucide-search-x"
           title="You have no active projects"
           description="We’ll list your accepted projects here as soon as they come in."
-          class="w-fit mx-auto my-8"
+          class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
     </UTabs>
@@ -63,7 +63,7 @@
 </template>
 
 <script setup lang="ts">
-import { useInfiniteScroll } from '@vueuse/core';
+import { useInfiniteScroll, useBreakpoints } from '@vueuse/core';
 import {
   vendorsGetIncomingRequestsForVendor,
   vendorsGetAvailableProjectsForVendor,
@@ -170,21 +170,28 @@ useInfiniteScroll(acceptedProjectsEl, loadMoreAccepted, {
     acceptedProjects.value.length < (totalAccepted.value ?? 0),
 });
 
-const tabs = [
-  {
-    label: 'Incoming Projects',
-    icon: 'i-lucide-inbox',
-    slot: 'incoming',
-  },
-  {
-    label: 'Find a Project',
-    icon: 'i-lucide-compass',
-    slot: 'search',
-  },
-  {
-    label: 'Accepted Projects',
-    icon: 'i-lucide-clipboard-check',
-    slot: 'accepted',
-  },
-];
+const breakpoints = useBreakpoints({
+  sm: 640,
+});
+
+const tabs = computed(() => {
+  const isSmallScreen = !breakpoints.sm.value;
+  return [
+    {
+      label: isSmallScreen ? 'Incoming' : 'Incoming Projects',
+      icon: 'i-lucide-inbox',
+      slot: 'incoming',
+    },
+    {
+      label: isSmallScreen ? 'Find' : 'Find a Project',
+      icon: 'i-lucide-compass',
+      slot: 'search',
+    },
+    {
+      label: isSmallScreen ? 'Accepted' : 'Accepted Projects',
+      icon: 'i-lucide-clipboard-check',
+      slot: 'accepted',
+    },
+  ];
+});
 </script>

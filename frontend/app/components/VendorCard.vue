@@ -72,7 +72,7 @@
     </div>
 
     <div class="flex-1 flex flex-col justify-between text-start">
-      <div>
+      <div v-if="reviews.length > 0">
         <h4 class="font-semibold mb-2">What clients have said</h4>
 
         <div class="grid lg:grid-cols-2 gap-3">
@@ -82,7 +82,11 @@
             class="border border-gray-300 rounded-lg p-3 bg-gray-50"
           >
             <div class="flex items-center justify-between mb-1">
-              <span class="font-semibold text-sm">{{ review.author }}</span>
+              <span class="font-semibold text-sm">{{
+                review.author?.full_name ||
+                review.author?.company_name ||
+                'Anonymous'
+              }}</span>
               <div class="flex items-center gap-0.5 text-yellow-500 text-xs">
                 <StarRating :rating="review.rating" />
               </div>
@@ -92,15 +96,15 @@
             </p>
           </div>
         </div>
-
-        <a
-          v-if="vendor.reviewLink"
-          :href="vendor.reviewLink"
-          class="inline-block mt-3 text-blue-600 text-sm font-medium hover:underline"
-        >
-          See all Reviews
-        </a>
       </div>
+
+      <UEmpty
+        v-else
+        icon="i-lucide-star"
+        title="No reviews yet"
+        description="This vendor has not received any reviews yet."
+        class="h-full"
+      />
 
       <div class="flex justify-end mt-4">
         <UButton
@@ -129,17 +133,18 @@
 </template>
 
 <script setup lang="ts">
-import type { VendorProfilePublic } from '~/generated/api';
+import type { VendorProfilePublic, ReviewPublic } from '~/generated/api';
 
 import {
   projectsSendProjectRequestCompany,
   requestsAcceptProject,
   requestsDeclineProject,
+  reviewsGetReviewsForVendor,
 } from '~/generated/api';
 
 defineEmits(['select', 'add-shortlist']);
 
-const { currentProjectId, requestId } = defineProps<{
+const { vendor, currentProjectId, requestId } = defineProps<{
   vendor: VendorProfilePublic;
   currentProjectId: string;
   requestId: string;
@@ -225,30 +230,29 @@ async function handleVendorDeny() {
 
 async function addToShortlist() {}
 
-const displayedReviews = computed(() => [
-  {
-    id: 1,
-    author: 'Alex P.',
-    rating: 5,
-    text: 'They delivered our project ahead of time and exceeded expectations.',
-  },
-  {
-    id: 2,
-    author: 'Marta K.',
-    rating: 4,
-    text: 'Very professional team, great communication throughout the process.',
-  },
-  {
-    id: 3,
-    author: 'John D.',
-    rating: 5,
-    text: 'Excellent work on our UI/UX design — creative and detail-oriented.',
-  },
-  {
-    id: 4,
-    author: 'John D.',
-    rating: 5,
-    text: 'Excellent work on our UI/UX design — creative and detail-oriented.',
-  },
-]);
+const reviews = ref<ReviewPublic[]>([]);
+
+const displayedReviews = computed(() => reviews.value.slice(0, 4));
+
+async function loadReviews() {
+  const res = await reviewsGetReviewsForVendor({
+    path: {
+      vendor_profile_id: vendor.id,
+    },
+    query: {
+      limit: 4,
+    },
+  });
+
+  if (res.error) {
+    console.error('Failed to load reviews:', res.error);
+    return;
+  }
+
+  reviews.value = res.data.result || [];
+}
+
+onMounted(() => {
+  loadReviews();
+});
 </script>

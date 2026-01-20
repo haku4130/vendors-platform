@@ -34,10 +34,14 @@
 
     <section class="rounded-2xl p-6 shadow-sm space-y-4">
       <h3 class="text-lg font-semibold">My Projects</h3>
-      <MyProjectGrid v-if="projects" :items="projects" class="my-6" />
-      <div v-if="!projects" class="w-full">
+      <MyProjectGrid
+        v-if="projects && projects.length > 0"
+        :items="projects"
+        class="my-6"
+      />
+      <div v-else class="w-full">
         <h4 class="text-xl font-semibold">Build a project brief in minutes</h4>
-        <p class="mt-1">
+        <p class="mt-1 text-muted">
           Create a personalized project brief and send it to multiple best-fit
           vendors all at once.
         </p>
@@ -316,7 +320,10 @@
 
     <section class="bg-white rounded-2xl p-6 shadow-sm">
       <h3 class="text-lg font-semibold mb-4">My Recommendations</h3>
-      <div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-3">
+      <div
+        v-if="displayedReviews.length > 0"
+        class="grid lg:grid-cols-2 xl:grid-cols-3 gap-3"
+      >
         <div
           v-for="review in displayedReviews"
           :key="review.id"
@@ -335,6 +342,9 @@
           </p>
         </div>
       </div>
+      <div v-else class="w-full">
+        <h3 class="text-muted">You haven't left a review to anyone yet!</h3>
+      </div>
     </section>
   </div>
 </template>
@@ -343,10 +353,15 @@
 import * as v from 'valibot';
 import type { AnswersType } from '@/types/answers';
 import type { Form } from '@nuxt/ui';
-import type { ProjectCreate, ProjectStart } from '~/generated/api';
+import type {
+  ProjectCreate,
+  ProjectStart,
+  ReviewPublic,
+} from '~/generated/api';
 import {
   projectsCreateNewProject,
   projectsListMyProjects,
+  reviewsGetMyReviews,
 } from '~/generated/api';
 
 const auth = useAuth();
@@ -387,28 +402,36 @@ const isValidCurrentStep = computed(() => {
 
 const phase = ref<'form' | 'summary' | 'vendors'>('form');
 
-const myReviews = [
-  {
-    id: 1,
-    commentedCompany: 'Acme Corp',
-    rating: 5,
-    text: 'They delivered our project ahead of time and exceeded expectations.',
-  },
-  {
-    id: 2,
-    commentedCompany: 'Beta LLC',
-    rating: 4,
-    text: 'Very professional team, great communication throughout the process.',
-  },
-  {
-    id: 3,
-    commentedCompany: 'Gamma Inc',
-    rating: 5,
-    text: 'Excellent work on our UI/UX design — creative and detail-oriented.',
-  },
-];
+const myReviews = ref<ReviewPublic[]>([]);
 
-const displayedReviews = computed(() => myReviews?.slice(0, 3) || []);
+const displayedReviews = computed(() => {
+  return myReviews.value.slice(0, 3).map((review) => ({
+    ...review,
+    commentedCompany:
+      review.reviewed_user.company_name ||
+      review.reviewed_user.full_name ||
+      review.reviewed_user_id,
+  }));
+});
+
+async function loadMyReviews() {
+  const res = await reviewsGetMyReviews({
+    query: {
+      limit: 3,
+    },
+  });
+
+  if (res.error) {
+    console.error('Failed to load my reviews:', res.error);
+    return;
+  }
+
+  myReviews.value = res.data.result || [];
+}
+
+onMounted(() => {
+  loadMyReviews();
+});
 
 function transformAnswersToProject(answers: AnswersType): ProjectCreate {
   return {
@@ -462,7 +485,7 @@ const answersInitialValue = {
   budget: 150,
   locationPreference: '',
   exactLocation: '',
-  website: '',
+  website: null as string | null,
   projectIntroduction: '',
   questions: [],
   requirements: [],
