@@ -17,12 +17,13 @@
         />
       </div>
 
-      <div class="flex items-center gap-1 mb-3">
-        <span class="font-semibold">{{ vendor.rating || 4.7 }}</span>
-        <StarRating :rating="vendor.rating || 4.7" />
-        <span class="text-sm text-muted"
-          >({{ vendor.reviewsCount || 56 }})</span
-        >
+      <div v-if="vendor.rating" class="flex items-center gap-1 mb-3">
+        <span class="font-semibold">{{ vendor.rating }}</span>
+        <StarRating :rating="vendor.rating" />
+        <span class="text-sm text-muted">({{ vendor.reviewsCount }})</span>
+      </div>
+      <div v-else class="flex items-center gap-1 mb-3">
+        <span class="font-semibold">No rating yet</span>
       </div>
 
       <div class="flex flex-wrap max-w-[16rem] gap-2 mb-4">
@@ -75,25 +76,13 @@
       <div v-if="reviews.length > 0">
         <h4 class="font-semibold mb-2">What clients have said</h4>
 
-        <div class="grid lg:grid-cols-2 gap-3">
+        <div class="grid xl:grid-cols-2 gap-3">
           <div
             v-for="review in displayedReviews"
             :key="review.id"
             class="border border-gray-300 rounded-lg p-3 bg-gray-50"
           >
-            <div class="flex items-center justify-between mb-1">
-              <span class="font-semibold text-sm">{{
-                review.author?.full_name ||
-                review.author?.company_name ||
-                'Anonymous'
-              }}</span>
-              <div class="flex items-center gap-0.5 text-yellow-500 text-xs">
-                <StarRating :rating="review.rating" />
-              </div>
-            </div>
-            <p class="text-sm text-gray-700 leading-snug line-clamp-3">
-              {{ review.text }}
-            </p>
+            <ReviewCard :review="review" />
           </div>
         </div>
       </div>

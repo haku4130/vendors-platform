@@ -8,7 +8,7 @@
           class="rounded-lg border-2 border-white shadow-md md:w-48 md:h-48 object-cover"
         />
 
-        <div class="flex-1">
+        <div class="flex-1 text-black">
           <div class="flex items-center">
             <h1 class="text-3xl font-semibold">
               {{ vendor.user?.company_name }}
@@ -16,7 +16,7 @@
           </div>
 
           <div class="flex mb-4 sm:mb-2">
-            <span class="text-sm align-middle text-muted">
+            <span class="text-sm align-middle">
               {{ vendor.user?.full_name }}
             </span>
           </div>
@@ -112,26 +112,7 @@
                 :key="review.id"
                 class="border border-gray-200 rounded-lg p-4 bg-gray-50"
               >
-                <div class="flex items-start justify-between mb-2">
-                  <div>
-                    <p class="font-semibold text-sm">
-                      {{
-                        review.author?.full_name ||
-                        review.author?.company_name ||
-                        'Anonymous'
-                      }}
-                    </p>
-                    <p class="text-xs text-muted">
-                      {{ formatDate(review.created_at) }}
-                    </p>
-                  </div>
-                  <div class="flex items-center gap-1 text-yellow-500">
-                    <StarRating :rating="review.rating" />
-                  </div>
-                </div>
-                <p class="text-sm leading-relaxed">
-                  {{ review.text }}
-                </p>
+                <ReviewCard :review="review" />
               </div>
 
               <div v-if="hasMoreReviews" class="text-center pt-4">
@@ -298,16 +279,6 @@ async function loadMoreReviews() {
   }
 
   reviews.value.push(...(res.data.result || []));
-}
-
-function formatDate(dateString?: string): string {
-  if (!dateString) return '';
-  const date = new Date(dateString);
-  return date.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
 }
 
 function formatTurnover(turnover: number): string {

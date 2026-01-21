@@ -48,7 +48,9 @@
     <template #footer>
       <div class="flex justify-between w-full">
         <UButton to="/logout"> Log Out </UButton>
-        <UButton to="/send-review" variant="link"> Leave a Review </UButton>
+        <UButton to="/dashboard/send-review" variant="link">
+          Leave a Review
+        </UButton>
       </div>
     </template>
   </UDashboardSidebar>

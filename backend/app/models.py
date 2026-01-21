@@ -349,6 +349,32 @@ class Message(SQLModel):
     message: str
 
 
+class PlatformFeedbackBase(SQLModel):
+    rating: int | None = Field(default=None, ge=1, le=5)
+    message: str = Field(min_length=1, max_length=2000)
+    page_url: str | None = Field(default=None, max_length=2048)
+    created_at: dt.datetime = Field(default_factory=lambda: dt.datetime.now(dt.UTC))
+
+
+class PlatformFeedback(PlatformFeedbackBase, table=True):
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    user_id: uuid.UUID = Field(
+        foreign_key="user.id", ondelete="CASCADE", nullable=False
+    )
+    user: User | None = Relationship()
+
+
+class PlatformFeedbackCreate(SQLModel):
+    rating: int | None = Field(default=None, ge=1, le=5)
+    message: str = Field(min_length=1, max_length=2000)
+    page_url: str | None = Field(default=None, max_length=2048)
+
+
+class PlatformFeedbackPublic(PlatformFeedbackBase):
+    id: uuid.UUID
+    user_id: uuid.UUID
+
+
 class Token(SQLModel):
     access_token: str
     token_type: str = "bearer"
@@ -405,3 +431,7 @@ class ReviewPublic(ReviewBase):
 
 class PaginatedReviewsPublic(PaginatedResponse):
     result: list[ReviewPublic]
+
+
+class PaginatedPlatformFeedbackPublic(PaginatedResponse):
+    result: list[PlatformFeedbackPublic]

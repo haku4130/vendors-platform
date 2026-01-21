@@ -72,7 +72,7 @@
               v.object({
                 projectName: v.pipe(
                   v.string(),
-                  v.nonEmpty('This step is required')
+                  v.nonEmpty('This step is required'),
                 ),
               })
             "
@@ -109,10 +109,10 @@
                     v.object({
                       id: v.string(),
                       label: v.string(),
-                    })
+                    }),
                   ),
                   v.nonEmpty('This step is required'),
-                  v.maxLength(5, 'You can select up to 5 services')
+                  v.maxLength(5, 'You can select up to 5 services'),
                 ),
               })
             "
@@ -144,7 +144,7 @@
               v.object({
                 startTime: v.pipe(
                   v.string(),
-                  v.nonEmpty('This step is required')
+                  v.nonEmpty('This step is required'),
                 ),
               })
             "
@@ -200,7 +200,7 @@
               v.object({
                 locationPreference: v.pipe(
                   v.string(),
-                  v.nonEmpty('This step is required')
+                  v.nonEmpty('This step is required'),
                 ),
               })
             "
@@ -238,7 +238,7 @@
                   v.object({
                     exactLocation: v.pipe(
                       v.string(),
-                      v.nonEmpty('This step is required')
+                      v.nonEmpty('This step is required'),
                     ),
                   })
                 "
@@ -298,7 +298,7 @@
               v.object({
                 projectIntroduction: v.pipe(
                   v.string(),
-                  v.nonEmpty('This step is required')
+                  v.nonEmpty('This step is required'),
                 ),
               })
             "
@@ -329,17 +329,7 @@
           :key="review.id"
           class="border border-gray-300 rounded-lg p-3 bg-gray-50"
         >
-          <div class="flex items-center justify-between mb-1">
-            <span class="font-semibold text-sm text-gray-900">{{
-              review.commentedCompany
-            }}</span>
-            <div class="flex items-center gap-0.5 text-yellow-500 text-xs">
-              <StarRating :rating="review.rating" />
-            </div>
-          </div>
-          <p class="text-sm text-gray-700 leading-snug line-clamp-3">
-            {{ review.text }}
-          </p>
+          <ReviewCard :review="review" />
         </div>
       </div>
       <div v-else class="w-full">
