@@ -195,6 +195,20 @@ export type NewPassword = {
 };
 
 /**
+ * PaginatedPlatformFeedbackPublic
+ */
+export type PaginatedPlatformFeedbackPublic = {
+    /**
+     * Result
+     */
+    result: Array<PlatformFeedbackPublic>;
+    /**
+     * Total
+     */
+    total: number;
+};
+
+/**
  * PaginatedProjectRequestsPublicProjectFull
  */
 export type PaginatedProjectRequestsPublicProjectFull = {
@@ -262,6 +276,54 @@ export type PaginatedVendorProfilesPublic = {
      * Total
      */
     total: number;
+};
+
+/**
+ * PlatformFeedbackCreate
+ */
+export type PlatformFeedbackCreate = {
+    /**
+     * Rating
+     */
+    rating?: number | null;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Page Url
+     */
+    page_url?: string | null;
+};
+
+/**
+ * PlatformFeedbackPublic
+ */
+export type PlatformFeedbackPublic = {
+    /**
+     * Rating
+     */
+    rating?: number | null;
+    /**
+     * Message
+     */
+    message: string;
+    /**
+     * Page Url
+     */
+    page_url?: string | null;
+    /**
+     * Created At
+     */
+    created_at?: string;
+    /**
+     * Id
+     */
+    id: string;
+    /**
+     * User Id
+     */
+    user_id: string;
 };
 
 /**
@@ -1616,6 +1678,65 @@ export type ItemsUpdateItemResponses = {
 };
 
 export type ItemsUpdateItemResponse = ItemsUpdateItemResponses[keyof ItemsUpdateItemResponses];
+
+export type FeedbackGetFeedbackData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/feedback/';
+};
+
+export type FeedbackGetFeedbackErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type FeedbackGetFeedbackError = FeedbackGetFeedbackErrors[keyof FeedbackGetFeedbackErrors];
+
+export type FeedbackGetFeedbackResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedPlatformFeedbackPublic;
+};
+
+export type FeedbackGetFeedbackResponse = FeedbackGetFeedbackResponses[keyof FeedbackGetFeedbackResponses];
+
+export type FeedbackSubmitPlatformFeedbackData = {
+    body: PlatformFeedbackCreate;
+    path?: never;
+    query?: never;
+    url: '/api/v1/feedback/';
+};
+
+export type FeedbackSubmitPlatformFeedbackErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type FeedbackSubmitPlatformFeedbackError = FeedbackSubmitPlatformFeedbackErrors[keyof FeedbackSubmitPlatformFeedbackErrors];
+
+export type FeedbackSubmitPlatformFeedbackResponses = {
+    /**
+     * Successful Response
+     */
+    201: Message;
+};
+
+export type FeedbackSubmitPlatformFeedbackResponse = FeedbackSubmitPlatformFeedbackResponses[keyof FeedbackSubmitPlatformFeedbackResponses];
 
 export type VendorsGetMyVendorProfileData = {
     body?: never;

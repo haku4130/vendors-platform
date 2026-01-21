@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, ReviewsCreateReviewData, ReviewsCreateReviewErrors, ReviewsCreateReviewResponses, ReviewsGetMyReviewsData, ReviewsGetMyReviewsErrors, ReviewsGetMyReviewsResponses, ReviewsGetReviewsForUserData, ReviewsGetReviewsForUserErrors, ReviewsGetReviewsForUserResponses, ReviewsGetReviewsForVendorData, ReviewsGetReviewsForVendorErrors, ReviewsGetReviewsForVendorResponses, ReviewsGetReviewsReceivedByMeData, ReviewsGetReviewsReceivedByMeErrors, ReviewsGetReviewsReceivedByMeResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetAvailableProjectsForVendorData, VendorsGetAvailableProjectsForVendorErrors, VendorsGetAvailableProjectsForVendorResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorErrors, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyAcceptedProjectsData, VendorsGetMyAcceptedProjectsErrors, VendorsGetMyAcceptedProjectsResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses, VendorsGetVendorProfileData, VendorsGetVendorProfileErrors, VendorsGetVendorProfileResponses } from './types.gen';
+import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, FeedbackGetFeedbackData, FeedbackGetFeedbackErrors, FeedbackGetFeedbackResponses, FeedbackSubmitPlatformFeedbackData, FeedbackSubmitPlatformFeedbackErrors, FeedbackSubmitPlatformFeedbackResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, ReviewsCreateReviewData, ReviewsCreateReviewErrors, ReviewsCreateReviewResponses, ReviewsGetMyReviewsData, ReviewsGetMyReviewsErrors, ReviewsGetMyReviewsResponses, ReviewsGetReviewsForUserData, ReviewsGetReviewsForUserErrors, ReviewsGetReviewsForUserResponses, ReviewsGetReviewsForVendorData, ReviewsGetReviewsForVendorErrors, ReviewsGetReviewsForVendorResponses, ReviewsGetReviewsReceivedByMeData, ReviewsGetReviewsReceivedByMeErrors, ReviewsGetReviewsReceivedByMeResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetAvailableProjectsForVendorData, VendorsGetAvailableProjectsForVendorErrors, VendorsGetAvailableProjectsForVendorResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorErrors, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyAcceptedProjectsData, VendorsGetMyAcceptedProjectsErrors, VendorsGetMyAcceptedProjectsResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses, VendorsGetVendorProfileData, VendorsGetVendorProfileErrors, VendorsGetVendorProfileResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -432,6 +432,44 @@ export const itemsUpdateItem = <ThrowOnError extends boolean = false>(options: O
             }
         ],
         url: '/api/v1/items/{id}',
+        ...options,
+        headers: {
+            'Content-Type': 'application/json',
+            ...options.headers
+        }
+    });
+};
+
+/**
+ * Get Feedback
+ */
+export const feedbackGetFeedback = <ThrowOnError extends boolean = false>(options?: Options<FeedbackGetFeedbackData, ThrowOnError>) => {
+    return (options?.client ?? client).get<FeedbackGetFeedbackResponses, FeedbackGetFeedbackErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/feedback/',
+        ...options
+    });
+};
+
+/**
+ * Submit Platform Feedback
+ *
+ * Submit feedback about the platform (authorized users only).
+ */
+export const feedbackSubmitPlatformFeedback = <ThrowOnError extends boolean = false>(options: Options<FeedbackSubmitPlatformFeedbackData, ThrowOnError>) => {
+    return (options.client ?? client).post<FeedbackSubmitPlatformFeedbackResponses, FeedbackSubmitPlatformFeedbackErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/feedback/',
         ...options,
         headers: {
             'Content-Type': 'application/json',

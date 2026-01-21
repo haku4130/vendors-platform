@@ -22,23 +22,6 @@ def get_my_vendor_profile(current_vendor_profile: CurrentVendorProfile):
     return current_vendor_profile
 
 
-@router.get("/{vendor_profile_id}", response_model=VendorProfilePublic)
-def get_vendor_profile(
-    session: SessionDep, vendor_profile_id: UUID
-) -> VendorProfilePublic:
-    """Get vendor profile by ID (public endpoint)"""
-    vendor_profile = crud.get_vendor_profile(
-        session=session, vendor_profile_id=vendor_profile_id
-    )
-    if not vendor_profile:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Vendor profile not found"
-        )
-    return crud.enrich_vendor_profile_with_reviews(
-        session=session, vendor_profile=vendor_profile
-    )
-
-
 @router.post("/me", response_model=VendorProfilePublic)
 def create_vendor_profile(
     session: SessionDep,
@@ -76,6 +59,23 @@ def get_available_projects_for_vendor(
     )
 
     return {"result": [project for project, _ in rows], "total": total}
+
+
+@router.get("/{vendor_profile_id}", response_model=VendorProfilePublic)
+def get_vendor_profile(
+    session: SessionDep, vendor_profile_id: UUID
+) -> VendorProfilePublic:
+    """Get vendor profile by ID (public endpoint)"""
+    vendor_profile = crud.get_vendor_profile(
+        session=session, vendor_profile_id=vendor_profile_id
+    )
+    if not vendor_profile:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND, detail="Vendor profile not found"
+        )
+    return crud.enrich_vendor_profile_with_reviews(
+        session=session, vendor_profile=vendor_profile
+    )
 
 
 @router.get(
