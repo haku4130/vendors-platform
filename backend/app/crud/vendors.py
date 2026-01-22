@@ -7,6 +7,7 @@ from sqlmodel import Session, col, func, select
 
 from app.crud import requests as requests_crud
 from app.crud import reviews as reviews_crud
+from app.crud import shortlist as shortlist_crud
 from app.models import (
     Project,
     ProjectRequest,
@@ -65,12 +66,20 @@ def get_ranked_vendors_for_project(
     )
     existing_vendor_ids = {vid for vid in existing_vendor_ids if vid is not None}  # type: ignore
 
+    # Get shortlisted vendor IDs for this project
+    shortlisted_vendor_ids = shortlist_crud.get_shortlisted_vendor_ids(
+        session=session, project_id=project.id
+    )
+
     vendors = session.exec(
         select(VendorProfile).where(col(VendorProfile.id).not_in(existing_vendor_ids))
     ).all()
 
     if required_services_count == 0:
-        return [(vendor, 0.0) for vendor in vendors][skip : skip + limit], len(vendors)
+        # Even with no services, shortlisted vendors go first
+        ranked = [(vendor, 0.0) for vendor in vendors]
+        ranked.sort(key=lambda x: (x[0].id not in shortlisted_vendor_ids,))
+        return ranked[skip : skip + limit], len(vendors)
 
     ranked: list[tuple[VendorProfile, float]] = []
     for vendor in vendors:
@@ -80,7 +89,14 @@ def get_ranked_vendors_for_project(
         score = match_count / required_services_count
         ranked.append((vendor, score))
 
-    ranked.sort(key=lambda x: (-x[1], -len({s.id for s in x[0].services})))
+    # Sort: shortlisted first, then by score, then by number of services
+    ranked.sort(
+        key=lambda x: (
+            x[0].id not in shortlisted_vendor_ids,  # False (shortlisted) first
+            -x[1],  # Higher score first
+            -len({s.id for s in x[0].services}),  # More services first
+        )
+    )
 
     return ranked[skip : skip + limit], len(ranked)
 

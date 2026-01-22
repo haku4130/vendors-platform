@@ -8,6 +8,9 @@
         :vendor="request.vendor_profile"
         :incoming="incoming"
         :current-project-id="projectId"
+        :initially-shortlisted="
+          shortlistedVendorIds.has(request.vendor_profile.id)
+        "
       />
       <div v-if="loading">Loading...</div>
       <div v-else-if="!requests.length">
@@ -24,14 +27,17 @@
 
 <script setup lang="ts">
 import { useInfiniteScroll } from '@vueuse/core';
-import { projectsGetProjectRequests } from '~/generated/api';
+import {
+  projectsGetProjectRequests,
+  shortlistGetShortlistedVendors,
+} from '~/generated/api';
 import type {
   RequestInitiator,
   RequestStatus,
   ProjectRequestPublicVendorFull,
 } from '~/generated/api';
 
-const { projectId } = defineProps<{
+const { projectId, incoming } = defineProps<{
   projectId: string;
   incoming?: boolean;
 }>();
@@ -40,6 +46,7 @@ const listEl = ref<HTMLElement | null>(null);
 const requests = ref<ProjectRequestPublicVendorFull[]>([]);
 const loading = ref(false);
 const total = ref<number | null>(null);
+const shortlistedVendorIds = ref<Set<string>>(new Set());
 
 const toast = useToast();
 
@@ -74,9 +81,25 @@ async function loadMore() {
   loading.value = false;
 }
 
+async function loadShortlistedVendors() {
+  const res = await shortlistGetShortlistedVendors({
+    path: {
+      project_id: projectId,
+    },
+  });
+
+  if (!res.error && res.data) {
+    shortlistedVendorIds.value = new Set(res.data.map((v) => v.id));
+  }
+}
+
 useInfiniteScroll(listEl, loadMore, {
   distance: 100,
   canLoadMore: () =>
     total.value === null || requests.value.length < (total.value ?? 0),
+});
+
+onMounted(() => {
+  loadShortlistedVendors();
 });
 </script>

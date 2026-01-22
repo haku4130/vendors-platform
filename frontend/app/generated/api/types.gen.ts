@@ -1779,36 +1779,6 @@ export type VendorsCreateVendorProfileResponses = {
 
 export type VendorsCreateVendorProfileResponse = VendorsCreateVendorProfileResponses[keyof VendorsCreateVendorProfileResponses];
 
-export type VendorsGetVendorProfileData = {
-    body?: never;
-    path: {
-        /**
-         * Vendor Profile Id
-         */
-        vendor_profile_id: string;
-    };
-    query?: never;
-    url: '/api/v1/vendors/{vendor_profile_id}';
-};
-
-export type VendorsGetVendorProfileErrors = {
-    /**
-     * Validation Error
-     */
-    422: HttpValidationError;
-};
-
-export type VendorsGetVendorProfileError = VendorsGetVendorProfileErrors[keyof VendorsGetVendorProfileErrors];
-
-export type VendorsGetVendorProfileResponses = {
-    /**
-     * Successful Response
-     */
-    200: VendorProfilePublic;
-};
-
-export type VendorsGetVendorProfileResponse = VendorsGetVendorProfileResponses[keyof VendorsGetVendorProfileResponses];
-
 export type VendorsGetAvailableProjectsForVendorData = {
     body?: never;
     path?: never;
@@ -1842,6 +1812,36 @@ export type VendorsGetAvailableProjectsForVendorResponses = {
 };
 
 export type VendorsGetAvailableProjectsForVendorResponse = VendorsGetAvailableProjectsForVendorResponses[keyof VendorsGetAvailableProjectsForVendorResponses];
+
+export type VendorsGetVendorProfileData = {
+    body?: never;
+    path: {
+        /**
+         * Vendor Profile Id
+         */
+        vendor_profile_id: string;
+    };
+    query?: never;
+    url: '/api/v1/vendors/{vendor_profile_id}';
+};
+
+export type VendorsGetVendorProfileErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsGetVendorProfileError = VendorsGetVendorProfileErrors[keyof VendorsGetVendorProfileErrors];
+
+export type VendorsGetVendorProfileResponses = {
+    /**
+     * Successful Response
+     */
+    200: VendorProfilePublic;
+};
+
+export type VendorsGetVendorProfileResponse = VendorsGetVendorProfileResponses[keyof VendorsGetVendorProfileResponses];
 
 export type VendorsGetIncomingRequestsForVendorData = {
     body?: never;
@@ -2522,6 +2522,106 @@ export type ReviewsGetReviewsReceivedByMeResponses = {
 };
 
 export type ReviewsGetReviewsReceivedByMeResponse = ReviewsGetReviewsReceivedByMeResponses[keyof ReviewsGetReviewsReceivedByMeResponses];
+
+export type ShortlistRemoveVendorFromShortlistData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+        /**
+         * Vendor Profile Id
+         */
+        vendor_profile_id: string;
+    };
+    query?: never;
+    url: '/api/v1/shortlist/projects/{project_id}/vendors/{vendor_profile_id}';
+};
+
+export type ShortlistRemoveVendorFromShortlistErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ShortlistRemoveVendorFromShortlistError = ShortlistRemoveVendorFromShortlistErrors[keyof ShortlistRemoveVendorFromShortlistErrors];
+
+export type ShortlistRemoveVendorFromShortlistResponses = {
+    /**
+     * Successful Response
+     */
+    200: Message;
+};
+
+export type ShortlistRemoveVendorFromShortlistResponse = ShortlistRemoveVendorFromShortlistResponses[keyof ShortlistRemoveVendorFromShortlistResponses];
+
+export type ShortlistAddVendorToShortlistData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+        /**
+         * Vendor Profile Id
+         */
+        vendor_profile_id: string;
+    };
+    query?: never;
+    url: '/api/v1/shortlist/projects/{project_id}/vendors/{vendor_profile_id}';
+};
+
+export type ShortlistAddVendorToShortlistErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ShortlistAddVendorToShortlistError = ShortlistAddVendorToShortlistErrors[keyof ShortlistAddVendorToShortlistErrors];
+
+export type ShortlistAddVendorToShortlistResponses = {
+    /**
+     * Successful Response
+     */
+    201: Message;
+};
+
+export type ShortlistAddVendorToShortlistResponse = ShortlistAddVendorToShortlistResponses[keyof ShortlistAddVendorToShortlistResponses];
+
+export type ShortlistGetShortlistedVendorsData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+    };
+    query?: never;
+    url: '/api/v1/shortlist/projects/{project_id}/vendors';
+};
+
+export type ShortlistGetShortlistedVendorsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ShortlistGetShortlistedVendorsError = ShortlistGetShortlistedVendorsErrors[keyof ShortlistGetShortlistedVendorsErrors];
+
+export type ShortlistGetShortlistedVendorsResponses = {
+    /**
+     * Response Shortlist-Get Shortlisted Vendors
+     *
+     * Successful Response
+     */
+    200: Array<VendorProfilePublic>;
+};
+
+export type ShortlistGetShortlistedVendorsResponse = ShortlistGetShortlistedVendorsResponses[keyof ShortlistGetShortlistedVendorsResponses];
 
 export type PrivateCreateUserData = {
     body: PrivateUserCreate;

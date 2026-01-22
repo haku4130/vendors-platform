@@ -5,6 +5,7 @@
     <div class="flex flex-col md:w-fit">
       <div class="mb-3">
         <UUser
+          :to="`/vendors/${vendor.id}`"
           :name="vendor.user?.company_name"
           :description="vendor.user?.full_name"
           :avatar="{
@@ -36,7 +37,9 @@
         </span>
       </div>
 
-      <div class="space-y-2 w-full border-y border-gray-400 pt-3">
+      <hr />
+
+      <div class="space-y-2 w-full border-gray-400 pt-3">
         <UTooltip :delay-duration="0" text="Minimum Project Price">
           <div class="flex items-center gap-2">
             <UIcon name="i-lucide-tag" />
@@ -61,14 +64,19 @@
         </div>
       </div>
 
+      <hr v-if="!incoming" />
+
       <UButton
+        v-if="!incoming"
         class="w-fit mt-2 px-0"
         variant="link"
-        leading-icon="i-lucide-bookmark"
+        :leading-icon="
+          isShortlisted ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'
+        "
         size="sm"
-        @click="addToShortlist"
+        @click="toggleShortlist"
       >
-        Add to Shortlist
+        {{ isShortlisted ? 'Shortlisted' : 'Add to Shortlist' }}
       </UButton>
     </div>
 
@@ -129,17 +137,27 @@ import {
   requestsAcceptProject,
   requestsDeclineProject,
   reviewsGetReviewsForVendor,
+  shortlistAddVendorToShortlist,
+  shortlistRemoveVendorFromShortlist,
 } from '~/generated/api';
 
-defineEmits(['select', 'add-shortlist']);
+const emit = defineEmits(['select', 'add-shortlist', 'shortlist-changed']);
 
-const { vendor, currentProjectId, requestId } = defineProps<{
+const {
+  vendor,
+  currentProjectId,
+  requestId,
+  initiallyShortlisted = false,
+  incoming,
+} = defineProps<{
   vendor: VendorProfilePublic;
   currentProjectId: string;
   requestId: string;
+  initiallyShortlisted?: boolean;
   incoming?: boolean;
 }>();
 
+const isShortlisted = ref(initiallyShortlisted);
 const alreadySent = ref(false);
 const alreadyProcessed = ref();
 const toast = useToast();
@@ -217,7 +235,45 @@ async function handleVendorDeny() {
   alreadyProcessed.value = 'Denied';
 }
 
-async function addToShortlist() {}
+async function toggleShortlist() {
+  const res = isShortlisted.value
+    ? await shortlistRemoveVendorFromShortlist({
+        path: {
+          project_id: currentProjectId,
+          vendor_profile_id: vendor.id,
+        },
+      })
+    : await shortlistAddVendorToShortlist({
+        path: {
+          project_id: currentProjectId,
+          vendor_profile_id: vendor.id,
+        },
+      });
+
+  if (res.error) {
+    toast.add({
+      title: 'Error',
+      description: extractErrorMessage(
+        res.error,
+        isShortlisted.value
+          ? 'Failed to remove from shortlist'
+          : 'Failed to add to shortlist',
+      ),
+      color: 'error',
+    });
+    return;
+  }
+
+  isShortlisted.value = !isShortlisted.value;
+  toast.add({
+    title: 'Success',
+    description: isShortlisted.value
+      ? 'Added to shortlist'
+      : 'Removed from shortlist',
+    color: 'success',
+  });
+  emit('shortlist-changed', isShortlisted.value);
+}
 
 const reviews = ref<ReviewPublic[]>([]);
 

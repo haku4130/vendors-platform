@@ -2,7 +2,7 @@
 
 import { type Client, formDataBodySerializer, type Options as Options2, type TDataShape, urlSearchParamsBodySerializer } from './client';
 import { client } from './client.gen';
-import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, FeedbackGetFeedbackData, FeedbackGetFeedbackErrors, FeedbackGetFeedbackResponses, FeedbackSubmitPlatformFeedbackData, FeedbackSubmitPlatformFeedbackErrors, FeedbackSubmitPlatformFeedbackResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, ReviewsCreateReviewData, ReviewsCreateReviewErrors, ReviewsCreateReviewResponses, ReviewsGetMyReviewsData, ReviewsGetMyReviewsErrors, ReviewsGetMyReviewsResponses, ReviewsGetReviewsForUserData, ReviewsGetReviewsForUserErrors, ReviewsGetReviewsForUserResponses, ReviewsGetReviewsForVendorData, ReviewsGetReviewsForVendorErrors, ReviewsGetReviewsForVendorResponses, ReviewsGetReviewsReceivedByMeData, ReviewsGetReviewsReceivedByMeErrors, ReviewsGetReviewsReceivedByMeResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetAvailableProjectsForVendorData, VendorsGetAvailableProjectsForVendorErrors, VendorsGetAvailableProjectsForVendorResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorErrors, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyAcceptedProjectsData, VendorsGetMyAcceptedProjectsErrors, VendorsGetMyAcceptedProjectsResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses, VendorsGetVendorProfileData, VendorsGetVendorProfileErrors, VendorsGetVendorProfileResponses } from './types.gen';
+import type { CatalogCreateCategoryData, CatalogCreateCategoryErrors, CatalogCreateCategoryResponses, CatalogCreateServiceData, CatalogCreateServiceErrors, CatalogCreateServiceResponses, CatalogDeleteServiceData, CatalogDeleteServiceErrors, CatalogDeleteServiceResponses, CatalogListCategoriesData, CatalogListCategoriesResponses, CatalogUpdateCategoryData, CatalogUpdateCategoryErrors, CatalogUpdateCategoryResponses, CatalogUpdateServiceData, CatalogUpdateServiceErrors, CatalogUpdateServiceResponses, FeedbackGetFeedbackData, FeedbackGetFeedbackErrors, FeedbackGetFeedbackResponses, FeedbackSubmitPlatformFeedbackData, FeedbackSubmitPlatformFeedbackErrors, FeedbackSubmitPlatformFeedbackResponses, ItemsCreateItemData, ItemsCreateItemErrors, ItemsCreateItemResponses, ItemsDeleteItemData, ItemsDeleteItemErrors, ItemsDeleteItemResponses, ItemsReadItemData, ItemsReadItemErrors, ItemsReadItemResponses, ItemsReadItemsData, ItemsReadItemsErrors, ItemsReadItemsResponses, ItemsUpdateItemData, ItemsUpdateItemErrors, ItemsUpdateItemResponses, LoginLoginAccessTokenData, LoginLoginAccessTokenErrors, LoginLoginAccessTokenResponses, LoginRecoverPasswordData, LoginRecoverPasswordErrors, LoginRecoverPasswordHtmlContentData, LoginRecoverPasswordHtmlContentErrors, LoginRecoverPasswordHtmlContentResponses, LoginRecoverPasswordResponses, LoginResetPasswordData, LoginResetPasswordErrors, LoginResetPasswordResponses, LoginTestTokenData, LoginTestTokenResponses, PrivateCreateUserData, PrivateCreateUserErrors, PrivateCreateUserResponses, ProjectsCreateNewProjectData, ProjectsCreateNewProjectErrors, ProjectsCreateNewProjectResponses, ProjectsGetMatchingVendorsData, ProjectsGetMatchingVendorsErrors, ProjectsGetMatchingVendorsResponses, ProjectsGetProjectDetailData, ProjectsGetProjectDetailErrors, ProjectsGetProjectDetailResponses, ProjectsGetProjectRequestsData, ProjectsGetProjectRequestsErrors, ProjectsGetProjectRequestsResponses, ProjectsListMyProjectsData, ProjectsListMyProjectsResponses, ProjectsSendProjectRequestCompanyData, ProjectsSendProjectRequestCompanyErrors, ProjectsSendProjectRequestCompanyResponses, ProjectsSendProjectRequestVendorData, ProjectsSendProjectRequestVendorErrors, ProjectsSendProjectRequestVendorResponses, RequestsAcceptProjectData, RequestsAcceptProjectErrors, RequestsAcceptProjectResponses, RequestsDeclineProjectData, RequestsDeclineProjectErrors, RequestsDeclineProjectResponses, ReviewsCreateReviewData, ReviewsCreateReviewErrors, ReviewsCreateReviewResponses, ReviewsGetMyReviewsData, ReviewsGetMyReviewsErrors, ReviewsGetMyReviewsResponses, ReviewsGetReviewsForUserData, ReviewsGetReviewsForUserErrors, ReviewsGetReviewsForUserResponses, ReviewsGetReviewsForVendorData, ReviewsGetReviewsForVendorErrors, ReviewsGetReviewsForVendorResponses, ReviewsGetReviewsReceivedByMeData, ReviewsGetReviewsReceivedByMeErrors, ReviewsGetReviewsReceivedByMeResponses, ShortlistAddVendorToShortlistData, ShortlistAddVendorToShortlistErrors, ShortlistAddVendorToShortlistResponses, ShortlistGetShortlistedVendorsData, ShortlistGetShortlistedVendorsErrors, ShortlistGetShortlistedVendorsResponses, ShortlistRemoveVendorFromShortlistData, ShortlistRemoveVendorFromShortlistErrors, ShortlistRemoveVendorFromShortlistResponses, UsersCreateUserData, UsersCreateUserErrors, UsersCreateUserResponses, UsersDeleteUserData, UsersDeleteUserErrors, UsersDeleteUserMeData, UsersDeleteUserMeResponses, UsersDeleteUserResponses, UsersReadUserByIdData, UsersReadUserByIdErrors, UsersReadUserByIdResponses, UsersReadUserMeData, UsersReadUserMeResponses, UsersReadUsersData, UsersReadUsersErrors, UsersReadUsersResponses, UsersRegisterUserData, UsersRegisterUserErrors, UsersRegisterUserResponses, UsersUpdatePasswordMeData, UsersUpdatePasswordMeErrors, UsersUpdatePasswordMeResponses, UsersUpdateUserData, UsersUpdateUserErrors, UsersUpdateUserMeData, UsersUpdateUserMeErrors, UsersUpdateUserMeResponses, UsersUpdateUserResponses, UsersUploadAvatarData, UsersUploadAvatarErrors, UsersUploadAvatarResponses, UtilsHealthCheckData, UtilsHealthCheckResponses, UtilsTestEmailData, UtilsTestEmailErrors, UtilsTestEmailResponses, VendorsCreateVendorProfileData, VendorsCreateVendorProfileErrors, VendorsCreateVendorProfileResponses, VendorsGetAvailableProjectsForVendorData, VendorsGetAvailableProjectsForVendorErrors, VendorsGetAvailableProjectsForVendorResponses, VendorsGetIncomingRequestsForVendorData, VendorsGetIncomingRequestsForVendorErrors, VendorsGetIncomingRequestsForVendorResponses, VendorsGetMyAcceptedProjectsData, VendorsGetMyAcceptedProjectsErrors, VendorsGetMyAcceptedProjectsResponses, VendorsGetMyVendorProfileData, VendorsGetMyVendorProfileResponses, VendorsGetVendorProfileData, VendorsGetVendorProfileErrors, VendorsGetVendorProfileResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean> = Options2<TData, ThrowOnError> & {
     /**
@@ -515,18 +515,6 @@ export const vendorsCreateVendorProfile = <ThrowOnError extends boolean = false>
 };
 
 /**
- * Get Vendor Profile
- *
- * Get vendor profile by ID (public endpoint)
- */
-export const vendorsGetVendorProfile = <ThrowOnError extends boolean = false>(options: Options<VendorsGetVendorProfileData, ThrowOnError>) => {
-    return (options.client ?? client).get<VendorsGetVendorProfileResponses, VendorsGetVendorProfileErrors, ThrowOnError>({
-        url: '/api/v1/vendors/{vendor_profile_id}',
-        ...options
-    });
-};
-
-/**
  * Get Available Projects For Vendor
  */
 export const vendorsGetAvailableProjectsForVendor = <ThrowOnError extends boolean = false>(options?: Options<VendorsGetAvailableProjectsForVendorData, ThrowOnError>) => {
@@ -538,6 +526,18 @@ export const vendorsGetAvailableProjectsForVendor = <ThrowOnError extends boolea
             }
         ],
         url: '/api/v1/vendors/available-projects',
+        ...options
+    });
+};
+
+/**
+ * Get Vendor Profile
+ *
+ * Get vendor profile by ID (public endpoint)
+ */
+export const vendorsGetVendorProfile = <ThrowOnError extends boolean = false>(options: Options<VendorsGetVendorProfileData, ThrowOnError>) => {
+    return (options.client ?? client).get<VendorsGetVendorProfileResponses, VendorsGetVendorProfileErrors, ThrowOnError>({
+        url: '/api/v1/vendors/{vendor_profile_id}',
         ...options
     });
 };
@@ -892,6 +892,60 @@ export const reviewsGetReviewsReceivedByMe = <ThrowOnError extends boolean = fal
             }
         ],
         url: '/api/v1/reviews/me/received',
+        ...options
+    });
+};
+
+/**
+ * Remove Vendor From Shortlist
+ *
+ * Remove vendor from project shortlist (company only)
+ */
+export const shortlistRemoveVendorFromShortlist = <ThrowOnError extends boolean = false>(options: Options<ShortlistRemoveVendorFromShortlistData, ThrowOnError>) => {
+    return (options.client ?? client).delete<ShortlistRemoveVendorFromShortlistResponses, ShortlistRemoveVendorFromShortlistErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/shortlist/projects/{project_id}/vendors/{vendor_profile_id}',
+        ...options
+    });
+};
+
+/**
+ * Add Vendor To Shortlist
+ *
+ * Add vendor to project shortlist (company only)
+ */
+export const shortlistAddVendorToShortlist = <ThrowOnError extends boolean = false>(options: Options<ShortlistAddVendorToShortlistData, ThrowOnError>) => {
+    return (options.client ?? client).post<ShortlistAddVendorToShortlistResponses, ShortlistAddVendorToShortlistErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/shortlist/projects/{project_id}/vendors/{vendor_profile_id}',
+        ...options
+    });
+};
+
+/**
+ * Get Shortlisted Vendors
+ *
+ * Get all vendors in project shortlist (company only)
+ */
+export const shortlistGetShortlistedVendors = <ThrowOnError extends boolean = false>(options: Options<ShortlistGetShortlistedVendorsData, ThrowOnError>) => {
+    return (options.client ?? client).get<ShortlistGetShortlistedVendorsResponses, ShortlistGetShortlistedVendorsErrors, ThrowOnError>({
+        security: [
+            {
+                scheme: 'bearer',
+                type: 'http'
+            }
+        ],
+        url: '/api/v1/shortlist/projects/{project_id}/vendors',
         ...options
     });
 };

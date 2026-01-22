@@ -9,6 +9,7 @@ from app.api.routes import (
     requests,
     reviews,
     services,
+    shortlist,
     users,
     utils,
     vendors,
@@ -26,6 +27,7 @@ api_router.include_router(services.router)
 api_router.include_router(projects.router)
 api_router.include_router(requests.router)
 api_router.include_router(reviews.router)
+api_router.include_router(shortlist.router)
 
 
 if settings.ENVIRONMENT == "local":
