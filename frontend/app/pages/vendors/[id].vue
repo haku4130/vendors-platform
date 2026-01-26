@@ -10,20 +10,20 @@
       </div>
     </div>
 
-    <div
+    <UEmpty
       v-else-if="error"
-      class="flex justify-center items-center min-h-[400px]"
-    >
-      <UCard class="max-w-md">
-        <template #header>
-          <h2 class="text-xl font-semibold text-error">Error</h2>
-        </template>
-        <template #default>
-          <p class="text-muted mb-4">{{ error }}</p>
-          <UButton to="/dashboard" variant="solid">Go to Dashboard</UButton>
-        </template>
-      </UCard>
-    </div>
+      icon="i-lucide-alert-circle"
+      title="Vendor not found"
+      description="The vendor you are looking for does not exist."
+      :actions="[
+        {
+          icon: 'i-lucide-arrow-left',
+          label: 'Go to Dashboard',
+          to: '/dashboard',
+        },
+      ]"
+      class="w-fit mx-auto"
+    />
 
     <VendorProfilePage v-else-if="vendor" :vendor="vendor" />
   </div>
@@ -62,7 +62,7 @@ async function loadVendorProfile() {
     } else {
       error.value = extractErrorMessage(
         res.error,
-        'Failed to load vendor profile'
+        'Failed to load vendor profile',
       );
     }
     return;

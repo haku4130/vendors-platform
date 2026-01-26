@@ -5,10 +5,14 @@ from fastapi import APIRouter, HTTPException, status
 from app.api.deps import CurrentUser, CurrentVendorProfile, SessionDep
 from app.crud import projects as projects_crud
 from app.crud import requests as requests_crud
+from app.crud import reviews as reviews_crud
 from app.crud import vendors as crud
 from app.models import (
     PaginatedProjectRequestsPublicProjectFull,
     PaginatedProjectsPublic,
+    ProjectPublic,
+    ProjectRequestPublicProjectFull,
+    UserPublic,
     UserRole,
     VendorProfileCreate,
     VendorProfilePublic,
@@ -58,7 +62,21 @@ def get_available_projects_for_vendor(
         limit=limit,
     )
 
-    return {"result": [project for project, _ in rows], "total": total}
+    # Convert to ProjectPublic and enrich with owner rating
+    result = []
+    for project, _ in rows:
+        project_public = ProjectPublic.model_validate(project)
+        if project.owner:
+            rating, count = reviews_crud.get_user_rating_stats(
+                session=session, user_id=project.owner.id
+            )
+            owner_public = UserPublic.model_validate(project.owner)
+            owner_public.rating = rating
+            owner_public.ratingCount = count
+            project_public.owner = owner_public
+        result.append(project_public)
+
+    return {"result": result, "total": total}
 
 
 @router.get("/{vendor_profile_id}", response_model=VendorProfilePublic)
@@ -96,7 +114,21 @@ def get_incoming_requests_for_vendor(
         limit=limit,
     )
 
-    return {"result": requests, "total": total}
+    # Convert to ProjectRequestPublicProjectFull and enrich with owner rating
+    result = []
+    for request in requests:
+        request_public = ProjectRequestPublicProjectFull.model_validate(request)
+        if request.project and request.project.owner:
+            rating, count = reviews_crud.get_user_rating_stats(
+                session=session, user_id=request.project.owner.id
+            )
+            owner_public = UserPublic.model_validate(request.project.owner)
+            owner_public.rating = rating
+            owner_public.ratingCount = count
+            request_public.project.owner = owner_public
+        result.append(request_public)
+
+    return {"result": result, "total": total}
 
 
 @router.get(
@@ -116,4 +148,18 @@ def get_my_accepted_projects(
         limit=limit,
     )
 
-    return {"result": projects, "total": total}
+    # Convert to ProjectPublic and enrich with owner rating
+    result = []
+    for project in projects:
+        project_public = ProjectPublic.model_validate(project)
+        if project.owner:
+            rating, count = reviews_crud.get_user_rating_stats(
+                session=session, user_id=project.owner.id
+            )
+            owner_public = UserPublic.model_validate(project.owner)
+            owner_public.rating = rating
+            owner_public.ratingCount = count
+            project_public.owner = owner_public
+        result.append(project_public)
+
+    return {"result": result, "total": total}

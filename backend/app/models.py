@@ -99,6 +99,8 @@ class UserPublicShort(UserBasePublic):
 
 class UserPublic(UserPublicShort):
     vendor_profile: "VendorProfilePublic | None"
+    rating: float | None = None
+    ratingCount: int = 0
 
 
 class UsersPublic(SQLModel):
@@ -424,8 +426,8 @@ class ReviewCreate(SQLModel):
 class ReviewPublic(ReviewBase):
     id: uuid.UUID
     reviewed_user_id: uuid.UUID
-    reviewed_user: UserPublicShort
-    author: UserPublicShort
+    reviewed_user: UserPublic
+    author: UserPublic
     project_id: uuid.UUID | None
 
 

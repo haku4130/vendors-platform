@@ -33,8 +33,8 @@
           class="w-fit"
           variant="link"
         />
-        <UButton to="/dashboard/send-review" variant="link">
-          Leave a Review
+        <UButton to="/dashboard/platform-feedback" variant="link">
+          Platform Feedback
         </UButton>
       </nav>
     </template> -->

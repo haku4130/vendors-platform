@@ -8,6 +8,7 @@ from app.models import (
     PaginatedReviewsPublic,
     ReviewCreate,
     ReviewPublic,
+    UserPublic,
 )
 
 router = APIRouter(prefix="/reviews", tags=["reviews"])
@@ -110,3 +111,15 @@ def get_reviews_received_by_me(
         limit=limit,
     )
     return {"result": reviews, "total": total}
+
+
+@router.get(
+    "/me/users-to-review",
+    response_model=list[UserPublic],
+)
+def get_users_to_review(
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    """Get users that the current user can leave a review for (from completed projects)"""
+    return crud.get_users_to_review(session=session, current_user_id=current_user.id)

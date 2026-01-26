@@ -7,7 +7,16 @@
       :ui="{ trigger: 'grow', list: 'sticky top-0 bg-white z-10' }"
     >
       <template #incoming>
-        <UContainer class="flex justify-center">
+        <div v-if="loadingIncoming" class="flex justify-center py-12">
+          <UIcon
+            name="i-lucide-loader-2"
+            class="w-8 h-8 animate-spin text-muted"
+          />
+        </div>
+        <UContainer
+          v-else-if="incomingRequests.length"
+          class="flex justify-center"
+        >
           <RequestGrid
             ref="incomingRequestsEl"
             :items="incomingRequests"
@@ -16,16 +25,25 @@
           />
         </UContainer>
         <UEmpty
-          v-if="!incomingRequests.length"
+          v-else
           icon="i-lucide-hourglass"
           title="Awaiting companies requests"
-          description="We’ll list their requests here as soon as they come in."
+          description="We'll list their requests here as soon as they come in."
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
 
       <template #search>
-        <UContainer class="flex justify-center">
+        <div v-if="loadingExplore" class="flex justify-center py-12">
+          <UIcon
+            name="i-lucide-loader-2"
+            class="w-8 h-8 animate-spin text-muted"
+          />
+        </div>
+        <UContainer
+          v-else-if="exploreProjects.length"
+          class="flex justify-center"
+        >
           <ProjectGrid
             ref="exploreProjectsEl"
             :items="exploreProjects"
@@ -34,16 +52,25 @@
           />
         </UContainer>
         <UEmpty
-          v-if="!exploreProjects.length"
+          v-else
           icon="i-lucide-hourglass"
           title="Awaiting companies projects"
-          description="We’ll list their projects here as soon as they come in."
+          description="We'll list their projects here as soon as they come in."
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
 
       <template #accepted>
-        <UContainer class="flex justify-center">
+        <div v-if="loadingAccepted" class="flex justify-center py-12">
+          <UIcon
+            name="i-lucide-loader-2"
+            class="w-8 h-8 animate-spin text-muted"
+          />
+        </div>
+        <UContainer
+          v-else-if="acceptedProjects.length"
+          class="flex justify-center"
+        >
           <ProjectGrid
             ref="acceptedProjectsEl"
             :items="acceptedProjects"
@@ -51,10 +78,10 @@
           />
         </UContainer>
         <UEmpty
-          v-if="!acceptedProjects.length"
+          v-else
           icon="i-lucide-search-x"
           title="You have no active projects"
-          description="We’ll list your accepted projects here as soon as they come in."
+          description="We'll list your accepted projects here as soon as they come in."
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
@@ -77,18 +104,24 @@ import type {
 const incomingRequestsEl = useTemplateRef('incomingRequestsEl');
 const incomingRequests = ref<ProjectRequestPublicProjectFull[]>([]);
 const totalIncoming = ref<number | null>(null);
+const loadingIncoming = ref(false);
 
 const exploreProjectsEl = useTemplateRef('exploreProjectsEl');
 const exploreProjects = ref<ProjectPublic[]>([]);
 const totalExplore = ref<number | null>(null);
+const loadingExplore = ref(false);
 
 const acceptedProjectsEl = useTemplateRef('acceptedProjectsEl');
 const acceptedProjects = ref<ProjectPublic[]>([]);
 const totalAccepted = ref<number | null>(null);
+const loadingAccepted = ref(false);
 
 const toast = useToast();
 
 async function loadMoreIncoming() {
+  if (loadingIncoming.value) return;
+
+  loadingIncoming.value = true;
   const offset = incomingRequests.value.length;
   const res = await vendorsGetIncomingRequestsForVendor({
     query: {
@@ -96,6 +129,7 @@ async function loadMoreIncoming() {
       limit: 5,
     },
   });
+  loadingIncoming.value = false;
 
   if (res.error) {
     toast.add({
@@ -110,6 +144,9 @@ async function loadMoreIncoming() {
 }
 
 async function loadMoreExplore() {
+  if (loadingExplore.value) return;
+
+  loadingExplore.value = true;
   const offset = exploreProjects.value.length;
   const res = await vendorsGetAvailableProjectsForVendor({
     query: {
@@ -117,6 +154,7 @@ async function loadMoreExplore() {
       limit: 5,
     },
   });
+  loadingExplore.value = false;
 
   if (res.error) {
     toast.add({
@@ -131,6 +169,9 @@ async function loadMoreExplore() {
 }
 
 async function loadMoreAccepted() {
+  if (loadingAccepted.value) return;
+
+  loadingAccepted.value = true;
   const offset = acceptedProjects.value.length;
   const res = await vendorsGetMyAcceptedProjects({
     query: {
@@ -138,6 +179,7 @@ async function loadMoreAccepted() {
       limit: 5,
     },
   });
+  loadingAccepted.value = false;
 
   if (res.error) {
     toast.add({
@@ -168,6 +210,12 @@ useInfiniteScroll(acceptedProjectsEl, loadMoreAccepted, {
   canLoadMore: () =>
     totalAccepted.value === null ||
     acceptedProjects.value.length < (totalAccepted.value ?? 0),
+});
+
+onMounted(() => {
+  loadMoreIncoming();
+  loadMoreExplore();
+  loadMoreAccepted();
 });
 
 const breakpoints = useBreakpoints({

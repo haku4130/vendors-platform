@@ -632,8 +632,8 @@ export type ReviewPublic = {
      * Reviewed User Id
      */
     reviewed_user_id: string;
-    reviewed_user: UserPublicShort;
-    author: UserPublicShort;
+    reviewed_user: UserPublic;
+    author: UserPublic;
     /**
      * Project Id
      */
@@ -812,6 +812,14 @@ export type UserPublic = {
      */
     id: string;
     vendor_profile: VendorProfilePublic | null;
+    /**
+     * Rating
+     */
+    rating?: number | null;
+    /**
+     * Ratingcount
+     */
+    ratingCount?: number;
 };
 
 /**
@@ -2522,6 +2530,24 @@ export type ReviewsGetReviewsReceivedByMeResponses = {
 };
 
 export type ReviewsGetReviewsReceivedByMeResponse = ReviewsGetReviewsReceivedByMeResponses[keyof ReviewsGetReviewsReceivedByMeResponses];
+
+export type ReviewsGetUsersToReviewData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/api/v1/reviews/me/users-to-review';
+};
+
+export type ReviewsGetUsersToReviewResponses = {
+    /**
+     * Response Reviews-Get Users To Review
+     *
+     * Successful Response
+     */
+    200: Array<UserPublic>;
+};
+
+export type ReviewsGetUsersToReviewResponse = ReviewsGetUsersToReviewResponses[keyof ReviewsGetUsersToReviewResponses];
 
 export type ShortlistRemoveVendorFromShortlistData = {
     body?: never;

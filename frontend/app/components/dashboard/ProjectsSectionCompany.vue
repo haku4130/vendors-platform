@@ -266,7 +266,7 @@
             :state="answers"
             :schema="
               v.object({
-                website: v.optional(v.string()),
+                website: v.pipe(v.nullable(v.string())),
               })
             "
           >
@@ -324,11 +324,7 @@
         v-if="displayedReviews.length > 0"
         class="grid lg:grid-cols-2 xl:grid-cols-3 gap-3"
       >
-        <div
-          v-for="review in displayedReviews"
-          :key="review.id"
-          class="border border-gray-300 rounded-lg p-3 bg-gray-50"
-        >
+        <div v-for="review in displayedReviews" :key="review.id">
           <ReviewCard :review="review" />
         </div>
       </div>

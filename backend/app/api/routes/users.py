@@ -198,21 +198,14 @@ def register_user(session: SessionDep, user_in: UserRegister) -> Any:
 
 
 @router.get("/{user_id}", response_model=UserPublic)
-def read_user_by_id(
-    user_id: uuid.UUID, session: SessionDep, current_user: CurrentUser
-) -> Any:
+def read_user_by_id(user_id: uuid.UUID, session: SessionDep) -> UserPublic:
     """
     Get a specific user by id.
     """
     user = session.get(User, user_id)
-    if user == current_user:
-        return user
-    if not current_user.is_superuser:
-        raise HTTPException(
-            status_code=403,
-            detail="The user doesn't have enough privileges",
-        )
-    return user
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return UserPublic.model_validate(user)
 
 
 @router.patch(

@@ -19,7 +19,7 @@
       </div>
 
       <div v-if="vendor.rating" class="flex items-center gap-1 mb-3">
-        <span class="font-semibold">{{ vendor.rating }}</span>
+        <span class="font-semibold">{{ vendor.rating.toFixed(1) }}</span>
         <StarRating :rating="vendor.rating" />
         <span class="text-sm text-muted">({{ vendor.reviewsCount }})</span>
       </div>
@@ -85,12 +85,8 @@
         <h4 class="font-semibold mb-2">What clients have said</h4>
 
         <div class="grid xl:grid-cols-2 gap-3">
-          <div
-            v-for="review in displayedReviews"
-            :key="review.id"
-            class="border border-gray-300 rounded-lg p-3 bg-gray-50"
-          >
-            <ReviewCard :review="review" />
+          <div v-for="review in displayedReviews" :key="review.id">
+            <ReviewCard :review="review" show-author />
           </div>
         </div>
       </div>

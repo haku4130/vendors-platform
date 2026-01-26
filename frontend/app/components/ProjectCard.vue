@@ -8,15 +8,20 @@
         icon: 'i-lucide-camera',
         class: 'rounded-lg border border-black',
       }"
+      :to="`/companies/${item.owner.id}`"
+      target="_blank"
       size="3xl"
     />
 
-    <div class="flex items-center gap-1 my-2">
-      <span class="text-sm">{{ item.owner.rating ?? 4.8 }}</span>
-      <StarRating :rating="item.owner.rating ?? 4.8" />
-      <span class="text-sm text-muted"
-        >({{ item.owner.ratingCount ?? 59 }})</span
-      >
+    <div v-if="item.owner.rating" class="flex items-center gap-1 mt-3">
+      <span class="text-sm font-semibold">{{
+        item.owner.rating.toFixed(1)
+      }}</span>
+      <StarRating :rating="item.owner.rating" />
+      <span class="text-sm text-muted">({{ item.owner.ratingCount }})</span>
+    </div>
+    <div v-else class="flex items-center mt-3">
+      <span class="text-sm font-semibold">No rating yet</span>
     </div>
 
     <span class="flex w-full py-1 rounded-sm text-lg font-semibold">

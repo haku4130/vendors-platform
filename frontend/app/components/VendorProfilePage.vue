@@ -107,12 +107,8 @@
           </template>
           <template #default>
             <div v-if="reviews.length > 0" class="space-y-4">
-              <div
-                v-for="review in reviews"
-                :key="review.id"
-                class="border border-gray-200 rounded-lg p-4 bg-gray-50"
-              >
-                <ReviewCard :review="review" />
+              <div v-for="review in reviews" :key="review.id">
+                <ReviewCard :review="review" show-author />
               </div>
 
               <div v-if="hasMoreReviews" class="text-center pt-4">

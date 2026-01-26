@@ -9,7 +9,13 @@
         :request-id="''"
         :initially-shortlisted="shortlistedVendorIds.has(vendor.id)"
       />
-      <div v-if="loading">Loading...</div>
+      <div v-if="loading" class="flex items-center justify-center gap-2">
+        <UIcon
+          name="i-lucide-loader-2"
+          class="w-6 h-6 animate-spin text-muted"
+        />
+        <span class="text-muted">Loading...</span>
+      </div>
       <div v-else-if="!vendors.length">
         <UEmpty
           icon="i-lucide-search-x"
