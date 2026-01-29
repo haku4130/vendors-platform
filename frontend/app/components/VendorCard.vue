@@ -145,12 +145,14 @@ const {
   requestId = null,
   initiallyShortlisted = false,
   incoming,
+  onShortlistChanged = undefined,
 } = defineProps<{
   vendor: VendorProfilePublic;
   currentProjectId?: string | null;
   requestId?: string | null;
   initiallyShortlisted?: boolean;
   incoming?: boolean;
+  onShortlistChanged?: () => void;
 }>();
 
 const isShortlisted = ref(initiallyShortlisted);
@@ -268,7 +270,9 @@ async function toggleShortlist() {
     return;
   }
 
-  const res = isShortlisted.value
+  const wasShortlisted = isShortlisted.value;
+
+  const res = wasShortlisted
     ? await shortlistRemoveVendorFromShortlist({
         path: {
           project_id: currentProjectId,
@@ -287,7 +291,7 @@ async function toggleShortlist() {
       title: 'Error',
       description: extractErrorMessage(
         res.error,
-        isShortlisted.value
+        wasShortlisted
           ? 'Failed to remove from shortlist'
           : 'Failed to add to shortlist'
       ),
@@ -296,14 +300,71 @@ async function toggleShortlist() {
     return;
   }
 
-  isShortlisted.value = !isShortlisted.value;
+  isShortlisted.value = !wasShortlisted;
+
+  // If removed from shortlist, show toast with undo action
+  if (wasShortlisted) {
+    toast.add({
+      title: 'Removed from shortlist',
+      description: 'Vendor removed from your shortlist',
+      color: 'success',
+      actions: [
+        {
+          label: 'Undo',
+          color: 'primary',
+          onClick: async () => {
+            await undoShortlistRemoval();
+          },
+        },
+      ],
+    });
+  } else {
+    toast.add({
+      title: 'Added to shortlist',
+      description: 'Vendor added to your shortlist',
+      color: 'success',
+    });
+  }
+
+  emit('shortlist-changed', isShortlisted.value);
+}
+
+async function undoShortlistRemoval() {
+  if (!currentProjectId) {
+    return;
+  }
+
+  const res = await shortlistAddVendorToShortlist({
+    path: {
+      project_id: currentProjectId,
+      vendor_profile_id: vendor.id,
+    },
+  });
+
+  if (res.error) {
+    toast.add({
+      title: 'Error',
+      description: extractErrorMessage(
+        res.error,
+        'Failed to restore vendor to shortlist'
+      ),
+      color: 'error',
+    });
+    return;
+  }
+
+  isShortlisted.value = true;
   toast.add({
-    title: 'Success',
-    description: isShortlisted.value
-      ? 'Added to shortlist'
-      : 'Removed from shortlist',
+    title: 'Restored',
+    description: 'Vendor restored to shortlist',
     color: 'success',
   });
+
+  // Call the callback if provided (works even after component is unmounted)
+  if (onShortlistChanged) {
+    onShortlistChanged();
+  }
+
   emit('shortlist-changed', isShortlisted.value);
 }
 

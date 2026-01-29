@@ -45,7 +45,7 @@
       </div>
     </div>
 
-    <div v-else-if="projects.length === 0" class="py-12">
+    <div v-else-if="projects.length === 0">
       <UEmpty
         icon="i-lucide-bookmark"
         title="No projects yet"
@@ -94,7 +94,8 @@
               :current-project-id="project.id"
               request-id=""
               :initially-shortlisted="true"
-              @shortlist-changed="loadShortlistForProject(project.id)"
+              :on-shortlist-changed="() => loadShortlistForProject(project.id)"
+              @shortlist-changed="() => loadShortlistForProject(project.id)"
             />
           </div>
 
