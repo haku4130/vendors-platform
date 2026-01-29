@@ -28,6 +28,7 @@ jobs:
       POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
+      ALLOWED_IPS: ${{ secrets.ALLOWED_IPS }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5
