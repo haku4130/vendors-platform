@@ -1746,6 +1746,48 @@ export type FeedbackSubmitPlatformFeedbackResponses = {
 
 export type FeedbackSubmitPlatformFeedbackResponse = FeedbackSubmitPlatformFeedbackResponses[keyof FeedbackSubmitPlatformFeedbackResponses];
 
+export type VendorsSearchVendorsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Service Ids
+         */
+        service_ids?: Array<string> | null;
+        /**
+         * Location
+         */
+        location?: string | null;
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/vendors/';
+};
+
+export type VendorsSearchVendorsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsSearchVendorsError = VendorsSearchVendorsErrors[keyof VendorsSearchVendorsErrors];
+
+export type VendorsSearchVendorsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedVendorProfilesPublic;
+};
+
+export type VendorsSearchVendorsResponse = VendorsSearchVendorsResponses[keyof VendorsSearchVendorsResponses];
+
 export type VendorsGetMyVendorProfileData = {
     body?: never;
     path?: never;

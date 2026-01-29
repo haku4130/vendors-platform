@@ -64,10 +64,10 @@
         </div>
       </div>
 
-      <hr v-if="!incoming" />
+      <hr v-if="!incoming && currentProjectId" />
 
       <UButton
-        v-if="!incoming"
+        v-if="!incoming && currentProjectId"
         class="w-fit mt-2 px-0"
         variant="link"
         :leading-icon="
@@ -99,7 +99,7 @@
         class="h-full"
       />
 
-      <div class="flex justify-end mt-4">
+      <div v-if="currentProjectId" class="flex justify-end mt-4">
         <UButton
           v-if="!incoming"
           :disabled="alreadySent"
@@ -141,14 +141,14 @@ const emit = defineEmits(['select', 'add-shortlist', 'shortlist-changed']);
 
 const {
   vendor,
-  currentProjectId,
-  requestId,
+  currentProjectId = null,
+  requestId = null,
   initiallyShortlisted = false,
   incoming,
 } = defineProps<{
   vendor: VendorProfilePublic;
-  currentProjectId: string;
-  requestId: string;
+  currentProjectId?: string | null;
+  requestId?: string | null;
   initiallyShortlisted?: boolean;
   incoming?: boolean;
 }>();
@@ -159,6 +159,15 @@ const alreadyProcessed = ref();
 const toast = useToast();
 
 async function handleVendorSelect(vendorId: string) {
+  if (!currentProjectId) {
+    toast.add({
+      title: 'No project selected',
+      description: 'Please create a project first to send a request.',
+      color: 'warning',
+    });
+    return;
+  }
+
   const res = await projectsSendProjectRequestCompany({
     path: {
       project_id: currentProjectId,
@@ -184,6 +193,15 @@ async function handleVendorSelect(vendorId: string) {
 }
 
 async function handleVendorAccept() {
+  if (!requestId) {
+    toast.add({
+      title: 'Error',
+      description: 'Request ID is missing',
+      color: 'error',
+    });
+    return;
+  }
+
   const res = await requestsAcceptProject({
     path: {
       request_id: requestId,
@@ -208,6 +226,15 @@ async function handleVendorAccept() {
 }
 
 async function handleVendorDeny() {
+  if (!requestId) {
+    toast.add({
+      title: 'Error',
+      description: 'Request ID is missing',
+      color: 'error',
+    });
+    return;
+  }
+
   const res = await requestsDeclineProject({
     path: {
       request_id: requestId,
@@ -232,6 +259,15 @@ async function handleVendorDeny() {
 }
 
 async function toggleShortlist() {
+  if (!currentProjectId) {
+    toast.add({
+      title: 'No project selected',
+      description: 'Please create a project first to add to shortlist.',
+      color: 'warning',
+    });
+    return;
+  }
+
   const res = isShortlisted.value
     ? await shortlistRemoveVendorFromShortlist({
         path: {
@@ -253,7 +289,7 @@ async function toggleShortlist() {
         res.error,
         isShortlisted.value
           ? 'Failed to remove from shortlist'
-          : 'Failed to add to shortlist',
+          : 'Failed to add to shortlist'
       ),
       color: 'error',
     });

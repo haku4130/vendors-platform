@@ -47,7 +47,7 @@
     </div>
   </template>
 
-  <UAccordion :items="categories" class="px-0 mt-5">
+  <UAccordion v-if="showAccordion" :items="categories" class="px-0 mt-5">
     <template #body="{ item }">
       <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-2">
         <button
@@ -80,10 +80,12 @@ const {
   placeholder = 'Search here',
   errors,
   maxSelected = 5,
+  showAccordion = true,
 } = defineProps<{
   placeholder?: string;
   maxSelected?: number;
   errors: FormError<string>[];
+  showAccordion?: boolean;
 }>();
 
 const selectedServices = defineModel<ServicePublicShort[]>({ required: true });
@@ -93,7 +95,7 @@ const { data: categories } = await catalogListCategories();
 const items = ref<InputMenuItem[]>(buildInputMenuItems(categories));
 
 function buildInputMenuItems(
-  categories: CategoryPublic[] | undefined
+  categories: CategoryPublic[] | undefined,
 ): InputMenuItem[] {
   if (!categories) {
     return [];
@@ -123,7 +125,7 @@ function buildInputMenuItems(
 function toggleTag(tag: ServicePublicShort) {
   if (isSelected(tag.id)) {
     selectedServices.value = selectedServices.value.filter(
-      (t) => t.id !== tag.id
+      (t) => t.id !== tag.id,
     );
   } else {
     selectedServices.value = [...selectedServices.value, tag];

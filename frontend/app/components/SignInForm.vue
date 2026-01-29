@@ -39,7 +39,7 @@
         </UInput>
         <template #hint>
           <NuxtLink
-            to="/password-reset"
+            to="/forgot-password"
             class="font-semibold underline text-default hover:text-gray-900"
           >
             Forgot password?
@@ -84,7 +84,7 @@ const schemaDefinition = v.pipe(
   v.object({
     email: v.pipe(v.string(), v.nonEmpty('This field is required')),
     password: v.pipe(v.string(), v.nonEmpty('This field is required')),
-  })
+  }),
 );
 
 type Schema = v.InferOutput<typeof schemaDefinition>;

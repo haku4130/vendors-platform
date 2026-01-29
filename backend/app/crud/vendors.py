@@ -75,13 +75,14 @@ def get_ranked_vendors_for_project(
         select(VendorProfile).where(col(VendorProfile.id).not_in(existing_vendor_ids))
     ).all()
 
+    ranked: list[tuple[VendorProfile, float]] = []
+
     if required_services_count == 0:
         # Even with no services, shortlisted vendors go first
         ranked = [(vendor, 0.0) for vendor in vendors]
         ranked.sort(key=lambda x: (x[0].id not in shortlisted_vendor_ids,))
         return ranked[skip : skip + limit], len(vendors)
 
-    ranked: list[tuple[VendorProfile, float]] = []
     for vendor in vendors:
         vendor_services = {s.id for s in vendor.services}
         match_count = len(required_services & vendor_services)
@@ -161,6 +162,85 @@ def get_available_ranked_projects_for_vendor(
     rows = session.exec(stmt).all()
 
     return rows, total
+
+
+def search_vendors(
+    *,
+    session: Session,
+    service_ids: list[UUID] | None = None,
+    location: str | None = None,
+    skip: int = 0,
+    limit: int = 100,
+) -> tuple[list[VendorProfile], int]:
+    """
+    Search for vendors by services and optionally by location.
+    Returns vendors sorted by relevance (number of matching services).
+    """
+    from app.models import User
+
+    # If service IDs are provided, filter vendors with matching services
+    if service_ids and len(service_ids) > 0:
+        # Get all vendors that have at least one of the requested services
+        vendors_query = (
+            select(VendorProfile)
+            .join(
+                VendorServiceLink,
+                col(VendorServiceLink.vendor_profile_id) == col(VendorProfile.id),
+            )
+            .where(col(VendorServiceLink.service_id).in_(service_ids))
+            .distinct()
+        )
+
+        # Apply location filter if provided
+        if location:
+            vendors_query = vendors_query.join(
+                User, col(VendorProfile.user_id) == col(User.id)
+            ).where(func.lower(col(User.location)).contains(location.lower()))
+
+        # Get all matching vendors for sorting
+        all_vendors = session.exec(vendors_query).all()
+
+        # Sort by number of matching services
+        required_services = set(service_ids)
+        vendors_with_score = []
+
+        for vendor in all_vendors:
+            # Load services relationship
+            session.refresh(vendor, ["services"])
+            vendor_services = {s.id for s in vendor.services}
+            match_count = len(required_services & vendor_services)
+            vendors_with_score.append((vendor, match_count))
+
+        # Sort by match count descending
+        vendors_with_score.sort(key=lambda x: -x[1])
+
+        # Get total and apply pagination
+        total = len(vendors_with_score)
+        paginated_vendors = [v for v, _ in vendors_with_score[skip : skip + limit]]
+
+        return paginated_vendors, total
+
+    # No service filter - just get all vendors (optionally filtered by location)
+    query = select(VendorProfile)
+
+    if location:
+        query = query.join(User, col(VendorProfile.user_id) == col(User.id)).where(
+            func.lower(col(User.location)).contains(location.lower())
+        )
+
+    # Get total count
+    count_query = select(func.count()).select_from(VendorProfile)
+    if location:
+        count_query = count_query.join(
+            User, col(VendorProfile.user_id) == col(User.id)
+        ).where(func.lower(col(User.location)).contains(location.lower()))
+
+    total = session.exec(count_query).one()
+
+    # Apply pagination
+    vendors = session.exec(query.offset(skip).limit(limit)).all()
+
+    return list(vendors), total
 
 
 def enrich_vendor_profile_with_reviews(

@@ -12,6 +12,7 @@ from app.api.deps import (
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
+from app.crud import reviews as reviews_crud
 from app.crud import users
 from app.file_utils import (
     avatar_url_to_path,
@@ -91,13 +92,6 @@ def update_user_me(
     """
     Update own user.
     """
-
-    if user_in.email:
-        existing_user = users.get_user_by_email(session=session, email=user_in.email)
-        if existing_user and existing_user.id != current_user.id:
-            raise HTTPException(
-                status_code=409, detail="User with this email already exists"
-            )
     user_data = user_in.model_dump(exclude_unset=True)
     current_user.sqlmodel_update(user_data)
     session.add(current_user)
@@ -205,7 +199,18 @@ def read_user_by_id(user_id: uuid.UUID, session: SessionDep) -> UserPublic:
     user = session.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return UserPublic.model_validate(user)
+
+    # Load vendor_profile relationship if exists
+    session.refresh(user, ["vendor_profile"])  # type: ignore
+
+    # Get user rating and reviews count
+    rating, count = reviews_crud.get_user_rating_stats(session=session, user_id=user.id)
+
+    user_public = UserPublic.model_validate(user)
+    user_public.rating = rating
+    user_public.ratingCount = count
+
+    return user_public
 
 
 @router.patch(

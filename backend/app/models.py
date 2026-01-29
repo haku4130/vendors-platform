@@ -278,7 +278,7 @@ class Project(ProjectBase, table=True):
 
 
 class ProjectCreate(ProjectBase):
-    service_ids: list[uuid.UUID] = Field(min_length=5, max_length=10)
+    service_ids: list[uuid.UUID] = Field(min_length=1, max_length=5)
 
 
 class ProjectPublic(ProjectBase):

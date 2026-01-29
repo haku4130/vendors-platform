@@ -1,39 +1,7 @@
 <template>
   <div class="space-y-8">
-    <section
-      class="bg-vendor-gradient shadow-sm p-6 rounded-2xl flex flex-col lg:flex-row items-stretch gap-6"
-    >
-      <div class="lg:w-1/3 flex items-center">
-        <h1 class="text-xl font-semibold text-gray-900 leading-snug">
-          Find the perfect partner for your project
-        </h1>
-      </div>
-
-      <div
-        class="bg-white rounded-2xl flex flex-col lg:flex-row items-center justify-between gap-4 min-w-fit w-full lg:w-2/3 p-6"
-      >
-        <div class="flex flex-col gap-3 w-full">
-          <UInput
-            leading-icon="i-lucide-search"
-            placeholder="Search web developers, SEO, UX..."
-            :ui="{ base: 'rounded-full' }"
-          />
-
-          <UInput
-            leading-icon="i-lucide-map-pin"
-            placeholder="Any location"
-            :ui="{ base: 'rounded-full' }"
-          />
-        </div>
-
-        <div class="min-w-fit w-1/3 flex justify-center">
-          <UButton size="xl" to="/dashboard/projects"> Find a Partner </UButton>
-        </div>
-      </div>
-    </section>
-
     <section class="rounded-2xl p-6 shadow-sm space-y-4">
-      <h3 class="text-lg font-semibold">My Projects</h3>
+      <h1 class="text-2xl font-semibold">My Projects</h1>
       <MyProjectGrid
         v-if="projects && projects.length > 0"
         :items="projects"
@@ -351,6 +319,7 @@ import {
 } from '~/generated/api';
 
 const auth = useAuth();
+const toast = useToast();
 
 let { data: projects } = await projectsListMyProjects();
 
@@ -432,8 +401,6 @@ function transformAnswersToProject(answers: AnswersType): ProjectCreate {
     requirements: answers.requirements.length > 0 ? answers.requirements : null,
   };
 }
-
-const toast = useToast();
 
 async function handleCreateFinish() {
   const res = await projectsCreateNewProject({

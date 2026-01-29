@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 
 from app.api.deps import CurrentUser, CurrentVendorProfile, SessionDep
 from app.crud import projects as projects_crud
@@ -10,6 +10,7 @@ from app.crud import vendors as crud
 from app.models import (
     PaginatedProjectRequestsPublicProjectFull,
     PaginatedProjectsPublic,
+    PaginatedVendorProfilesPublic,
     ProjectPublic,
     ProjectRequestPublicProjectFull,
     UserPublic,
@@ -19,6 +20,35 @@ from app.models import (
 )
 
 router = APIRouter(prefix="/vendors", tags=["vendors"])
+
+
+@router.get("/", response_model=PaginatedVendorProfilesPublic)
+def search_vendors(
+    session: SessionDep,
+    service_ids: list[UUID] | None = Query(None),
+    location: str | None = None,
+    skip: int = 0,
+    limit: int = 100,
+):
+    """
+    Search for vendors by services and location.
+    Public endpoint - no authentication required.
+    """
+    vendors, total = crud.search_vendors(
+        session=session,
+        service_ids=service_ids,
+        location=location,
+        skip=skip,
+        limit=limit,
+    )
+
+    # Enrich with reviews
+    result = [
+        crud.enrich_vendor_profile_with_reviews(session=session, vendor_profile=vendor)
+        for vendor in vendors
+    ]
+
+    return {"result": result, "total": total}
 
 
 @router.get("/me", response_model=VendorProfilePublic)

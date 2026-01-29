@@ -8,10 +8,63 @@ from app.crud import vendors as vendors_crud
 from app.models import Project, Review, ReviewCreate, User, VendorProfile
 
 
+def has_shared_project(
+    *, session: Session, author_id: UUID, reviewed_user_id: UUID
+) -> bool:
+    """Check if two users have worked together on a project"""
+    author = session.get(User, author_id)
+    reviewed = session.get(User, reviewed_user_id)
+
+    if not author or not reviewed:
+        return False
+
+    # Get vendor profile for vendor users
+    author_vendor_profile = None
+    reviewed_vendor_profile = None
+
+    if author.role.value == "vendor":
+        author_vendor_profile = session.exec(
+            select(VendorProfile).where(col(VendorProfile.user_id) == author_id)
+        ).first()
+
+    if reviewed.role.value == "vendor":
+        reviewed_vendor_profile = session.exec(
+            select(VendorProfile).where(col(VendorProfile.user_id) == reviewed_user_id)
+        ).first()
+
+    # Check for shared projects
+    # Case 1: author is company, reviewed is vendor
+    if author.role.value == "company" and reviewed_vendor_profile:
+        stmt = select(Project).where(
+            col(Project.owner_id) == author_id,
+            col(Project.vendor_profile_id) == reviewed_vendor_profile.id,
+        )
+        project = session.exec(stmt).first()
+        return project is not None
+
+    # Case 2: author is vendor, reviewed is company
+    if author_vendor_profile and reviewed.role.value == "company":
+        stmt = select(Project).where(
+            col(Project.owner_id) == reviewed_user_id,
+            col(Project.vendor_profile_id) == author_vendor_profile.id,
+        )
+        project = session.exec(stmt).first()
+        return project is not None
+
+    # Both are same role - no shared projects possible
+    return False
+
+
 def create_review(*, session: Session, author_id: UUID, data: ReviewCreate) -> Review:
     # Prevent self-review
     if author_id == data.reviewed_user_id:
         raise ValueError("Cannot review yourself")
+
+    # Check if users have worked together
+    if not has_shared_project(
+        session=session, author_id=author_id, reviewed_user_id=data.reviewed_user_id
+    ):
+        raise ValueError("You can only review users you have worked with on a project")
 
     review = Review.model_validate(data, update={"author_id": author_id})
     session.add(review)

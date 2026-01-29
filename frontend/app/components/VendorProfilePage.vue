@@ -5,7 +5,7 @@
       <div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
         <NuxtImg
           :src="vendor.user?.logo_url || '/placeholder-avatar.png'"
-          class="rounded-lg border-2 border-white shadow-md md:w-48 md:h-48 object-cover"
+          class="rounded-lg border-2 border-white shadow-md w-full h-full md:w-48 md:h-48 object-cover"
         />
 
         <div class="flex-1 text-black">

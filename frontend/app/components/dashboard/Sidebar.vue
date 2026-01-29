@@ -79,6 +79,11 @@ const menuItems =
           icon: 'i-lucide-bookmark',
         },
         { id: 'reviews', label: 'Reviews', icon: 'i-lucide-star' },
+        {
+          id: 'vendors',
+          label: 'Find Vendors',
+          icon: 'i-lucide-search',
+        },
       ]
     : [
         {

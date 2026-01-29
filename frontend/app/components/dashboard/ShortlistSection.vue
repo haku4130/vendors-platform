@@ -196,7 +196,6 @@ async function loadShortlistForProject(projectId: string) {
   }
 
   shortlistedVendors.value[projectId] = res.data || [];
-  console.log(shortlistedVendors.value[projectId]);
   shortlistCounts.value[projectId] = (res.data || []).length;
 }
 </script>
