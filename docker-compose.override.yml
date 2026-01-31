@@ -34,6 +34,10 @@ services:
       - --api
       # Enable the Dashboard and API in insecure mode for local development
       - --api.insecure=true
+      # Enable Prometheus metrics for local development
+      - --metrics.prometheus=true
+      - --metrics.prometheus.addEntryPointsLabels=true
+      - --metrics.prometheus.addServicesLabels=true
     labels:
       # Enable Traefik for this service, to make it available in the public network
       - traefik.enable=true
@@ -154,6 +158,16 @@ services:
       - ./dashboard/test-results:/app/test-results
     ports:
       - 9323:9323
+
+  prometheus:
+    restart: "no"
+    ports:
+      - "9090:9090"
+
+  grafana:
+    restart: "no"
+    ports:
+      - "3001:3000"  # Using 3001 to avoid conflict with frontend on 3000
 
 networks:
   traefik-public:

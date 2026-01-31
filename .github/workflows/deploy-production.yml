@@ -31,6 +31,8 @@ jobs:
       SENTRY_DSN: ${{ secrets.SENTRY_DSN }}
       ALLOWED_IPS: ${{ secrets.ALLOWED_IPS }}
       FRONTEND_ALLOWED_IPS: 0.0.0.0/0
+      GRAFANA_ADMIN_USER: ${{ secrets.GRAFANA_ADMIN_USER }}
+      GRAFANA_ADMIN_PASSWORD: ${{ secrets.GRAFANA_ADMIN_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v5

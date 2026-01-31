@@ -253,9 +253,112 @@ services:
       # redirect http → https
       - traefik.http.routers.${STACK_NAME?Variable not set}-media-http.middlewares=https-redirect
 
+  prometheus:
+    image: prom/prometheus:v3.0.1
+    restart: always
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    networks:
+      - default
+      - traefik-public
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+
+      # IP Whitelist middleware for prometheus
+      - traefik.http.middlewares.${STACK_NAME?Variable not set}-prometheus-ipwhitelist.ipwhitelist.sourcerange=${ALLOWED_IPS?Variable not set}
+
+      - traefik.http.services.${STACK_NAME?Variable not set}-prometheus.loadbalancer.server.port=9090
+
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-http.rule=Host(`prometheus.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-http.entrypoints=http
+
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-https.rule=Host(`prometheus.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-https.entrypoints=https
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-https.tls=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-https.tls.certresolver=le
+
+      # Enable redirection for HTTP and HTTPS, and IP whitelist
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-https.middlewares=${STACK_NAME?Variable not set}-prometheus-ipwhitelist
+
+  grafana:
+    image: grafana/grafana:11.4.0
+    restart: always
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER?Variable not set}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD?Variable not set}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=https://grafana.${DOMAIN?Variable not set}
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    networks:
+      - default
+      - traefik-public
+    depends_on:
+      - prometheus
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik-public
+      - traefik.constraint-label=traefik-public
+
+      # IP Whitelist middleware for grafana
+      - traefik.http.middlewares.${STACK_NAME?Variable not set}-grafana-ipwhitelist.ipwhitelist.sourcerange=${ALLOWED_IPS?Variable not set}
+
+      - traefik.http.services.${STACK_NAME?Variable not set}-grafana.loadbalancer.server.port=3000
+
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-http.rule=Host(`grafana.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-http.entrypoints=http
+
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-https.rule=Host(`grafana.${DOMAIN?Variable not set}`)
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-https.entrypoints=https
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-https.tls=true
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-https.tls.certresolver=le
+
+      # Enable redirection for HTTP and HTTPS, and IP whitelist
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-http.middlewares=https-redirect
+      - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-https.middlewares=${STACK_NAME?Variable not set}-grafana-ipwhitelist
+
+  postgres-exporter:
+    image: prometheuscommunity/postgres-exporter:v0.18.0
+    restart: always
+    environment:
+      - DATA_SOURCE_NAME=postgresql://${POSTGRES_USER?Variable not set}:${POSTGRES_PASSWORD?Variable not set}@db:5432/${POSTGRES_DB?Variable not set}?sslmode=disable
+    networks:
+      - default
+    depends_on:
+      - db
+
+  node-exporter:
+    image: prom/node-exporter:v1.8.2
+    restart: always
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    networks:
+      - default
+
 volumes:
   app-db-data:
   media-data:
+  prometheus-data:
+  grafana-data:
 
 networks:
   traefik-public:
