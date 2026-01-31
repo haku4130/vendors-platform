@@ -196,7 +196,7 @@ services:
       context: ./frontend
       args:
         - NUXT_PUBLIC_BACKEND_API_URL=https://api.${DOMAIN?Variable not set}
-        - NUXT_PUBLIC_BACKEND_STATIC_URL=https://media.${DOMAIN?Variable not set}
+        - NUXT_PUBLIC_BACKEND_STATIC_URL=https://api.${DOMAIN?Variable not set}/static
         - NODE_ENV=production
     labels:
       - traefik.enable=true
