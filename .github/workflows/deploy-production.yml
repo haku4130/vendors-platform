@@ -37,11 +37,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
       - run: touch .env
-      # Build one image at a time to avoid OOM on low-RAM servers (Node/Nuxt and Node/Vite builds use 2–4 GB each).
-      - run: |
+      - name: Stop stack and cleanup
+        run: |
+          export COMPOSE_FILE="docker-compose.yml"
+          export COMPOSE_ENV="--env-file .env.production --project-name ${{ secrets.STACK_NAME_PRODUCTION }}"
+          docker compose -f $COMPOSE_FILE $COMPOSE_ENV down --remove-orphans || true
+          docker image prune -f
+      - name: Build images
+        run: |
           export COMPOSE_FILE="docker-compose.yml"
           export COMPOSE_ENV="--env-file .env.production --project-name ${{ secrets.STACK_NAME_PRODUCTION }}"
           docker compose -f $COMPOSE_FILE $COMPOSE_ENV build backend
           docker compose -f $COMPOSE_FILE $COMPOSE_ENV build dashboard
           docker compose -f $COMPOSE_FILE $COMPOSE_ENV build frontend
-      - run: docker compose -f docker-compose.yml --env-file .env.production --project-name ${{ secrets.STACK_NAME_PRODUCTION }} up -d
+      - name: Start stack
+        run: docker compose -f docker-compose.yml --env-file .env.production --project-name ${{ secrets.STACK_NAME_PRODUCTION }} up -d
+      - name: Cleanup after deploy
+        run: |
+          docker image prune -f

@@ -42,6 +42,8 @@ export default defineNuxtConfig({
                 proxy: `${backendStaticUrl}/**`,
             },
         },
+        // Avoid slow prerender of Nuxt Content routes (e.g. /__nuxt_content/content/*) when content module is not used.
+        prerender: { ignore: ['/__nuxt_content/**'] },
     },
     icon: {
         localApiEndpoint: '/icons',
