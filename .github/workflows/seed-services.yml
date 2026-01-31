@@ -1,0 +1,56 @@
+# Run this workflow manually to add service categories and services to the database.
+# Requires: stack must be already deployed (backend container running).
+# The workflow runs on the same self-hosted runner as deploy, checks out code, then execs into backend.
+
+name: Seed Services (Categories & Services)
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment to seed"
+        required: true
+        default: "production"
+        type: choice
+        options:
+          - production
+          - staging
+
+jobs:
+  seed-staging:
+    if: github.event.inputs.environment == 'staging'
+    runs-on:
+      - self-hosted
+    env:
+      ENVIRONMENT: staging
+      DOMAIN: ${{ secrets.DOMAIN_STAGING }}
+      STACK_NAME: ${{ secrets.STACK_NAME_STAGING }}
+      # Backend container gets DB etc from compose; we only need project identity
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Seed services (staging)
+        run: |
+          docker compose -f docker-compose.yml --env-file .env.staging \
+            --project-name ${{ secrets.STACK_NAME_STAGING }} \
+            exec -T backend python -m app.scripts.add_services --yes
+
+  seed-production:
+    if: github.event.inputs.environment == 'production'
+    runs-on:
+      - self-hosted
+      - production
+    env:
+      ENVIRONMENT: production
+      DOMAIN: ${{ secrets.DOMAIN_PRODUCTION }}
+      STACK_NAME: ${{ secrets.STACK_NAME_PRODUCTION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Seed services (production)
+        run: |
+          docker compose -f docker-compose.yml --env-file .env.production \
+            --project-name ${{ secrets.STACK_NAME_PRODUCTION }} \
+            exec -T backend python -m app.scripts.add_services --yes
