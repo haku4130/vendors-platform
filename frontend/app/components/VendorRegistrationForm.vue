@@ -38,7 +38,7 @@
             v.object({
               main_goal: v.pipe(
                 v.string(),
-                v.nonEmpty('This step is required')
+                v.nonEmpty('This step is required'),
               ),
             })
           "
@@ -72,32 +72,32 @@
               sales_email: v.pipe(
                 v.string(),
                 v.email('Invalid email'),
-                v.nonEmpty('Sales Email is required')
+                v.nonEmpty('Sales Email is required'),
               ),
               admin_contact_phone: v.pipe(
                 v.string(),
-                v.nonEmpty('Phone number is required')
+                v.nonEmpty('Phone number is required'),
               ),
               employee_count: v.pipe(
                 v.number('Please input a number'),
-                v.minValue(1, 'Employee count should be greater than 1')
+                v.minValue(1, 'Employee count should be greater than 1'),
               ),
               company_website: v.pipe(
                 v.string(),
                 v.url('Invalid URL'),
-                v.nonEmpty('Company website is required')
+                v.nonEmpty('Company website is required'),
               ),
               founded_year: v.pipe(
                 v.number('Please input a number'),
                 v.minValue(1900, 'Enter valid founding year'),
                 v.maxValue(
                   new Date().getFullYear(),
-                  'Enter valid founding year'
-                )
+                  'Enter valid founding year',
+                ),
               ),
               turnover: v.pipe(
                 v.number('Please input a number'),
-                v.minValue(0, 'Turnover should be positive')
+                v.minValue(0, 'Turnover should be positive'),
               ),
             })
           "
@@ -193,7 +193,7 @@
             v.object({
               description: v.pipe(
                 v.string(),
-                v.nonEmpty('This step is required')
+                v.nonEmpty('This step is required'),
               ),
             })
           "
@@ -222,11 +222,11 @@
             v.object({
               min_project_size: v.pipe(
                 v.number('Please input a number'),
-                v.minValue(0, 'Should be positive')
+                v.minValue(0, 'Should be positive'),
               ),
               avg_hourly_rate: v.pipe(
                 v.number('Please input a number'),
-                v.minValue(0, 'Should be positive')
+                v.minValue(0, 'Should be positive'),
               ),
             })
           "
@@ -268,10 +268,10 @@
                 v.object({
                   id: v.string(),
                   label: v.string(),
-                })
+                }),
               ),
               v.nonEmpty('This step is required'),
-              v.maxLength(5, 'You can select up to 5 services')
+              v.maxLength(5, 'You can select up to 5 services'),
             )
           "
           class="space-y-4 max-w-xl mx-auto"
@@ -380,7 +380,7 @@ const {
     image: string;
     dial_code: string;
   }[]
->('/backend/static/countries.json', {
+>('/countries.json', {
   immediate: false,
 });
 
