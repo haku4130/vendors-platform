@@ -15,6 +15,28 @@ But you have to configure a couple things first. 🤓
 * Configure a wildcard subdomain for your domain, so that you can have multiple subdomains for different services, e.g. `*.fastapi-project.example.com`. This will be useful for accessing different components, like `dashboard.fastapi-project.example.com`, `api.fastapi-project.example.com`, `traefik.fastapi-project.example.com`, `adminer.fastapi-project.example.com`, etc. And also for `staging`, like `dashboard.staging.fastapi-project.example.com`, `adminer.staging.fastapi-project.example.com`, etc.
 * Install and configure [Docker](https://docs.docker.com/engine/install/) on the remote server (Docker Engine, not Docker Desktop).
 
+## Server requirements
+
+The stack runs many services (PostgreSQL, backend, frontend Nuxt, dashboard, Traefik, Prometheus, Grafana, Adminer, nginx, exporters). Staging deploy runs **on the same server** and does `docker compose build` there — that builds backend (Python), frontend (Node/Nuxt) and dashboard (Node/Vite). Node builds (`npm ci` + Nuxt/Vite build) are **very memory‑hungry** (often 2–4 GB RAM each). If several builds run in parallel, RAM and CPU can be exhausted, the system starts swapping, and the server (including SSH) becomes slow or unresponsive.
+
+**Recommended for staging (with deploy on the same host):**
+
+| Resource | Minimum | Recommended |
+|----------|---------|-------------|
+| RAM      | 4 GB    | **8 GB**    |
+| CPU      | 2 cores | 4 cores     |
+| Disk     | 20 GB   | 40 GB SSD   |
+
+**If the server is weaker (e.g. 2 GB RAM):**
+
+1. **Add swap** (e.g. 2–4 GB) so that builds don’t OOM-kill the system (SSH will still be slow during build, but the server won’t crash):
+   ```bash
+   sudo fallocate -l 4G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
+   echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+   ```
+2. **Build images one at a time** so that only one heavy Node build runs at once — the staging workflow can use sequential build (see below).
+3. Or **build images in CI (e.g. GitHub-hosted runner)** and push to a registry; on the server only `docker compose pull && docker compose up -d`. That avoids running builds on the staging host.
+
 ## Public Traefik
 
 We need a Traefik proxy to handle incoming connections and HTTPS certificates.
