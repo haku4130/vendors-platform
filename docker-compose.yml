@@ -67,7 +67,6 @@ services:
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
-      - DASHBOARD_HOST=${DASHBOARD_HOST?Variable not set}
       - ENVIRONMENT=${ENVIRONMENT}
       - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY?Variable not set}
@@ -104,7 +103,6 @@ services:
     environment:
       - DOMAIN=${DOMAIN}
       - FRONTEND_HOST=${FRONTEND_HOST?Variable not set}
-      - DASHBOARD_HOST=${DASHBOARD_HOST?Variable not set}
       - ENVIRONMENT=${ENVIRONMENT}
       - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
       - SECRET_KEY=${SECRET_KEY?Variable not set}
@@ -152,39 +150,6 @@ services:
 
       # Enable redirection for HTTP and HTTPS
       - traefik.http.routers.${STACK_NAME?Variable not set}-backend-http.middlewares=https-redirect
-
-  dashboard:
-    image: '${DOCKER_IMAGE_DASHBOARD?Variable not set}:${TAG-latest}'
-    restart: always
-    networks:
-      - traefik-public
-      - default
-    build:
-      context: ./dashboard
-      args:
-        - VITE_API_URL=https://api.${DOMAIN?Variable not set}
-        - NODE_ENV=production
-    labels:
-      - traefik.enable=true
-      - traefik.docker.network=traefik-public
-      - traefik.constraint-label=traefik-public
-
-      # IP Whitelist middleware for dashboard
-      - traefik.http.middlewares.${STACK_NAME?Variable not set}-dashboard-ipwhitelist.ipwhitelist.sourcerange=${ALLOWED_IPS?Variable not set}
-
-      - traefik.http.services.${STACK_NAME?Variable not set}-dashboard.loadbalancer.server.port=80
-
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-http.rule=Host(`dashboard.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-http.entrypoints=http
-
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-https.rule=Host(`dashboard.${DOMAIN?Variable not set}`)
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-https.entrypoints=https
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-https.tls=true
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-https.tls.certresolver=le
-
-      # Enable redirection for HTTP and HTTPS, and IP whitelist
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-http.middlewares=https-redirect
-      - traefik.http.routers.${STACK_NAME?Variable not set}-dashboard-https.middlewares=${STACK_NAME?Variable not set}-dashboard-ipwhitelist
 
   frontend:
     image: '${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}'

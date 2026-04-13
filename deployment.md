@@ -12,12 +12,12 @@ But you have to configure a couple things first. 🤓
 
 * Have a remote server ready and available.
 * Configure the DNS records of your domain to point to the IP of the server you just created.
-* Configure a wildcard subdomain for your domain, so that you can have multiple subdomains for different services, e.g. `*.fastapi-project.example.com`. This will be useful for accessing different components, like `dashboard.fastapi-project.example.com`, `api.fastapi-project.example.com`, `traefik.fastapi-project.example.com`, `adminer.fastapi-project.example.com`, etc. And also for `staging`, like `dashboard.staging.fastapi-project.example.com`, `adminer.staging.fastapi-project.example.com`, etc.
+* Configure a wildcard subdomain for your domain, so that you can have multiple subdomains for different services, e.g. `*.fastapi-project.example.com`. This will be useful for accessing different components, like `api.fastapi-project.example.com`, `traefik.fastapi-project.example.com`, `adminer.fastapi-project.example.com`, etc.
 * Install and configure [Docker](https://docs.docker.com/engine/install/) on the remote server (Docker Engine, not Docker Desktop).
 
 ## Server requirements
 
-The stack runs many services (PostgreSQL, backend, frontend Nuxt, dashboard, Traefik, Prometheus, Grafana, Adminer, nginx, exporters). Staging deploy runs **on the same server** and does `docker compose build` there — that builds backend (Python), frontend (Node/Nuxt) and dashboard (Node/Vite). Node builds (`npm ci` + Nuxt/Vite build) are **very memory‑hungry** (often 2–4 GB RAM each). If several builds run in parallel, RAM and CPU can be exhausted, the system starts swapping, and the server (including SSH) becomes slow or unresponsive.
+The stack runs many services (PostgreSQL, backend, frontend Nuxt, Traefik, Prometheus, Grafana, Adminer, nginx, exporters). Staging deploy runs **on the same server** and does `docker compose build` there — that builds backend (Python) and frontend (Node/Nuxt). Node builds (`npm ci` + Nuxt build) are **very memory-hungry** (often 2–4 GB RAM). If several builds run in parallel, RAM and CPU can be exhausted, the system starts swapping, and the server (including SSH) becomes slow or unresponsive.
 
 **Recommended for staging (with deploy on the same host):**
 
@@ -312,7 +312,7 @@ Traefik UI: `https://traefik.fastapi-project.example.com`
 
 ### Production
 
-Dashboard: `https://dashboard.fastapi-project.example.com`
+Frontend: `https://fastapi-project.example.com`
 
 Backend API docs: `https://api.fastapi-project.example.com/docs`
 
@@ -322,7 +322,7 @@ Adminer: `https://adminer.fastapi-project.example.com`
 
 ### Staging
 
-Dashboard: `https://dashboard.staging.fastapi-project.example.com`
+Frontend: `https://staging.fastapi-project.example.com`
 
 Backend API docs: `https://api.staging.fastapi-project.example.com/docs`
 

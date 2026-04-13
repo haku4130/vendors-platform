@@ -12,11 +12,11 @@ repos:
       - id: end-of-file-fixer
         exclude: |
           (?x)^(
-              dashboard/src/client/.*|
+              frontend/app/generated/api/.*|
               backend/app/email-templates/build/.*
           )$
       - id: trailing-whitespace
-        exclude: ^dashboard/src/client/.*
+        exclude: ^frontend/app/generated/api/.*
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.2.2
     hooks:
@@ -24,15 +24,6 @@ repos:
         args:
           - --fix
       - id: ruff-format
-  - repo: local
-    hooks:
-      - id: local-biome-check
-        name: biome check
-        entry: bash -c 'cd dashboard && npm run lint'
-        language: system
-        types: [text]
-        files: ^dashboard/
-
 ci:
   autofix_commit_msg: 🎨 [pre-commit.ci] Auto format from pre-commit.com hooks
   autoupdate_commit_msg: ⬆ [pre-commit.ci] pre-commit autoupdate

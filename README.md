@@ -9,12 +9,8 @@
     - 🧰 [SQLModel](https://sqlmodel.tiangolo.com) for the Python SQL database interactions (ORM).
     - 🔍 [Pydantic](https://docs.pydantic.dev), used by FastAPI, for the data validation and settings management.
     - 💾 [PostgreSQL](https://www.postgresql.org) as the SQL database.
-- 🚀 [React](https://react.dev) for the dashboard.
-    - 💃 Using TypeScript, hooks, Vite, and other parts of a modern frontend stack.
-    - 🎨 [Chakra UI](https://chakra-ui.com) for the dashboard components.
-    - 🤖 An automatically generated dashboard client.
-    - 🧪 [Playwright](https://playwright.dev) for End-to-End testing.
-    - 🦇 Dark mode support.
+- 🚀 [Nuxt](https://nuxt.com) frontend application with Vue.
+    - 💃 TypeScript-based app with generated API client.
 - 🐋 [Docker Compose](https://www.docker.com) for development and production.
 - 🔒 Secure password hashing by default.
 - 🔑 JWT (JSON Web Token) authentication.
@@ -216,9 +212,9 @@ The input variables, with their default values (some auto generated) are:
 
 Backend docs: [backend/README.md](./backend/README.md).
 
-## Dashboard Frontend Development
+## Frontend Development
 
-Dashboard docs: [dashboard/README.md](./dashboard/README.md).
+Frontend docs: [frontend/README.md](./frontend/README.md).
 
 ## Deployment
 

@@ -10,7 +10,7 @@ docker compose watch
 
 * Now you can open your browser and interact with these URLs:
 
-Dashboard, built with Docker, with routes handled based on the path: http://localhost:5173
+Frontend, built with Docker: http://localhost:3000
 
 Backend, JSON based web API based on OpenAPI: http://localhost:8000
 
@@ -38,20 +38,20 @@ docker compose logs backend
 
 The Docker Compose files are configured so that each of the services is available in a different port in `localhost`.
 
-For the backend and dashboard, they use the same port that would be used by their local development server, so, the backend is at `http://localhost:8000` and the dashboard at `http://localhost:5173`.
+For the backend and frontend, they use the same port that would be used by their local development server, so the backend is at `http://localhost:8000` and the frontend at `http://localhost:3000`.
 
 This way, you could turn off a Docker Compose service and start its local development service, and everything would keep working, because it all uses the same ports.
 
-For example, you can stop that `dashboard` service in the Docker Compose, in another terminal, run:
+For example, you can stop the `frontend` service in Docker Compose, in another terminal, run:
 
 ```bash
-docker compose stop dashboard
+docker compose stop frontend
 ```
 
-And then start the local dashboard development server:
+And then start the local frontend development server:
 
 ```bash
-cd dashboard
+cd frontend
 npm run dev
 ```
 
@@ -70,9 +70,9 @@ fastapi dev app/main.py
 
 ## Docker Compose in `localhost.tiangolo.com`
 
-When you start the Docker Compose stack, it uses `localhost` by default, with different ports for each service (backend, dashboard, adminer, etc).
+When you start the Docker Compose stack, it uses `localhost` by default, with different ports for each service (backend, frontend, adminer, etc).
 
-When you deploy it to production (or staging), it will deploy each service in a different subdomain, like `api.example.com` for the backend and `dashboard.example.com` for the dashboard.
+When you deploy it to production (or staging), it will deploy backend and frontend separately, for example `api.example.com` for the backend and `example.com` for the frontend.
 
 In the guide about [deployment](deployment.md) you can read about Traefik, the configured proxy. That's the component in charge of transmitting traffic to each service based on the subdomain.
 
@@ -84,7 +84,7 @@ DOMAIN=localhost.tiangolo.com
 
 That will be used by the Docker Compose files to configure the base domain for the services.
 
-Traefik will use this to transmit traffic at `api.localhost.tiangolo.com` to the backend, and traffic at `dashboard.localhost.tiangolo.com` to the dashboard.
+Traefik will use this to transmit traffic at `api.localhost.tiangolo.com` to the backend, and traffic at `localhost.tiangolo.com` to the frontend.
 
 The domain `localhost.tiangolo.com` is a special domain that is configured (with all its subdomains) to point to `127.0.0.1`. This way you can use that for your local development.
 
@@ -94,7 +94,7 @@ After you update it, run again:
 docker compose watch
 ```
 
-When deploying, for example in production, the main Traefik is configured outside of the Docker Compose files. For local development, there's an included Traefik in `docker-compose.override.yml`, just to let you test that the domains work as expected, for example with `api.localhost.tiangolo.com` and `dashboard.localhost.tiangolo.com`.
+When deploying, for example in production, the main Traefik is configured outside of the Docker Compose files. For local development, there's an included Traefik in `docker-compose.override.yml`, just to let you test that the domains work as expected, for example with `api.localhost.tiangolo.com` and `localhost.tiangolo.com`.
 
 ## Docker Compose files and env vars
 
@@ -174,7 +174,7 @@ The production or staging URLs would use these same paths, but with your own dom
 
 Development URLs, for local development.
 
-Dashboard: http://localhost:5173
+Frontend: http://localhost:3000
 
 Backend: http://localhost:8000
 
@@ -192,7 +192,7 @@ MailCatcher: http://localhost:1080
 
 Development URLs, for local development.
 
-Dashboard: http://dashboard.localhost.tiangolo.com
+Frontend: http://localhost.tiangolo.com
 
 Backend: http://api.localhost.tiangolo.com
 

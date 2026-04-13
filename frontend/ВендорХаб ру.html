@@ -1,0 +1,1102 @@
+<html lang="ru"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ВендорХаб — Платформа для взаимодействия компаний с IT-вендорами</title>
+    <style>
+        :root {
+            --color-primary: #2563eb;
+            --color-primary-dark: #1e40af;
+            --color-secondary: #0ea5e9;
+            --color-accent: #10b981;
+            --color-dark: #1e293b;
+            --color-light: #f8fafc;
+            --color-gray: #64748b;
+            --color-border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--color-dark);
+            background: #ffffff;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--color-border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .header.scrolled {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: var(--color-dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            color: var(--color-primary);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--color-primary);
+            color: var(--color-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            margin-top: 80px;
+            padding: 6rem 2rem 4rem;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.1) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            border-radius: 50%;
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: var(--color-dark);
+        }
+
+        .hero-content .highlight {
+            color: var(--color-primary);
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            color: var(--color-gray);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .hero-image {
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Stats Section */
+        .stats {
+            padding: 3rem 2rem;
+            background: white;
+        }
+
+        .stats-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-item p {
+            color: var(--color-gray);
+            font-size: 1rem;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 6rem 2rem;
+            background: var(--color-light);
+        }
+
+        .features-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            font-size: 1.25rem;
+            color: var(--color-gray);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--color-gray);
+            line-height: 1.7;
+        }
+
+        /* How It Works */
+        .how-it-works {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .how-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            margin: 0 auto 1.5rem;
+        }
+
+        .step h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .step p {
+            color: var(--color-gray);
+        }
+
+        /* Target Audience */
+        .audience {
+            padding: 6rem 2rem;
+            background: var(--color-light);
+        }
+
+        .audience-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .audience-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .audience-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .audience-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-primary);
+        }
+
+        .audience-card ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .audience-card li {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .audience-card li:last-child {
+            border-bottom: none;
+        }
+
+        .check-icon {
+            color: var(--color-accent);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        /* Pricing */
+        .pricing {
+            padding: 6rem 2rem;
+            background: white;
+        }
+
+        .pricing-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 4rem;
+        }
+
+        .pricing-card {
+            background: white;
+            border: 2px solid var(--color-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            border-color: var(--color-primary);
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(37, 99, 235, 0.2);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+
+        .pricing-badge {
+            background: var(--color-primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-card .price {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-card .period {
+            color: var(--color-gray);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-card ul {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .pricing-card li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        /* CTA Section */
+        .cta {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+            color: white;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta .btn-outline {
+            background: white;
+            color: var(--color-primary);
+            border: none;
+        }
+
+        .cta .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem 2rem;
+            background: var(--color-dark);
+            color: white;
+        }
+
+        .footer-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.7;
+        }
+
+        .footer-links h4 {
+            font-size: 1.125rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            display: block;
+            padding: 0.5rem 0;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .features-grid,
+            .steps,
+            .audience-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-container {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+                flex-direction: column;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 1rem;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+        }
+    
+        /* Clients Section */
+        .clients {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .clients-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .companies-scroll-wrapper {
+            position: relative;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+
+        .companies-scroll {
+            display: flex;
+            gap: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 1rem 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-primary) var(--color-border);
+        }
+
+        .companies-scroll::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .companies-scroll::-webkit-scrollbar-track {
+            background: var(--color-border);
+            border-radius: 4px;
+        }
+
+        .companies-scroll::-webkit-scrollbar-thumb {
+            background: var(--color-primary);
+            border-radius: 4px;
+        }
+
+        .companies-scroll::-webkit-scrollbar-thumb:hover {
+            background: var(--color-primary-dark);
+        }
+
+        .company-card {
+            min-width: 200px;
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .company-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        .company-logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-placeholder {
+            width: 100%;
+            height: 100%;
+        }
+
+        .company-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-dark);
+            text-align: center;
+        }
+
+        .scroll-hint {
+            text-align: center;
+            color: var(--color-gray);
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .clients {
+                padding: 4rem 1rem;
+            }
+
+            .company-card {
+                min-width: 160px;
+                padding: 1.5rem;
+            }
+
+            .company-logo {
+                width: 60px;
+                height: 60px;
+            }
+
+            .company-name {
+                font-size: 1rem;
+            }
+        }
+</style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <nav class="nav-container">
+            <a href="#" class="logo">
+                <div class="logo-icon">V</div>
+                ВендорХаб
+            </a>
+            <button class="mobile-menu-btn" id="menuBtn">☰</button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#features">Возможности</a></li>
+                <li><a href="#how-it-works">Как это работает</a></li>
+                <li><a href="#clients">Наши клиенты</a></li>
+                <li><a href="#" class="btn btn-outline">Войти</a></li>
+                <li><a href="#" class="btn btn-primary" style="color: #fff;">Начать бесплатно</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1>Найдите <span class="highlight">идеального</span> IT-партнера за минуты</h1>
+                <p>ВендорХаб — цифровая платформа, которая упрощает поиск и выбор IT-вендоров. Автоматизируйте процесс закупок и сэкономьте до 60% времени на поиск подрядчиков.</p>
+                <div class="hero-buttons">
+                    <a href="#" class="btn btn-primary">Разместить проект</a>
+                    <a href="#" class="btn btn-outline">Стать вендором</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=800&amp;h=600&amp;fit=crop" alt="IT команда">
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="features-container">
+            <div class="section-header">
+                <h2>Почему выбирают ВендорХаб</h2>
+                <p>Все инструменты для эффективного взаимодействия с IT-вендорами в одном месте</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3>Умный поиск вендоров</h3>
+                    <p>Алгоритмы автоматически подбирают подходящих исполнителей на основе ваших требований, технологического стека и бюджета проекта.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Стандартизированные брифы</h3>
+                    <p>Создавайте подробные брифы проектов за минуты с помощью готовых шаблонов. Все требования структурированы и понятны вендорам.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚖️</div>
+                    <h3>Сравнение предложений</h3>
+                    <p>Сравнивайте коммерческие предложения вендоров в едином интерфейсе. Оценивайте технические решения, сроки и стоимость.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">✅</div>
+                    <h3>Проверенные профили</h3>
+                    <p>Все вендоры проходят верификацию. Изучайте портфолио, отзывы клиентов и рейтинги перед принятием решения.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💬</div>
+                    <h3>Единое окно коммуникации</h3>
+                    <p>Вся переписка, документы и история взаимодействия с вендорами сохраняется в одном месте.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Аналитика и отчеты</h3>
+                    <p>Отслеживайте ключевые метрики: время закрытия проектов, бюджеты, производительность вендоров.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="how-container">
+            <div class="section-header">
+                <h2>Как это работает</h2>
+                <p>Простой процесс от размещения проекта до выбора исполнителя</p>
+            </div>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h3>Опишите проект</h3>
+                    <p>Заполните бриф проекта, указав цели, требования, бюджет и сроки. Наш конструктор поможет ничего не упустить.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h3>Получите предложения</h3>
+                    <p>Подходящие вендоры получат уведомление о проекте и отправят свои коммерческие предложения.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h3>Выберите исполнителя</h3>
+                    <p>Сравните предложения, изучите портфолио и отзывы. Свяжитесь с финалистами и выберите лучшего партнера.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience -->
+    <section class="audience">
+        <div class="audience-container">
+            <div class="section-header">
+                <h2>Кому подходит ВендорХаб</h2>
+                <p>Наша платформа создана для двух типов пользователей</p>
+            </div>
+            <div class="audience-grid">
+                <div class="audience-card">
+                    <h3>Для компаний</h3>
+                    <ul>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Быстрый поиск и подбор IT-вендоров под любые задачи</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Экономия времени на оценку и сравнение предложений</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Доступ к широкой сети проверенных исполнителей</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Прозрачность процесса выбора подрядчика</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Снижение рисков выбора неподходящего вендора</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="audience-card">
+                    <h3>Для IT-вендоров</h3>
+                    <ul>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Новые клиенты и проекты в вашей специализации</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Повышение узнаваемости бренда на рынке</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Структурированные брифы с четкими требованиями</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Снижение затрат на привлечение клиентов</span>
+                        </li>
+                        <li>
+                            <span class="check-icon">✓</span>
+                            <span>Инструменты для демонстрации экспертизы</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
+    <section class="clients" id="clients">
+        <div class="clients-container">
+            <div class="section-header">
+                <h2>Нам доверяют</h2>
+                <p>Ведущие компании России выбирают нас для поиска IT-вендоров</p>
+            </div>
+            <div class="companies-scroll-wrapper">
+                <div class="companies-scroll">
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#FF0000"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="36" font-weight="bold">Л</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Лукойл</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#0066CC"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="36" font-weight="bold">Г</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Газпром</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#009B3A"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="36" font-weight="bold">С</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Сбербанк</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#4A90E2"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="32" font-weight="bold">ВТБ</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">ВТБ</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#FF6B00"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="36" font-weight="bold">Р</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Роснефть</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#E31E24"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="32" font-weight="bold">МТС</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">МТС</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#7B68EE"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="36" font-weight="bold">Я</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Яндекс</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#FF9900"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="32" font-weight="bold">РЖД</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">РЖД</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#00A650"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="36" font-weight="bold">М</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Мегафон</div>
+                    </div>
+                    <div class="company-card">
+                        <div class="company-logo">
+                            <svg viewBox="0 0 120 120" class="logo-placeholder">
+                                <rect width="120" height="120" fill="#1E88E5"></rect>
+                                <text x="60" y="70" text-anchor="middle" fill="white" font-size="32" font-weight="bold">РТ</text>
+                            </svg>
+                        </div>
+                        <div class="company-name">Ростех</div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-hint">← Прокрутите, чтобы увидеть больше →</div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2>Готовы начать?</h2>
+            <p>Присоединяйтесь к сотням компаний, которые уже оптимизировали процесс поиска IT-вендоров</p>
+            <div style="text-align: center;">
+    <a href="#" class="btn btn-outline">Создать аккаунт</a>
+</div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <h3>ВендорХаб</h3>
+                <p>Цифровая платформа для эффективного взаимодействия компаний с IT-вендорами. Упрощаем процесс поиска и выбора технологических партнеров.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Продукт</h4>
+                <ul>
+                    <li><a href="#">Процесс поиска</a></li>
+                    <li><a href="#">Тарифы</a></li>
+                    
+                    <li><a href="#">API</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Компания</h4>
+                <ul>
+                    <li><a href="#">О компании</a></li>
+                    
+                    
+                    <li><a href="#">Контакты</a></li>
+                <li><a href="#">Отзывы клиентов</a></li></ul>
+            </div>
+            <div class="footer-links">
+                <h4>Другое</h4>
+                <ul>
+                    <li><a href="#">Политика конфиденциальности</a></li>
+                    <li><a href="#">Политика обработки персональных данных</a></li>
+                    <li><a href="#">Правила применения рекомендательных технологий</a></li>
+                    
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 ООО "Вендор Хаб"</p>
+        </div>
+    </footer>
+
+    <script>
+        // Header scroll effect
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('menuBtn');
+        const navMenu = document.getElementById('navMenu');
+        menuBtn.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+
+</body></html>

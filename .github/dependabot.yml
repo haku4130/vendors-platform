@@ -16,7 +16,7 @@ updates:
       prefix: ⬆
   # npm
   - package-ecosystem: npm
-    directory: /dashboard
+    directory: /frontend
     schedule:
       interval: weekly
     commit-message:
@@ -27,7 +27,7 @@ updates:
   - package-ecosystem: docker
     directories:
       - /backend
-      - /dashboard
+      - /frontend
     schedule:
       interval: weekly
     commit-message:

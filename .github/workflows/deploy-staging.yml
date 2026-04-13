@@ -47,7 +47,6 @@ jobs:
           export COMPOSE_FILE="docker-compose.yml"
           export COMPOSE_ENV="--env-file .env.staging --project-name ${{ secrets.STACK_NAME_STAGING }}"
           docker compose -f $COMPOSE_FILE $COMPOSE_ENV build backend
-          docker compose -f $COMPOSE_FILE $COMPOSE_ENV build dashboard
           docker compose -f $COMPOSE_FILE $COMPOSE_ENV build frontend
       - name: Start stack
         run: docker compose -f docker-compose.yml --env-file .env.staging --project-name ${{ secrets.STACK_NAME_STAGING }} up -d
