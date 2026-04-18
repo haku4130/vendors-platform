@@ -218,7 +218,10 @@ services:
       # redirect http → https
       - traefik.http.routers.${STACK_NAME?Variable not set}-media-http.middlewares=https-redirect
 
+  # Optional stack: `docker compose --profile monitoring up -d` to enable
   prometheus:
+    profiles:
+      - monitoring
     image: prom/prometheus:v3.0.1
     restart: always
     volumes:
@@ -256,6 +259,8 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-prometheus-https.middlewares=${STACK_NAME?Variable not set}-prometheus-ipwhitelist
 
   grafana:
+    profiles:
+      - monitoring
     image: grafana/grafana:11.4.0
     restart: always
     volumes:
@@ -295,6 +300,8 @@ services:
       - traefik.http.routers.${STACK_NAME?Variable not set}-grafana-https.middlewares=${STACK_NAME?Variable not set}-grafana-ipwhitelist
 
   postgres-exporter:
+    profiles:
+      - monitoring
     image: prometheuscommunity/postgres-exporter:v0.18.0
     restart: always
     environment:
@@ -305,6 +312,8 @@ services:
       - db
 
   node-exporter:
+    profiles:
+      - monitoring
     image: prom/node-exporter:v1.8.2
     restart: always
     command:

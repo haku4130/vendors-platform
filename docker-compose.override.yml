@@ -122,11 +122,15 @@ services:
       - "8088:80"
 
   prometheus:
+    profiles:
+      - monitoring
     restart: "no"
     ports:
       - "9090:9090"
 
   grafana:
+    profiles:
+      - monitoring
     restart: "no"
     ports:
       - "3001:3000"  # Using 3001 to avoid conflict with frontend on 3000
