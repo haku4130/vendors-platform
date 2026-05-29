@@ -1,14 +1,11 @@
 <template>
   <div class="bg-white text-slate-800">
-    <UHeader>
+    <UHeader :to="$localePath('/')">
       <template #title>
-        <NuxtLink
-          :to="$localePath('/')"
-          class="flex items-center gap-2 font-bold text-blue-600"
-        >
+        <div class="flex items-center gap-2 font-bold text-blue-600">
           <Logo />
           {{ $t('brandName') }}
-        </NuxtLink>
+        </div>
       </template>
 
       <UNavigationMenu :items="navItems" />
@@ -17,10 +14,14 @@
         <LangSwitcher />
         <div class="hidden items-center gap-2 md:flex">
           <template v-if="auth.user.value">
-            <UButton :to="$localePath('/dashboard/projects')">{{ $t('nav.dashboard') }}</UButton>
+            <UButton :to="$localePath('/dashboard/projects')">{{
+              $t('nav.dashboard')
+            }}</UButton>
           </template>
           <template v-else>
-            <UButton :to="$localePath('/sign-in')">{{ $t('nav.signIn') }}</UButton>
+            <UButton :to="$localePath('/sign-in')">{{
+              $t('nav.signIn')
+            }}</UButton>
             <UButton :to="$localePath('/register')" variant="solid">{{
               $t('nav.getStarted')
             }}</UButton>
@@ -76,7 +77,10 @@
             <UButton :to="$localePath('/register')" variant="solid" size="xl">
               {{ $t('hero.placeProject') }}
             </UButton>
-            <UButton :to="$localePath('/dashboard/vendor-registration')" size="xl">
+            <UButton
+              :to="$localePath('/dashboard/vendor-registration')"
+              size="xl"
+            >
               {{ $t('hero.becomeVendor') }}
             </UButton>
           </div>
@@ -247,9 +251,7 @@
       >
         <div>
           <h3 class="mb-4 text-3xl font-bold">{{ $t('brandName') }}</h3>
-          <p class="text-white/70">
-            {{ $t('footer.description') }}
-          </p>
+          <p class="text-white/70">{{ $t('footer.description') }}</p>
         </div>
         <div>
           <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.product') }}</h4>

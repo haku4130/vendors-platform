@@ -1,8 +1,10 @@
 <template>
   <AuthFormContainer>
     <div class="text-start space-y-1">
-      <h2 class="text-xl font-semibold text-gray-800">{{ $t('auth.register.title') }}</h2>
-      <h2 class="text-sm mb-6 text-gray-600">
+      <h2 class="text-xl font-semibold text-white">
+        {{ $t('auth.register.title') }}
+      </h2>
+      <h2 class="text-sm mb-6 text-gray-200">
         {{ $t('auth.register.subtitle') }}
       </h2>
     </div>
@@ -28,14 +30,20 @@
               class="w-full"
             />
           </UFormField>
-          <UFormField :label="$t('auth.register.companyName')" name="companyName">
+          <UFormField
+            :label="$t('auth.register.companyName')"
+            name="companyName"
+          >
             <UInput
               v-model="state.companyName"
               leading-icon="i-lucide-building"
               class="w-full"
             />
           </UFormField>
-          <UFormField :label="$t('auth.register.companyLocation')" name="companyLocation">
+          <UFormField
+            :label="$t('auth.register.companyLocation')"
+            name="companyLocation"
+          >
             <LocationSelector v-model="state.companyLocation" class="w-full" />
           </UFormField>
           <UFormField :label="$t('auth.register.email')" name="email">
@@ -68,7 +76,10 @@
               </template>
             </UInput>
           </UFormField>
-          <UFormField :label="$t('auth.register.confirmPassword')" name="confirmPassword">
+          <UFormField
+            :label="$t('auth.register.confirmPassword')"
+            name="confirmPassword"
+          >
             <UInput
               v-model="state.confirmPassword"
               leading-icon="i-lucide-lock"

@@ -1,8 +1,10 @@
 <template>
   <AuthFormContainer class="max-w-sm">
     <div class="text-start space-y-1">
-      <h2 class="text-xl font-semibold text-gray-800">{{ $t('auth.signIn.title') }}</h2>
-      <h2 class="text-sm mb-6 text-gray-600">
+      <h2 class="text-xl font-semibold text-white">
+        {{ $t('auth.signIn.title') }}
+      </h2>
+      <h2 class="text-sm mb-6 text-gray-200">
         {{ $t('auth.signIn.subtitle') }}
       </h2>
     </div>
