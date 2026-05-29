@@ -1,17 +1,16 @@
 <template>
   <UContainer class="max-w-2xl space-y-6">
     <div class="text-center">
-      <h1 class="text-2xl font-semibold">Give Feedback</h1>
+      <h1 class="text-2xl font-semibold">{{ $t('dashboard.feedback.title') }}</h1>
       <p class="text-muted mt-1">
-        Tell us what you like and what we should improve about the vendor
-        platform.
+        {{ $t('dashboard.feedback.subtitle') }}
       </p>
     </div>
 
     <UCard class="shadow-sm">
       <template #default>
         <UForm :state="form" class="space-y-5" @submit="submit">
-          <UFormField label="Rate your experience" name="rating" class="w-fit">
+          <UFormField :label="$t('dashboard.feedback.rating')" name="rating" class="w-fit">
             <StarRating
               v-model:rating="form.rating"
               clickable
@@ -21,14 +20,14 @@
           </UFormField>
 
           <UFormField
-            label="Feedback"
+            :label="$t('dashboard.feedback.message')"
             name="message"
-            help="Please be specific (min 10 chars)."
+            :help="$t('dashboard.feedback.messageHint')"
           >
             <UTextarea
               v-model="form.message"
               :rows="6"
-              placeholder="What worked well? What didn't? Any missing features?"
+              :placeholder="$t('dashboard.feedback.placeholder')"
               autoresize
               class="w-full"
             />
@@ -36,10 +35,10 @@
 
           <div class="flex items-center justify-end gap-2 pt-2">
             <UButton variant="ghost" type="button" @click="resetForm">
-              Reset
+              {{ $t('dashboard.feedback.reset') }}
             </UButton>
             <UButton :loading="submitting" type="submit">
-              Send feedback
+              {{ $t('dashboard.feedback.send') }}
             </UButton>
           </div>
         </UForm>

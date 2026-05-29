@@ -1,5 +1,9 @@
 export default defineAppConfig({
     ui: {
+        colors: {
+            primary: 'blue',
+            secondary: 'sky',
+        },
         button: {
             defaultVariants: {
                 variant: 'outline',
@@ -13,7 +17,7 @@ export default defineAppConfig({
                 {
                     color: 'primary',
                     variant: 'solid',
-                    class: 'border hover:bg-white hover:text-black active:bg-primary/10 active:text-black disabled:hover:text-white',
+                    class: 'hover:bg-blue-700 active:bg-blue-800',
                 },
                 {
                     color: 'warning',

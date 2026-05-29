@@ -4,8 +4,8 @@
       class="bg-vendor-gradient shadow-sm p-6 mb-6 rounded-2xl flex flex-col items-stretch gap-6"
     >
       <div class="flex items-center">
-        <h1 class="text-xl font-semibold text-gray-900 leading-snug">
-          Find the perfect partner for your project
+        <h1 class="text-xl font-semibold text-white leading-snug">
+          {{ $t('dashboard.vendors.bannerTitle') }}
         </h1>
       </div>
 
@@ -14,7 +14,7 @@
           <UInputMenu
             v-model="searchServices"
             icon="i-lucide-search"
-            placeholder="Search for Web Design, Web App Development, etc."
+            :placeholder="$t('dashboard.vendors.searchPlaceholder')"
             :items="searchServicesMenuItems"
             value-key="value"
             multiple
@@ -31,7 +31,7 @@
 
           <template v-if="searchServices.length > 0">
             <USeparator
-              :label="`Selected Services (${searchServices.length}/10)`"
+              :label="$t('dashboard.vendors.selectedServices', { count: searchServices.length })"
               class="my-2"
             />
             <div
@@ -68,7 +68,7 @@
             class="w-full justify-center"
             @click="handleSearch"
           >
-            Search
+            {{ $t('dashboard.vendors.searchButton') }}
           </UButton>
           <UButton
             v-if="hasSearched"
@@ -76,7 +76,7 @@
             variant="ghost"
             @click="handleClear"
           >
-            Clear
+            {{ $t('dashboard.vendors.clearSearch') }}
           </UButton>
         </div>
       </div>
@@ -103,7 +103,7 @@
           name="i-lucide-loader-2"
           class="animate-spin text-4xl text-primary mb-4"
         />
-        <p class="text-muted">Searching for vendors...</p>
+        <p class="text-muted">{{ $t('dashboard.vendors.searching') }}</p>
       </div>
 
       <div
@@ -119,11 +119,11 @@
 
       <div v-else class="text-center py-12">
         <UIcon name="i-lucide-search-x" class="text-6xl text-gray-300 mb-4" />
-        <h4 class="text-xl font-semibold text-gray-700">No vendors found</h4>
+        <h4 class="text-xl font-semibold text-gray-700">{{ $t('dashboard.vendors.noResults') }}</h4>
         <p class="mt-2 text-muted mb-4">
-          Try adjusting your search criteria or selecting different services.
+          {{ $t('dashboard.vendors.noResultsDesc') }}
         </p>
-        <UButton variant="outline" @click="handleClear"> Clear Search </UButton>
+        <UButton variant="outline" @click="handleClear">{{ $t('dashboard.vendors.clearSearch') }}</UButton>
       </div>
     </section>
 
@@ -137,11 +137,10 @@
         class="text-6xl text-gray-300 mx-auto mb-4"
       />
       <h3 class="text-xl font-semibold text-gray-700">
-        Start searching for vendors
+        {{ $t('dashboard.vendors.startTitle') }}
       </h3>
       <p class="text-muted max-w-md mx-auto">
-        Select the services you need and optionally a location to find the
-        perfect vendors for your project.
+        {{ $t('dashboard.vendors.startDesc') }}
       </p>
     </section>
   </div>

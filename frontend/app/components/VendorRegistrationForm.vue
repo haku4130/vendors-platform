@@ -169,7 +169,7 @@
               }"
             />
           </UFormField>
-          <UFormField label="Company’s Value" name="turnover">
+          <UFormField label="Company's Value" name="turnover">
             <UInputNumber
               v-model="answers.turnover"
               class="w-full"

@@ -6,6 +6,8 @@
       header: phase === 'form' ? 'bg-vendor-gradient' : '',
       footer: 'justify-between',
       body: phase === 'form' ? '' : 'bg-vendor-gradient',
+      title: 'text-white',
+      close: 'text-white',
     }"
     fullscreen
   >
@@ -17,7 +19,6 @@
           v-if="phase === 'form'"
           :model-value="stepNumber"
           :max="totalSteps"
-          color="neutral"
         />
 
         <div

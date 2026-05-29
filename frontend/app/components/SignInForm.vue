@@ -1,14 +1,14 @@
 <template>
   <AuthFormContainer class="max-w-sm">
     <div class="text-start space-y-1">
-      <h2 class="text-xl font-semibold text-gray-800">Sign In</h2>
+      <h2 class="text-xl font-semibold text-gray-800">{{ $t('auth.signIn.title') }}</h2>
       <h2 class="text-sm mb-6 text-gray-600">
-        Welcome back to Vendor Platform
+        {{ $t('auth.signIn.subtitle') }}
       </h2>
     </div>
 
     <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-      <UFormField label="Email" name="email">
+      <UFormField :label="$t('auth.signIn.email')" name="email">
         <UInput
           v-model="state.email"
           leading-icon="i-lucide-at-sign"
@@ -16,7 +16,7 @@
         />
       </UFormField>
 
-      <UFormField label="Password" name="password">
+      <UFormField :label="$t('auth.signIn.password')" name="password">
         <UInput
           v-model="state.password"
           leading-icon="i-lucide-lock"
@@ -39,10 +39,10 @@
         </UInput>
         <template #hint>
           <NuxtLink
-            to="/forgot-password"
+            :to="$localePath('/forgot-password')"
             class="font-semibold underline text-default hover:text-gray-900"
           >
-            Forgot password?
+            {{ $t('auth.signIn.forgotPassword') }}
           </NuxtLink>
         </template>
       </UFormField>
@@ -50,21 +50,21 @@
       <UButton
         type="submit"
         variant="solid"
-        color="warning"
+        color="primary"
         size="lg"
         class="font-semibold justify-center py-2 px-10 rounded-lg my-4"
       >
-        Continue
+        {{ $t('auth.signIn.submit') }}
       </UButton>
     </UForm>
 
     <p class="text-sm text-gray-800">
-      Don't have an account?
+      {{ $t('auth.signIn.noAccount') }}
       <NuxtLink
-        to="/register"
+        :to="$localePath('/register')"
         class="font-semibold underline hover:text-gray-900"
       >
-        Register
+        {{ $t('auth.signIn.register') }}
       </NuxtLink>
     </p>
   </AuthFormContainer>
@@ -74,6 +74,8 @@
 import * as v from 'valibot';
 import type { FormSubmitEvent } from '@nuxt/ui';
 import { loginLoginAccessToken } from '~/generated/api';
+
+const localePath = useLocalePath();
 
 const state = ref({
   email: '',
@@ -115,7 +117,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       color: 'success',
     });
 
-    navigateTo('/dashboard');
+    navigateTo(localePath('/dashboard'));
   } else {
     toast.add({
       title: 'Login failed',

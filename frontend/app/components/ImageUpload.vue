@@ -54,7 +54,7 @@ const schema = z.object({
         }),
       {
         message: `The image dimensions are invalid. Please upload an image between ${MIN_DIMENSIONS.width}x${MIN_DIMENSIONS.height} and ${MAX_DIMENSIONS.width}x${MAX_DIMENSIONS.height} pixels.`,
-      }
+      },
     ),
 });
 
@@ -99,7 +99,7 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
 
 <template>
   <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
-    <UFormField name="avatar" help="JPG, GIF or PNG. 1MB Max.">
+    <UFormField name="avatar" :help="$t('dashboard.profile.imageHint')">
       <UFileUpload
         v-slot="{ open, removeFile }"
         v-model="state.avatar"
@@ -116,7 +116,7 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
           />
 
           <UButton
-            :label="state.avatar ? 'Change image' : 'Upload new image'"
+            :label="state.avatar ? $t('dashboard.profile.changeImage') : $t('dashboard.profile.uploadImage')"
             variant="outline"
             @click="open()"
           />
@@ -137,6 +137,6 @@ async function onSubmit(event: FormSubmitEvent<schema>) {
       </UFileUpload>
     </UFormField>
 
-    <UButton type="submit" label="Submit" />
+    <UButton type="submit" :label="$t('dashboard.profile.submit')" class="w-fit" />
   </UForm>
 </template>

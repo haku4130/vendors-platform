@@ -2,8 +2,8 @@
   <div class="space-y-4">
     <!-- Top block -->
     <section class="bg-vendor-gradient p-6 rounded-2xl">
-      <h2 class="text-xl font-semibold text-gray-900">
-        Leaving a review helps business leaders like you make a confident choice
+      <h2 class="text-xl font-semibold text-white">
+        {{ $t('dashboard.reviews.banner') }}
       </h2>
     </section>
 
@@ -21,8 +21,8 @@
         <UEmpty
           v-else-if="!writtenReviews.length"
           icon="i-lucide-pen-line"
-          title="No reviews written yet"
-          description="Start by reviewing people you've worked with on projects."
+          :title="$t('dashboard.reviews.empty.writtenTitle')"
+          :description="$t('dashboard.reviews.empty.writtenDescription')"
           class="w-fit mx-auto py-8"
         />
 
@@ -48,8 +48,8 @@
         <UEmpty
           v-else-if="!receivedReviews.length"
           icon="i-lucide-star"
-          title="No reviews received yet"
-          description="Complete projects to receive reviews from your partners."
+          :title="$t('dashboard.reviews.empty.receivedTitle')"
+          :description="$t('dashboard.reviews.empty.receivedDescription')"
           class="w-fit mx-auto py-8"
         />
 
@@ -75,8 +75,8 @@
         <UEmpty
           v-else-if="!usersToReview.length"
           icon="i-lucide-users"
-          title="No one to review"
-          description="Complete projects with partners to leave reviews."
+          :title="$t('dashboard.reviews.empty.toReviewTitle')"
+          :description="$t('dashboard.reviews.empty.toReviewDescription')"
           class="w-fit mx-auto py-8"
         />
 
@@ -108,7 +108,7 @@
               icon="i-lucide-pen-line"
               class="bg-white"
             >
-              Write Review
+              {{ $t('dashboard.reviews.writeButton') }}
             </UButton>
           </div>
         </div>
@@ -126,6 +126,8 @@ import {
   reviewsGetUsersToReview,
 } from '~/generated/api';
 
+const { t } = useI18n();
+
 const breakpoints = useBreakpoints({
   sm: 640,
 });
@@ -135,17 +137,17 @@ const tabs = computed(() => {
   return [
     {
       slot: 'written',
-      label: isSmallScreen ? 'Written' : 'My Reviews',
+      label: isSmallScreen ? t('dashboard.reviews.tabs.writtenShort') : t('dashboard.reviews.tabs.written'),
       icon: 'i-lucide-pen-line',
     },
     {
       slot: 'received',
-      label: isSmallScreen ? 'Received' : 'Reviews About Me',
+      label: isSmallScreen ? t('dashboard.reviews.tabs.receivedShort') : t('dashboard.reviews.tabs.received'),
       icon: 'i-lucide-star',
     },
     {
       slot: 'to-review',
-      label: isSmallScreen ? 'Write' : 'Write a Review',
+      label: isSmallScreen ? t('dashboard.reviews.tabs.toReviewShort') : t('dashboard.reviews.tabs.toReview'),
       icon: 'i-lucide-users',
     },
   ];

@@ -1,43 +1,37 @@
 <template>
-  <UHeader
-    title="Vendor Platform"
-    class="bg-gray-100"
-    :toggle="false"
-    :ui="{
-      title: 'text-lg font-semibold text-normal',
-      header: 'bg-gray-100',
-    }"
-  >
+  <UHeader>
+    <template #title>
+      <NuxtLink :to="$localePath('/')" class="flex items-center gap-2 font-bold text-blue-600">
+        <Logo />
+        {{ $t('brandName') }}
+      </NuxtLink>
+    </template>
+
     <template #right>
-      <div class="flex items-center gap-6">
-        <nav class="flex items-center gap-6 text-sm font-medium">
-          <UButton v-if="!auth.user.value" label="Sign In" to="/sign-in" />
-          <UButton v-else label="Dashboard" to="/dashboard" />
-        </nav>
+      <LangSwitcher />
+      <div class="hidden items-center gap-2 md:flex">
+        <template v-if="auth.user.value">
+          <UButton :to="$localePath('/dashboard/projects')">{{ $t('nav.dashboard') }}</UButton>
+        </template>
+        <template v-else>
+          <UButton :to="$localePath('/sign-in')">{{ $t('nav.signIn') }}</UButton>
+          <UButton :to="$localePath('/register')" variant="solid">{{ $t('nav.getStarted') }}</UButton>
+        </template>
       </div>
     </template>
 
-    <!-- <template #body>
-      <nav class="flex flex-col gap-2 text-sm font-medium">
-        <UButton
-          v-if="!auth.user.value"
-          label="Sign In"
-          to="/sign-in"
-          variant="link"
-          class="w-fit"
-        />
-        <UButton
-          v-else
-          label="Dashboard"
-          to="/dashboard"
-          class="w-fit"
-          variant="link"
-        />
-        <UButton to="/dashboard/platform-feedback" variant="link">
-          Platform Feedback
-        </UButton>
-      </nav>
-    </template> -->
+    <template #body>
+      <LangSwitcher />
+      <div class="flex flex-col gap-2 p-4">
+        <template v-if="auth.user.value">
+          <UButton :to="$localePath('/dashboard/projects')" block>{{ $t('nav.dashboard') }}</UButton>
+        </template>
+        <template v-else>
+          <UButton :to="$localePath('/sign-in')" block>{{ $t('nav.signIn') }}</UButton>
+          <UButton :to="$localePath('/register')" variant="solid" block>{{ $t('nav.getStarted') }}</UButton>
+        </template>
+      </div>
+    </template>
   </UHeader>
 </template>
 

@@ -1,18 +1,15 @@
 <template>
   <div class="space-y-8">
     <section class="rounded-2xl p-6 shadow-sm space-y-4">
-      <h1 class="text-2xl font-semibold">My Projects</h1>
+      <h1 class="text-2xl font-semibold">{{ $t('dashboard.projects.title') }}</h1>
       <MyProjectGrid
         v-if="projects && projects.length > 0"
         :items="projects"
         class="my-6"
       />
       <div v-else class="w-full">
-        <h4 class="text-xl font-semibold">Build a project brief in minutes</h4>
-        <p class="mt-1 text-muted">
-          Create a personalized project brief and send it to multiple best-fit
-          vendors all at once.
-        </p>
+        <h4 class="text-xl font-semibold">{{ $t('dashboard.projects.buildBrief') }}</h4>
+        <p class="mt-1 text-muted">{{ $t('dashboard.projects.buildBriefDesc') }}</p>
       </div>
       <MultiStepModal
         v-model="answers"
@@ -21,15 +18,14 @@
         :is-valid-current-step="isValidCurrentStep"
         :created-project-id="createdProjectId"
         :phase="phase"
-        title="Project Brief"
+        :title="$t('dashboard.projects.modal.title')"
+        :trigger-label="$t('dashboard.projects.startProject')"
         @next-step="nextStep"
         @prev-step="stepIndex--"
         @finish-create="handleCreateFinish"
         @finish="handleFinish"
       >
-        <template #step-1-title>
-          Give your project a name as a short description.
-        </template>
+        <template #step-1-title>{{ $t('dashboard.projects.modal.step1Title') }}</template>
         <template #step-1>
           <UForm
             :ref="
@@ -61,9 +57,7 @@
           </UForm>
         </template>
 
-        <template #step-2-title>
-          What kind of services are you looking for?
-        </template>
+        <template #step-2-title>{{ $t('dashboard.projects.modal.step2Title') }}</template>
         <template #step-2>
           <UForm
             :ref="
@@ -99,9 +93,7 @@
           </UForm>
         </template>
 
-        <template #step-3-title>
-          When would you like to start this project?
-        </template>
+        <template #step-3-title>{{ $t('dashboard.projects.modal.step3Title') }}</template>
         <template #step-3>
           <UForm
             :ref="
@@ -130,7 +122,7 @@
           </UForm>
         </template>
 
-        <template #step-4-title> What is your project budget? </template>
+        <template #step-4-title>{{ $t('dashboard.projects.modal.step4Title') }}</template>
         <template #step-4>
           <UForm
             :ref="
@@ -155,9 +147,7 @@
           </UForm>
         </template>
 
-        <template #step-5-title>
-          What's important to you about a provider's location?
-        </template>
+        <template #step-5-title>{{ $t('dashboard.projects.modal.step5Title') }}</template>
         <template #step-5>
           <UForm
             :ref="
@@ -225,7 +215,7 @@
           </UForm>
         </template>
 
-        <template #step-6-title> What's your company's website? </template>
+        <template #step-6-title>{{ $t('dashboard.projects.modal.step6Title') }}</template>
         <template #step-6>
           <UForm
             :ref="
@@ -253,9 +243,7 @@
           </UForm>
         </template>
 
-        <template #step-7-title>
-          Tell us more about your project and goals.
-        </template>
+        <template #step-7-title>{{ $t('dashboard.projects.modal.step7Title') }}</template>
         <template #step-7>
           <UForm
             :ref="
@@ -274,7 +262,7 @@
             <UFormField name="projectIntroduction">
               <UTextarea
                 v-model="answers.projectIntroduction"
-                placeholder="Briefly describe your company, the challenges you’re facing, and what you aim to achieve with this project."
+                placeholder="Briefly describe your company, the challenges you're facing, and what you aim to achieve with this project."
                 size="xl"
                 :rows="5"
                 class="w-full"
@@ -287,7 +275,7 @@
     </section>
 
     <section class="bg-white rounded-2xl p-6 shadow-sm">
-      <h3 class="text-lg font-semibold mb-4">My Recommendations</h3>
+      <h3 class="text-lg font-semibold mb-4">{{ $t('dashboard.projects.myRecommendations') }}</h3>
       <div
         v-if="displayedReviews.length > 0"
         class="grid lg:grid-cols-2 xl:grid-cols-3 gap-3"
@@ -297,7 +285,7 @@
         </div>
       </div>
       <div v-else class="w-full">
-        <h3 class="text-muted">You haven't left a review to anyone yet!</h3>
+        <h3 class="text-muted">{{ $t('dashboard.projects.noReviews') }}</h3>
       </div>
     </section>
   </div>

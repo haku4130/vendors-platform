@@ -1,6 +1,6 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'dashboard',
-  middleware: ['auth', () => navigateTo('/dashboard/projects')],
+  middleware: ['auth', () => navigateTo(useLocalePath()('/dashboard/projects'))],
 });
 </script>

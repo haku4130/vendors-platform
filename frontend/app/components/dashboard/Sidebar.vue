@@ -7,12 +7,16 @@
     class="min-w-fit max-w-md"
   >
     <template #header>
-      <NuxtLink to="/">
-        <h2 class="text-lg font-semibold px-4 py-3">Vendor Platform</h2>
+      <NuxtLink
+        :to="$localePath('/')"
+        class="flex items-center gap-2 pe-4 py-3 text-[1.25rem] font-bold text-blue-600"
+      >
+        <Logo />
+        {{ $t('brandName') }}
       </NuxtLink>
     </template>
     <template #default>
-      <NuxtLink to="/dashboard/profile">
+      <NuxtLink :to="$localePath('/dashboard/profile')">
         <UUser
           :name="auth.user.value?.full_name"
           :description="auth.user.value?.company_name"
@@ -22,7 +26,7 @@
             class: 'rounded-lg border border-black',
           }"
           size="3xl"
-          class="px-4 pt-3"
+          class="pt-3"
         />
       </NuxtLink>
 
@@ -30,7 +34,7 @@
         <UButton
           v-for="item in menuItems"
           :key="item.label"
-          :to="`/dashboard/${item.id}`"
+          :to="$localePath(`/dashboard/${item.id}`)"
           :active="route.path.includes(`/dashboard/${item.id}`)"
           variant="ghost"
           class="hover:bg-gray-100"
@@ -47,9 +51,14 @@
     </template>
     <template #footer>
       <div class="flex justify-between w-full">
-        <UButton to="/logout"> Log Out </UButton>
-        <UButton to="/dashboard/platform-feedback" variant="link">
-          Platform Feedback
+        <UButton :to="$localePath('/logout')">
+          {{ $t('dashboard.logout') }}
+        </UButton>
+        <UButton
+          :to="$localePath('/dashboard/platform-feedback')"
+          variant="link"
+        >
+          {{ $t('dashboard.platformFeedback') }}
         </UButton>
       </div>
     </template>
@@ -59,47 +68,59 @@
 <script setup lang="ts">
 const route = useRoute();
 const auth = useAuth();
+const { t } = useI18n();
 
-const menuItems =
+const menuItems = computed(() =>
   auth.user.value?.role === 'company'
     ? [
         {
           id: 'projects',
-          label: 'Projects',
+          label: t('dashboard.menu.projects'),
           icon: 'i-lucide-layers-2',
         },
-        // {
-        //   id: 'messages',
-        //   label: 'Messages',
-        //   icon: 'i-lucide-message-square-text',
-        // },
         {
           id: 'shortlist',
-          label: 'Shortlist',
+          label: t('dashboard.menu.shortlist'),
           icon: 'i-lucide-bookmark',
         },
-        { id: 'reviews', label: 'Reviews', icon: 'i-lucide-star' },
+        {
+          id: 'reviews',
+          label: t('dashboard.menu.reviews'),
+          icon: 'i-lucide-star',
+        },
         {
           id: 'vendors',
-          label: 'Find Vendors',
+          label: t('dashboard.menu.findVendors'),
           icon: 'i-lucide-search',
         },
       ]
     : [
         {
           id: 'projects',
-          label: 'Projects',
+          label: t('dashboard.menu.projects'),
           icon: 'i-lucide-layers-2',
         },
-        // {
-        //   id: 'messages',
-        //   label: 'Messages',
-        //   icon: 'i-lucide-message-square-text',
-        // },
-        { id: 'portfolio', label: 'Portfolio', icon: 'i-lucide-file-user' },
-        { id: 'reviews', label: 'Reviews', icon: 'i-lucide-star' },
-        { id: 'analytics', label: 'Analytics', icon: 'i-lucide-bar-chart-2' },
-        { id: 'bills', label: 'Bills', icon: 'i-lucide-receipt' },
-        { id: 'team', label: 'Team', icon: 'i-lucide-users' },
-      ];
+        {
+          id: 'portfolio',
+          label: t('dashboard.menu.portfolio'),
+          icon: 'i-lucide-file-user',
+        },
+        {
+          id: 'reviews',
+          label: t('dashboard.menu.reviews'),
+          icon: 'i-lucide-star',
+        },
+        {
+          id: 'analytics',
+          label: t('dashboard.menu.analytics'),
+          icon: 'i-lucide-bar-chart-2',
+        },
+        {
+          id: 'bills',
+          label: t('dashboard.menu.bills'),
+          icon: 'i-lucide-receipt',
+        },
+        { id: 'team', label: t('dashboard.menu.team'), icon: 'i-lucide-users' },
+      ],
+);
 </script>

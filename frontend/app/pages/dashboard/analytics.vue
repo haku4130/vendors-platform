@@ -1,8 +1,8 @@
 <template>
   <UEmpty
     icon="i-lucide-construction"
-    title="That page is under construction"
-    description="We are working hard to bring you this feature soon."
+    :title="$t('dashboard.underConstruction.title')"
+    :description="$t('dashboard.underConstruction.description')"
   />
 </template>
 

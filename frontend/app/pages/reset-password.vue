@@ -19,7 +19,7 @@
         color="warning"
         size="lg"
         class="w-full justify-center"
-        to="/forgot-password"
+        :to="$localePath('/forgot-password')"
       >
         Request New Link
       </UButton>
@@ -114,7 +114,7 @@
         color="warning"
         size="lg"
         class="w-full justify-center"
-        to="/sign-in"
+        :to="$localePath('/sign-in')"
       >
         Go to Sign In
       </UButton>
@@ -122,7 +122,7 @@
 
     <div v-if="!passwordReset && !tokenError" class="mt-4 text-center">
       <NuxtLink
-        to="/sign-in"
+        :to="$localePath('/sign-in')"
         class="text-sm font-semibold underline text-default hover:text-gray-900"
       >
         Back to Sign In

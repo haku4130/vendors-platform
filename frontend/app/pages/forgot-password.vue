@@ -58,7 +58,7 @@
 
     <div class="mt-4 text-center">
       <NuxtLink
-        to="/sign-in"
+        :to="$localePath('/sign-in')"
         class="text-sm font-semibold underline text-default hover:text-gray-900"
       >
         Back to Sign In

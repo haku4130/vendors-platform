@@ -17,7 +17,7 @@
         <UEmpty
           icon="i-lucide-hourglass"
           title="Awaiting vendor requests"
-          description="We’ll list their requests here as soon as they come in."
+          description="We'll list their requests here as soon as they come in."
           class="w-fit mx-auto"
         />
       </div>

@@ -11,6 +11,7 @@ export default defineNuxtConfig({
     devtools: { enabled: true },
 
     modules: [
+        '@nuxtjs/i18n',
         '@nuxt/eslint',
         '@nuxt/image',
         '@nuxt/scripts',
@@ -19,6 +20,21 @@ export default defineNuxtConfig({
         '@nuxt/content',
         '@compodium/nuxt',
     ],
+
+    i18n: {
+        strategy: 'prefix_except_default',
+        defaultLocale: 'ru',
+        locales: [
+            { code: 'ru', language: 'ru-RU', name: 'Русский', file: 'ru.json' },
+            { code: 'en', language: 'en-US', name: 'English', file: 'en.json' },
+        ],
+        langDir: 'locales/',
+        detectBrowserLanguage: {
+            useCookie: true,
+            cookieKey: 'i18n_redirected',
+            redirectOn: 'root',
+        },
+    },
 
     css: ['~/assets/css/main.css'],
 

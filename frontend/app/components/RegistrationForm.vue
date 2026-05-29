@@ -1,9 +1,9 @@
 <template>
   <AuthFormContainer>
     <div class="text-start space-y-1">
-      <h2 class="text-xl font-semibold text-gray-800">Register</h2>
+      <h2 class="text-xl font-semibold text-gray-800">{{ $t('auth.register.title') }}</h2>
       <h2 class="text-sm mb-6 text-gray-600">
-        Create an account to start using Vendor Platform
+        {{ $t('auth.register.subtitle') }}
       </h2>
     </div>
 
@@ -21,24 +21,24 @@
           class="space-y-4"
           @submit="stepper?.next()"
         >
-          <UFormField label="Full Name" name="fullName">
+          <UFormField :label="$t('auth.register.fullName')" name="fullName">
             <UInput
               v-model="state.fullName"
               leading-icon="i-lucide-user"
               class="w-full"
             />
           </UFormField>
-          <UFormField label="Company Name" name="companyName">
+          <UFormField :label="$t('auth.register.companyName')" name="companyName">
             <UInput
               v-model="state.companyName"
               leading-icon="i-lucide-building"
               class="w-full"
             />
           </UFormField>
-          <UFormField label="Company Location" name="companyLocation">
+          <UFormField :label="$t('auth.register.companyLocation')" name="companyLocation">
             <LocationSelector v-model="state.companyLocation" class="w-full" />
           </UFormField>
-          <UFormField label="Email" name="email">
+          <UFormField :label="$t('auth.register.email')" name="email">
             <UInput
               v-model="state.email"
               leading-icon="i-lucide-at-sign"
@@ -46,7 +46,7 @@
             />
           </UFormField>
 
-          <UFormField label="Password" name="password">
+          <UFormField :label="$t('auth.register.password')" name="password">
             <UInput
               v-model="state.password"
               leading-icon="i-lucide-lock"
@@ -68,7 +68,7 @@
               </template>
             </UInput>
           </UFormField>
-          <UFormField label="Confirm Password" name="confirmPassword">
+          <UFormField :label="$t('auth.register.confirmPassword')" name="confirmPassword">
             <UInput
               v-model="state.confirmPassword"
               leading-icon="i-lucide-lock"
@@ -93,9 +93,9 @@
 
           <UButton
             variant="solid"
-            color="warning"
+            color="primary"
             size="lg"
-            label="Next Step"
+            :label="$t('auth.register.nextStep')"
             class="font-semibold justify-center py-2 px-10 rounded-lg mt-4"
             type="submit"
           />
@@ -125,16 +125,16 @@
             <UButton
               variant="soft"
               size="lg"
-              label="Go Back"
+              :label="$t('auth.register.goBack')"
               class="flex-1 font-semibold justify-center py-2 rounded-lg"
               @click="stepper?.prev()"
             />
 
             <UButton
               variant="solid"
-              color="warning"
+              color="primary"
               size="lg"
-              label="Create account"
+              :label="$t('auth.register.submit')"
               class="flex-1 font-semibold justify-center py-2 rounded-lg"
               type="submit"
               :disabled="!state.role"
@@ -145,12 +145,12 @@
     </UStepper>
 
     <p class="text-sm text-gray-800 mt-4">
-      Have an account?
+      {{ $t('auth.register.hasAccount') }}
       <NuxtLink
-        to="/sign-in"
+        :to="$localePath('/sign-in')"
         class="font-semibold underline hover:text-gray-900"
       >
-        Sign In
+        {{ $t('auth.register.signIn') }}
       </NuxtLink>
     </p>
   </AuthFormContainer>
@@ -163,6 +163,8 @@ import type { FormSubmitEvent } from '@nuxt/ui';
 import { usersRegisterUser, loginLoginAccessToken } from '~/generated/api';
 import type { UserRole } from '~/generated/api';
 
+const { t } = useI18n();
+const localePath = useLocalePath();
 const stepper = useTemplateRef('stepper');
 
 const state = ref({
@@ -183,7 +185,7 @@ const schemaDefinition = v.pipe(
     email: v.pipe(v.string(), v.email('Invalid email')),
     password: v.pipe(
       v.string(),
-      v.minLength(8, 'Must be at least 8 characters')
+      v.minLength(8, 'Must be at least 8 characters'),
     ),
     confirmPassword: v.string(),
   }),
@@ -191,10 +193,10 @@ const schemaDefinition = v.pipe(
     v.partialCheck(
       [['password'], ['confirmPassword']],
       (input) => input.password === input.confirmPassword,
-      'Passwords do not match'
+      'Passwords do not match',
     ),
-    ['confirmPassword']
-  )
+    ['confirmPassword'],
+  ),
 );
 
 type Schema = v.InferOutput<typeof schemaDefinition>;
@@ -252,34 +254,26 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
     color: 'success',
   });
 
-  navigateTo('/dashboard');
+  navigateTo(localePath('/dashboard'));
 }
 
 const show = ref(false);
 
 const items = [
-  {
-    title: 'Registration',
-    slot: 'registration',
-  },
-  {
-    title: 'Role Selection',
-    slot: 'role-selection',
-  },
+  { title: 'Registration', slot: 'registration' },
+  { title: 'Role Selection', slot: 'role-selection' },
 ];
 
-const roleSelectionOptions = [
+const roleSelectionOptions = computed(() => [
   {
-    label: 'Hire a business partner',
+    label: t('auth.register.roles.company.label'),
     value: 'company',
-    description:
-      'I want to find and hire a provider to help our company achieve our goals.',
+    description: t('auth.register.roles.company.description'),
   },
   {
-    label: 'Get listed on the platform',
+    label: t('auth.register.roles.vendor.label'),
     value: 'vendor',
-    description:
-      "I want to sell my business' services and boost visibility for my brand.",
+    description: t('auth.register.roles.vendor.description'),
   },
-];
+]);
 </script>

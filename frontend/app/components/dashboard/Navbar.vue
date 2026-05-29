@@ -1,15 +1,16 @@
 <template>
-  <UDashboardNavbar title="Dashboard" class="bg-gray-100" toggle-side="right">
+  <UDashboardNavbar :title="$t('dashboard.title')" class="bg-gray-100" toggle-side="right">
     <template #right>
-      <div class="hidden lg:flex gap-6">
+      <div class="hidden lg:flex items-center gap-4">
+        <LangSwitcher />
         <UButton
           class="w-fit"
-          to="/dashboard/profile"
+          :to="$localePath('/dashboard/profile')"
           :variant="
-            useRoute().path === '/dashboard/profile' ? 'solid' : 'outline'
+            useRoute().path.includes('/dashboard/profile') ? 'solid' : 'outline'
           "
         >
-          Profile
+          {{ $t('dashboard.menu.profile') }}
         </UButton>
       </div>
     </template>

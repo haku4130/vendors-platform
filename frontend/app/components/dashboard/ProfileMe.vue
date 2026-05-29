@@ -1,30 +1,30 @@
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl">
-    <UCard class="shadow-sm">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl items-stretch">
+    <UCard class="shadow-sm h-full" :ui="{ body: 'h-full' }">
       <ImageUpload
-        class="-p-6"
+        class="h-full"
         :current-avatar="auth.user.value?.logo_url ?? undefined"
       />
     </UCard>
 
-    <UCard class="bg-vendor-gradient shadow-sm h-fit">
+    <UCard class="bg-vendor-gradient shadow-sm">
       <template #header>
-        <p class="font-semibold">General Information</p>
+        <p class="font-semibold text-white">{{ $t('dashboard.profile.generalInfo') }}</p>
       </template>
       <UForm :state="form" class="space-y-4">
-        <UFormField label="Full Name" name="full_name">
+        <UFormField :label="$t('dashboard.profile.fullName')" name="full_name">
           <UInput v-model="form.full_name" class="w-full" />
         </UFormField>
 
-        <UFormField label="Email" name="email">
+        <UFormField :label="$t('dashboard.profile.email')" name="email">
           <UInput :model-value="form.email" disabled class="w-full" />
         </UFormField>
 
-        <UFormField label="Company Name" name="company_name">
+        <UFormField :label="$t('dashboard.profile.companyName')" name="company_name">
           <UInput :model-value="form.company_name" disabled class="w-full" />
         </UFormField>
 
-        <UFormField label="Location" name="location">
+        <UFormField :label="$t('dashboard.profile.location')" name="location">
           <LocationSelector
             v-model="form.location"
             :icon="null"
@@ -34,11 +34,12 @@
 
         <UButton
           :loading="saving"
-          color="primary"
+          variant="outline"
+          color="neutral"
           class="mt-3"
           @click="saveProfile"
         >
-          Save Changes
+          {{ $t('dashboard.profile.saveChanges') }}
         </UButton>
       </UForm>
     </UCard>

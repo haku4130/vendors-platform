@@ -1,9 +1,9 @@
 <template>
   <section class="bg-vendor-gradient p-6 rounded-2xl">
-    <h1 class="text-2xl font-semibold text-gray-900">Shortlist</h1>
-    <p class="mt-1 text-gray-900">
-      Your favorite vendors saved for quick access.
-    </p>
+    <h1 class="text-2xl font-semibold text-white">
+      {{ $t('dashboard.shortlist.title') }}
+    </h1>
+    <p class="mt-1 text-white">{{ $t('dashboard.shortlist.subtitle') }}</p>
   </section>
   <div
     v-if="Object.values(shortlistCounts).every((count) => count === 0)"
@@ -11,14 +11,16 @@
   >
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white rounded-2xl p-6 shadow-sm">
-        <h3 class="text-lg font-semibold mb-6">How it works</h3>
+        <h3 class="text-lg font-semibold mb-6">
+          {{ $t('dashboard.shortlist.howItWorks') }}
+        </h3>
 
         <UStepper
-          v-model="active"
-          color="neutral"
+          :model-value="2"
           orientation="vertical"
           :items="items"
           class="w-full"
+          disabled
         />
       </div>
 
@@ -26,10 +28,14 @@
         class="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-center max-h-fit"
       >
         <h3 class="text-lg font-semibold mb-4">
-          You haven’t picked your favorites yet!
+          {{ $t('dashboard.shortlist.notPicked') }}
         </h3>
-        <UButton size="xl" class="w-fit" to="/dashboard/projects">
-          Find a Partner
+        <UButton
+          size="xl"
+          class="w-fit"
+          :to="$localePath('/dashboard/projects')"
+        >
+          {{ $t('dashboard.shortlist.findPartner') }}
         </UButton>
       </div>
     </section>
@@ -72,7 +78,7 @@
               variant="outline"
               size="sm"
             >
-              Find More Vendors
+              {{ $t('dashboard.shortlist.findMore') }}
             </UButton>
           </div>
 
@@ -123,29 +129,24 @@ import {
   shortlistGetShortlistedVendors,
 } from '~/generated/api';
 
-const items = ref<StepperItem[]>([
+const { t } = useI18n();
+
+const items = computed<StepperItem[]>(() => [
   {
-    title: 'Start a Project',
-    description: 'Create a brief describing your needs and goals.',
+    title: t('dashboard.shortlist.steps.startProject.title'),
+    description: t('dashboard.shortlist.steps.startProject.description'),
   },
   {
-    title: 'Get Matched',
-    description:
-      'We’ll suggest the best-fit vendors based on your project details.',
+    title: t('dashboard.shortlist.steps.getMatched.title'),
+    description: t('dashboard.shortlist.steps.getMatched.description'),
   },
   {
-    title: 'Shortlist & Decide',
-    description:
-      'Compare proposals, pick your favorites, and choose who to work with.',
+    title: t('dashboard.shortlist.steps.shortlistDecide.title'),
+    description: t('dashboard.shortlist.steps.shortlistDecide.description'),
   },
 ]);
 
-const active = ref(0);
-
 onMounted(() => {
-  setInterval(() => {
-    active.value = (active.value + 1) % items.value.length;
-  }, 1500);
   loadProjects();
 });
 
