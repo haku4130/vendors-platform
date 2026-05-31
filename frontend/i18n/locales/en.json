@@ -105,7 +105,14 @@
         "other": "Other",
         "signIn": "Sign In",
         "register": "Register",
-        "copyright": "© {year} VendorHub LLC"
+        "copyright": "© {year} VendorHub LLC",
+        "legal": "Legal",
+        "privacy": "Privacy Policy",
+        "personalData": "Personal Data",
+        "publicOffer": "Public Offer",
+        "api": "API",
+        "pricing": "Pricing",
+        "comingSoon": "Coming soon"
     },
     "auth": {
         "signIn": {
@@ -283,5 +290,24 @@
             "reset": "Reset",
             "send": "Send feedback"
         }
+    },
+    "content": {
+        "edit": "Edit",
+        "editPage": "Edit page",
+        "preview": "Preview",
+        "save": "Save",
+        "saved": "Saved",
+        "saveError": "Save error"
+    },
+    "pages": {
+        "searchProcess": "Search Process",
+        "pricing": "Pricing",
+        "about": "About",
+        "contacts": "Contacts",
+        "privacy": "Privacy Policy",
+        "personalData": "Personal Data Policy",
+        "recommendationsPolicy": "Recommendation Technology Policy",
+        "publicOffer": "Public Offer",
+        "api": "API"
     }
 }

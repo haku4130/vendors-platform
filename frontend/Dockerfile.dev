@@ -7,6 +7,10 @@ COPY package.json package-lock.json ./
 # Install dependencies including optional dependencies (needed for native modules like oxc-parser)
 RUN npm ci --include=optional
 
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
 COPY . .
 
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["npm", "run", "dev", "--", "-o"]

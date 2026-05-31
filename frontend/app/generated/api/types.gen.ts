@@ -783,6 +783,54 @@ export type UserCreate = {
 };
 
 /**
+ * UserMePublic
+ */
+export type UserMePublic = {
+    /**
+     * Logo Url
+     */
+    logo_url?: string | null;
+    /**
+     * Email
+     */
+    email: string;
+    /**
+     * Company Name
+     */
+    company_name: string;
+    /**
+     * Location
+     */
+    location: string;
+    role: UserRole;
+    /**
+     * Full Name
+     */
+    full_name: string;
+    /**
+     * Id
+     */
+    id: string;
+    vendor_profile: VendorProfilePublic | null;
+    /**
+     * Rating
+     */
+    rating?: number | null;
+    /**
+     * Ratingcount
+     */
+    ratingCount?: number;
+    /**
+     * Is Active
+     */
+    is_active?: boolean;
+    /**
+     * Is Superuser
+     */
+    is_superuser?: boolean;
+};
+
+/**
  * UserPublic
  */
 export type UserPublic = {
@@ -1295,7 +1343,7 @@ export type UsersReadUserMeResponses = {
     /**
      * Successful Response
      */
-    200: UserPublic;
+    200: UserMePublic;
 };
 
 export type UsersReadUserMeResponse = UsersReadUserMeResponses[keyof UsersReadUserMeResponses];
@@ -2715,3 +2763,17 @@ export type PrivateCreateUserResponses = {
 };
 
 export type PrivateCreateUserResponse = PrivateCreateUserResponses[keyof PrivateCreateUserResponses];
+
+export type MetricsData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/metrics';
+};
+
+export type MetricsResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};

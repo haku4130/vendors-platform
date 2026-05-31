@@ -1,8 +1,8 @@
 import { usersReadUserMe } from '~/generated/api';
-import type { UserPublic } from '~/generated/api';
+import type { UserMePublic } from '~/generated/api';
 
 export const useAuth = () => {
-    const user = useState<UserPublic | null>('user', () => null);
+    const user = useState<UserMePublic | null>('user', () => null);
     const token = useCookie('access_token');
 
     async function loadUser() {

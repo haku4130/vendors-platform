@@ -257,20 +257,19 @@
           <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.product') }}</h4>
           <ul class="space-y-2">
             <li>
-              <a
-                href="#how-it-works"
-                class="text-white/70 transition hover:text-white"
-              >
-                {{ $t('footer.searchProcess') }}
-              </a>
+              <NuxtLink :to="$localePath('/search-process')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.searchProcess') }}
+              </NuxtLink>
             </li>
             <li>
-              <a
-                href="#features"
-                class="text-white/70 transition hover:text-white"
-              >
-                {{ $t('footer.features') }}
-              </a>
+              <NuxtLink :to="$localePath('/pricing')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.pricing') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <button class="text-white/70 transition hover:text-white text-left" @click="showApiToast">
+                {{ $t('pages.api') }}
+              </button>
             </li>
           </ul>
         </div>
@@ -278,40 +277,38 @@
           <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.company') }}</h4>
           <ul class="space-y-2">
             <li>
-              <NuxtLink
-                :to="$localePath('/dashboard/platform-feedback')"
-                class="text-white/70 transition hover:text-white"
-              >
-                {{ $t('footer.contacts') }}
+              <NuxtLink :to="$localePath('/about')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.about') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="$localePath('/dashboard/reviews')"
-                class="text-white/70 transition hover:text-white"
-              >
-                {{ $t('footer.reviews') }}
+              <NuxtLink :to="$localePath('/contacts')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.contacts') }}
               </NuxtLink>
             </li>
           </ul>
         </div>
         <div>
-          <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.other') }}</h4>
+          <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.legal') }}</h4>
           <ul class="space-y-2">
             <li>
-              <NuxtLink
-                :to="$localePath('/sign-in')"
-                class="text-white/70 transition hover:text-white"
-              >
-                {{ $t('footer.signIn') }}
+              <NuxtLink :to="$localePath('/privacy')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.privacy') }}
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink
-                :to="$localePath('/register')"
-                class="text-white/70 transition hover:text-white"
-              >
-                {{ $t('footer.register') }}
+              <NuxtLink :to="$localePath('/personal-data')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.personalData') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink :to="$localePath('/recommendations-policy')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.recommendationsPolicy') }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink :to="$localePath('/public-offer')" class="text-white/70 transition hover:text-white">
+                {{ $t('pages.publicOffer') }}
               </NuxtLink>
             </li>
           </ul>
@@ -331,10 +328,15 @@ definePageMeta({ layout: false });
 
 const auth = useAuth();
 const { t, tm, rt } = useI18n();
+const toast = useToast();
 
 useHead({ title: () => t('pageTitle') });
 
 const year = new Date().getFullYear();
+
+function showApiToast() {
+  toast.add({ title: t('footer.comingSoon'), icon: 'i-lucide-clock', color: 'info' });
+}
 
 const navItems = computed(() => [
   { label: t('nav.features'), to: '#features' },

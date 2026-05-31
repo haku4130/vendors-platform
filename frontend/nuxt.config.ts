@@ -2,6 +2,8 @@
 
 const backendApiUrl =
     process?.env?.NUXT_PUBLIC_BACKEND_API_URL ?? 'http://localhost:8000';
+const backendApiUrlInternal =
+    process?.env?.NUXT_BACKEND_API_URL ?? backendApiUrl;
 const backendStaticUrl =
     process.env.NUXT_PUBLIC_BACKEND_STATIC_URL ??
     'http://localhost:8000/static';
@@ -43,6 +45,7 @@ export default defineNuxtConfig({
     },
 
     runtimeConfig: {
+        backendApiUrl: backendApiUrlInternal,
         public: {
             backendApiUrl: backendApiUrl,
             backendStaticUrl: backendStaticUrl,
@@ -52,7 +55,7 @@ export default defineNuxtConfig({
     nitro: {
         routeRules: {
             '/api/**': {
-                proxy: `${backendApiUrl}/api/v1/**`,
+                proxy: `${backendApiUrlInternal}/api/v1/**`,
             },
             '/backend/static/**': {
                 proxy: `${backendStaticUrl}/**`,

@@ -28,6 +28,7 @@ from app.models import (
     UpdatePassword,
     User,
     UserCreate,
+    UserMePublic,
     UserPublic,
     UserRegister,
     UsersPublic,
@@ -153,7 +154,7 @@ async def upload_avatar(
     return current_user
 
 
-@router.get("/me", response_model=UserPublic)
+@router.get("/me", response_model=UserMePublic)
 def read_user_me(current_user: CurrentUser) -> Any:
     """
     Get current user.

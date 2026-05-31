@@ -1,0 +1,34 @@
+{
+    "search-process": {
+        "ru": "<h1>Процесс поиска</h1><p>Описание процесса поиска IT-вендоров.</p>",
+        "en": "<h1>Search Process</h1><p>Description of the IT vendor search process.</p>"
+    },
+    "pricing": {
+        "ru": "<h1>Тарифы</h1><p>Описание тарифных планов.</p>",
+        "en": "<h1>Pricing</h1><p>Description of pricing plans.</p>"
+    },
+    "about": {
+        "ru": "<h1>О компании</h1><p>Информация о компании.</p>",
+        "en": "<h1>About Us</h1><p>Company information.</p>"
+    },
+    "contacts": {
+        "ru": "<h1>Контакты</h1><p>Контактная информация.</p>",
+        "en": "<h1>Contacts</h1><p>Contact information.</p>"
+    },
+    "privacy": {
+        "ru": "<h1>Политика конфиденциальности</h1><p>Текст политики.</p>",
+        "en": "<h1>Privacy Policy</h1><p>Policy text.</p>"
+    },
+    "personal-data": {
+        "ru": "<h1>Политика обработки персональных данных</h1><p>Текст политики.</p>",
+        "en": "<h1>Personal Data Policy</h1><p>Policy text.</p>"
+    },
+    "recommendations-policy": {
+        "ru": "<h1>Правила применения рекомендательных технологий</h1><p>Текст правил.</p>",
+        "en": "<h1>Recommendation Technology Policy</h1><p>Policy text.</p>"
+    },
+    "public-offer": {
+        "ru": "<h1>Публичная оферта</h1><p>Текст оферты.</p>",
+        "en": "<h1>Public Offer</h1><p>Offer text.</p>"
+    }
+}

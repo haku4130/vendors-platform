@@ -103,6 +103,11 @@ class UserPublic(UserPublicShort):
     ratingCount: int = 0
 
 
+class UserMePublic(UserPublic):
+    is_active: bool = True
+    is_superuser: bool = False
+
+
 class UsersPublic(SQLModel):
     data: list[UserPublic]
     count: int
