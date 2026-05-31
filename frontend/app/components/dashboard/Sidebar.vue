@@ -48,6 +48,30 @@
           </template>
         </UButton>
       </nav>
+
+      <template v-if="auth.user.value?.is_superuser">
+        <USeparator class="my-1" />
+        <p class="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+          {{ $t('dashboard.admin.contentPages') }}
+        </p>
+        <nav class="flex flex-col gap-1 w-full">
+          <UButton
+            v-for="page in contentPages"
+            :key="page.slug"
+            :to="$localePath(`/dashboard/content/${page.slug}`)"
+            :active="route.path.includes(`/dashboard/content/${page.slug}`)"
+            variant="ghost"
+            class="hover:bg-gray-100"
+            active-class="font-semibold bg-gray-100"
+            size="md"
+          >
+            {{ page.label }}
+            <template #trailing>
+              <UIcon name="i-lucide-file-pen-line" size="16" class="ml-auto text-gray-400" />
+            </template>
+          </UButton>
+        </nav>
+      </template>
     </template>
     <template #footer>
       <div class="flex justify-between w-full">
@@ -69,6 +93,17 @@
 const route = useRoute();
 const auth = useAuth();
 const { t } = useI18n();
+
+const contentPages = computed(() => [
+  { slug: 'about', label: t('pages.about') },
+  { slug: 'contacts', label: t('pages.contacts') },
+  { slug: 'pricing', label: t('pages.pricing') },
+  { slug: 'search-process', label: t('pages.searchProcess') },
+  { slug: 'privacy', label: t('pages.privacy') },
+  { slug: 'personal-data', label: t('pages.personalData') },
+  { slug: 'public-offer', label: t('pages.publicOffer') },
+  { slug: 'recommendations-policy', label: t('pages.recommendationsPolicy') },
+]);
 
 const menuItems = computed(() =>
   auth.user.value?.role === 'company'

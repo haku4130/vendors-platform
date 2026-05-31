@@ -163,6 +163,9 @@
         "title": "Дашборд",
         "logout": "Выйти",
         "platformFeedback": "Обратная связь",
+        "admin": {
+            "contentPages": "Страницы сайта"
+        },
         "menu": {
             "projects": "Проекты",
             "shortlist": "Шортлист",

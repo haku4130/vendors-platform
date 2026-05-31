@@ -163,6 +163,9 @@
         "title": "Dashboard",
         "logout": "Log Out",
         "platformFeedback": "Platform Feedback",
+        "admin": {
+            "contentPages": "Site Pages"
+        },
         "menu": {
             "projects": "Projects",
             "shortlist": "Shortlist",
