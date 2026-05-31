@@ -12,7 +12,7 @@
 
       <template #right>
         <LangSwitcher />
-        <div class="hidden items-center gap-2 md:flex">
+        <div class="hidden items-center gap-2 lg:flex">
           <template v-if="auth.user.value">
             <UButton :to="$localePath('/dashboard/projects')">{{
               $t('nav.dashboard')
