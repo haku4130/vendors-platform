@@ -139,6 +139,12 @@
             "confirmPassword": "Подтвердите пароль",
             "nextStep": "Далее",
             "goBack": "Назад",
+            "consent": "Я принимаю",
+            "consentPublicOffer": "публичную оферту",
+            "consentAnd": "и",
+            "consentPrivacy": "политику конфиденциальности",
+            "consentPersonalData": "и обработку персональных данных",
+            "consentRequired": "Необходимо принять условия",
             "roles": {
                 "company": {
                     "label": "Нанять бизнес-партнёра",

@@ -102,6 +102,29 @@
             </UInput>
           </UFormField>
 
+          <UFormField name="consent">
+            <div class="flex items-start gap-2 mt-2">
+              <UCheckbox v-model="state.consent" class="mt-0.5" />
+              <span class="text-sm text-gray-600 leading-snug">
+                {{ $t('auth.register.consent') }}
+                <NuxtLink
+                  :to="$localePath('/public-offer')"
+                  target="_blank"
+                  class="underline hover:text-white"
+                  >{{ $t('auth.register.consentPublicOffer') }}</NuxtLink
+                >
+                {{ $t('auth.register.consentAnd') }}
+                <NuxtLink
+                  :to="$localePath('/privacy')"
+                  target="_blank"
+                  class="underline hover:text-white"
+                  >{{ $t('auth.register.consentPrivacy') }}</NuxtLink
+                >
+                {{ $t('auth.register.consentPersonalData') }}
+              </span>
+            </div>
+          </UFormField>
+
           <UButton
             variant="solid"
             color="primary"
@@ -185,6 +208,7 @@ const state = ref({
   email: '',
   password: '',
   confirmPassword: '',
+  consent: false,
   role: '',
 });
 
@@ -199,6 +223,10 @@ const schemaDefinition = v.pipe(
       v.minLength(8, 'Must be at least 8 characters'),
     ),
     confirmPassword: v.string(),
+    consent: v.pipe(
+      v.boolean(),
+      v.literal(true, t('auth.register.consentRequired')),
+    ),
   }),
   v.forward(
     v.partialCheck(

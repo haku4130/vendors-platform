@@ -139,6 +139,12 @@
             "confirmPassword": "Confirm Password",
             "nextStep": "Next Step",
             "goBack": "Go Back",
+            "consent": "I accept the",
+            "consentPublicOffer": "public offer",
+            "consentAnd": "and",
+            "consentPrivacy": "privacy policy",
+            "consentPersonalData": "and personal data processing",
+            "consentRequired": "You must accept the terms",
             "roles": {
                 "company": {
                     "label": "Hire a business partner",
