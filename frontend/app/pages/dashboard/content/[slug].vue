@@ -1,12 +1,21 @@
 <template>
   <div class="space-y-6">
     <div class="flex items-center justify-between">
-      <h1 class="text-2xl font-semibold">{{ $t('content.editPage') }}: {{ slug }}</h1>
+      <h1 class="text-2xl font-semibold">
+        {{ $t('content.editPage') }}: {{ slug }}
+      </h1>
       <div class="flex gap-3">
         <NuxtLink :to="$localePath(`/${slug}`)">
-          <UButton variant="outline" icon="i-lucide-eye">{{ $t('content.preview') }}</UButton>
+          <UButton variant="outline" icon="i-lucide-eye">{{
+            $t('content.preview')
+          }}</UButton>
         </NuxtLink>
-        <UButton icon="i-lucide-save" :loading="saving" @click="save">
+        <UButton
+          icon="i-lucide-save"
+          variant="solid"
+          :loading="saving"
+          @click="save"
+        >
           {{ $t('content.save') }}
         </UButton>
       </div>
@@ -15,14 +24,34 @@
     <UTabs :items="tabs" class="w-full">
       <template #ru>
         <div class="mt-4">
-          <p class="text-sm text-muted mb-2">Русский</p>
-          <UEditor v-model="ruContent" class="min-h-[500px]" />
+          <UEditor
+            v-slot="{ editor }"
+            v-model="ruContent"
+            class="min-h-[500px] border border-default rounded-lg overflow-hidden"
+            :ui="{ content: 'p-3' }"
+          >
+            <UEditorToolbar
+              :editor="editor"
+              :items="toolbarItems"
+              class="border-b border-default px-2 py-1"
+            />
+          </UEditor>
         </div>
       </template>
       <template #en>
         <div class="mt-4">
-          <p class="text-sm text-muted mb-2">English</p>
-          <UEditor v-model="enContent" class="min-h-[500px]" />
+          <UEditor
+            v-slot="{ editor }"
+            v-model="enContent"
+            class="min-h-[500px] border border-default rounded-lg overflow-hidden"
+            :ui="{ content: 'p-3' }"
+          >
+            <UEditorToolbar
+              :editor="editor"
+              :items="toolbarItems"
+              class="border-b border-default px-2 py-1"
+            />
+          </UEditor>
         </div>
       </template>
     </UTabs>
@@ -43,6 +72,32 @@ const { t } = useI18n();
 const tabs = [
   { label: 'RU', slot: 'ru' },
   { label: 'EN', slot: 'en' },
+];
+
+const toolbarItems = [
+  [
+    { kind: 'heading', level: 1, icon: 'i-lucide-heading-1' },
+    { kind: 'heading', level: 2, icon: 'i-lucide-heading-2' },
+    { kind: 'heading', level: 3, icon: 'i-lucide-heading-3' },
+  ],
+  [
+    { kind: 'mark', mark: 'bold', icon: 'i-lucide-bold' },
+    { kind: 'mark', mark: 'italic', icon: 'i-lucide-italic' },
+    { kind: 'mark', mark: 'strike', icon: 'i-lucide-strikethrough' },
+  ],
+  [
+    { kind: 'bulletList', icon: 'i-lucide-list' },
+    { kind: 'orderedList', icon: 'i-lucide-list-ordered' },
+  ],
+  [
+    { kind: 'blockquote', icon: 'i-lucide-quote' },
+    { kind: 'codeBlock', icon: 'i-lucide-code' },
+  ],
+  [{ kind: 'link', icon: 'i-lucide-link' }],
+  [
+    { kind: 'undo', icon: 'i-lucide-undo' },
+    { kind: 'redo', icon: 'i-lucide-redo' },
+  ],
 ];
 
 const { data } = await useFetch<{ ru: string; en: string }>(

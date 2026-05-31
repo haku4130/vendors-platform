@@ -100,12 +100,15 @@ services:
       - '3000:3000'
     volumes:
       - ./frontend:/app
-      - /app/node_modules
     environment:
       - NUXT_PUBLIC_BACKEND_API_URL=http://localhost:8000
       - NUXT_BACKEND_API_URL=http://backend:8000
       - NUXT_PUBLIC_BACKEND_STATIC_URL=http://localhost:8088
       - NODE_ENV=development
+    develop:
+      watch:
+        - path: ./frontend/package-lock.json
+          action: rebuild
 
   media-nginx:
     image: nginx:stable-alpine

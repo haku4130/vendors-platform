@@ -22,6 +22,7 @@
         "@nuxt/ui": "^4.8.1",
         "@nuxtjs/i18n": "^10.4.0",
         "@primeuix/themes": "^1.2.5",
+        "@tailwindcss/typography": "^0.5.19",
         "@tiptap/core": "3.23.6",
         "@tiptap/extension-collaboration": "3.23.6",
         "@tiptap/extension-drag-handle": "3.23.6",

@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
 
     const store = JSON.parse(readFileSync(filePath, 'utf-8'));
     store[slug] = { ru: body.ru ?? '', en: body.en ?? '' };
-    writeFileSync(filePath, JSON.stringify(store, null, 2));
+    writeFileSync(filePath, JSON.stringify(store, null, 4));
 
     return { ok: true };
 });

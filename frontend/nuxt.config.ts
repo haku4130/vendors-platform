@@ -67,4 +67,10 @@ export default defineNuxtConfig({
     icon: {
         localApiEndpoint: '/icons',
     },
+
+    vite: {
+        optimizeDeps: {
+            include: ['@vue/devtools-core', '@vue/devtools-kit'],
+        },
+    },
 });
