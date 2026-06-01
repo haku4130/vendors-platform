@@ -98,8 +98,6 @@ services:
     restart: 'no'
     ports:
       - '3000:3000'
-    volumes:
-      - ./frontend:/app
     environment:
       - NUXT_PUBLIC_BACKEND_API_URL=http://localhost:8000
       - NUXT_BACKEND_API_URL=http://backend:8000
@@ -109,6 +107,15 @@ services:
       watch:
         - path: ./frontend/package-lock.json
           action: rebuild
+        - path: ./frontend
+          action: sync
+          target: /app
+          ignore:
+            - node_modules
+            - .data
+            - .nuxt
+            - .output
+            - .vscode
 
   media-nginx:
     image: nginx:stable-alpine
