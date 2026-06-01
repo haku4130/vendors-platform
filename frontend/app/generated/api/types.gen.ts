@@ -432,6 +432,10 @@ export type ProjectPublic = {
      * Id
      */
     id: string;
+    /**
+     * Is Archived
+     */
+    is_archived: boolean;
     owner: UserPublic;
     /**
      * Services
@@ -564,6 +568,10 @@ export type ProjectWithIncomingCount = {
      * Id
      */
     id: string;
+    /**
+     * Is Archived
+     */
+    is_archived: boolean;
     owner: UserPublic;
     /**
      * Services
@@ -2009,6 +2017,40 @@ export type VendorsGetMyAcceptedProjectsResponses = {
 
 export type VendorsGetMyAcceptedProjectsResponse = VendorsGetMyAcceptedProjectsResponses[keyof VendorsGetMyAcceptedProjectsResponses];
 
+export type VendorsGetMyArchivedProjectsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        /**
+         * Skip
+         */
+        skip?: number;
+        /**
+         * Limit
+         */
+        limit?: number;
+    };
+    url: '/api/v1/vendors/me/archived-projects';
+};
+
+export type VendorsGetMyArchivedProjectsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type VendorsGetMyArchivedProjectsError = VendorsGetMyArchivedProjectsErrors[keyof VendorsGetMyArchivedProjectsErrors];
+
+export type VendorsGetMyArchivedProjectsResponses = {
+    /**
+     * Successful Response
+     */
+    200: PaginatedProjectsPublic;
+};
+
+export type VendorsGetMyArchivedProjectsResponse = VendorsGetMyArchivedProjectsResponses[keyof VendorsGetMyArchivedProjectsResponses];
+
 export type CatalogListCategoriesData = {
     body?: never;
     path?: never;
@@ -2170,9 +2212,23 @@ export type CatalogUpdateServiceResponse = CatalogUpdateServiceResponses[keyof C
 export type ProjectsListMyProjectsData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Is Archived
+         */
+        is_archived?: boolean;
+    };
     url: '/api/v1/projects/';
 };
+
+export type ProjectsListMyProjectsErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProjectsListMyProjectsError = ProjectsListMyProjectsErrors[keyof ProjectsListMyProjectsErrors];
 
 export type ProjectsListMyProjectsResponses = {
     /**
@@ -2389,6 +2445,36 @@ export type ProjectsGetProjectRequestsResponses = {
 };
 
 export type ProjectsGetProjectRequestsResponse = ProjectsGetProjectRequestsResponses[keyof ProjectsGetProjectRequestsResponses];
+
+export type ProjectsArchiveProjectData = {
+    body?: never;
+    path: {
+        /**
+         * Project Id
+         */
+        project_id: string;
+    };
+    query?: never;
+    url: '/api/v1/projects/{project_id}/archive';
+};
+
+export type ProjectsArchiveProjectErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type ProjectsArchiveProjectError = ProjectsArchiveProjectErrors[keyof ProjectsArchiveProjectErrors];
+
+export type ProjectsArchiveProjectResponses = {
+    /**
+     * Successful Response
+     */
+    200: ProjectPublic;
+};
+
+export type ProjectsArchiveProjectResponse = ProjectsArchiveProjectResponses[keyof ProjectsArchiveProjectResponses];
 
 export type RequestsAcceptProjectData = {
     body?: never;

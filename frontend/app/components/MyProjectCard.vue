@@ -30,7 +30,14 @@
     </template>
 
     <template #footer>
-      <div v-if="item.vendor_profile">
+      <div
+        v-if="item.is_archived"
+        class="flex items-center gap-2 text-sm text-muted"
+      >
+        <UIcon name="i-lucide-archive" class="w-4 h-4" />
+        <span>Archived</span>
+      </div>
+      <div v-else-if="item.vendor_profile">
         <UButton
           label="Selected Vendor"
           class="w-full justify-center"

@@ -25,8 +25,14 @@ router = APIRouter(prefix="/projects", tags=["projects"])
 
 
 @router.get("/", response_model=list[ProjectWithIncomingCount])
-def list_my_projects(session: SessionDep, company_account: CurrentCompanyAccount):
-    return crud.get_projects_for_owner(session=session, owner_id=company_account.id)
+def list_my_projects(
+    session: SessionDep,
+    company_account: CurrentCompanyAccount,
+    is_archived: bool = False,
+):
+    return crud.get_projects_for_owner(
+        session=session, owner_id=company_account.id, is_archived=is_archived
+    )
 
 
 @router.post("/", response_model=ProjectPublic)
@@ -171,3 +177,19 @@ def get_project_requests(
     )
 
     return {"result": result, "total": total}
+
+
+@router.post("/{project_id}/archive", response_model=ProjectPublic)
+def archive_project(
+    project_id: UUID,
+    session: SessionDep,
+    company_account: CurrentCompanyAccount,
+):
+    project = crud.get_project(session=session, project_id=project_id)
+    if not project or project.owner_id != company_account.id:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Project not found or not owned")
+
+    if project.is_archived:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, "Project is already archived")
+
+    return crud.archive_project(session=session, project=project)

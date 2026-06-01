@@ -85,6 +85,32 @@
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
+
+      <template #archive>
+        <div v-if="loadingArchived" class="flex justify-center py-12">
+          <UIcon
+            name="i-lucide-loader-2"
+            class="w-8 h-8 animate-spin text-muted"
+          />
+        </div>
+        <UContainer
+          v-else-if="archivedProjects.length"
+          class="flex justify-center"
+        >
+          <ProjectGrid
+            ref="archivedProjectsEl"
+            :items="archivedProjects"
+            class="p-4 sm:p-6 w-full max-w-5xl"
+          />
+        </UContainer>
+        <UEmpty
+          v-else
+          icon="i-lucide-archive"
+          title="No archived projects"
+          description="Projects you applied to that were archived will appear here."
+          class="w-fit mx-auto my-8 max-w-4/5"
+        />
+      </template>
     </UTabs>
   </div>
 </template>
@@ -95,6 +121,7 @@ import {
   vendorsGetIncomingRequestsForVendor,
   vendorsGetAvailableProjectsForVendor,
   vendorsGetMyAcceptedProjects,
+  vendorsGetMyArchivedProjects,
 } from '~/generated/api';
 import type {
   ProjectPublic,
@@ -115,6 +142,11 @@ const acceptedProjectsEl = useTemplateRef('acceptedProjectsEl');
 const acceptedProjects = ref<ProjectPublic[]>([]);
 const totalAccepted = ref<number | null>(null);
 const loadingAccepted = ref(false);
+
+const archivedProjectsEl = useTemplateRef('archivedProjectsEl');
+const archivedProjects = ref<ProjectPublic[]>([]);
+const totalArchived = ref<number | null>(null);
+const loadingArchived = ref(false);
 
 const toast = useToast();
 
@@ -193,6 +225,31 @@ async function loadMoreAccepted() {
   }
 }
 
+async function loadMoreArchived() {
+  if (loadingArchived.value) return;
+
+  loadingArchived.value = true;
+  const offset = archivedProjects.value.length;
+  const res = await vendorsGetMyArchivedProjects({
+    query: {
+      skip: offset,
+      limit: 5,
+    },
+  });
+  loadingArchived.value = false;
+
+  if (res.error) {
+    toast.add({
+      title: "Can't get archived projects",
+      description: extractErrorMessage(res.error),
+      color: 'error',
+    });
+  } else {
+    archivedProjects.value.push(...res.data.result);
+    totalArchived.value = res.data.total;
+  }
+}
+
 useInfiniteScroll(incomingRequestsEl, loadMoreIncoming, {
   distance: 10,
   canLoadMore: () =>
@@ -211,11 +268,18 @@ useInfiniteScroll(acceptedProjectsEl, loadMoreAccepted, {
     totalAccepted.value === null ||
     acceptedProjects.value.length < (totalAccepted.value ?? 0),
 });
+useInfiniteScroll(archivedProjectsEl, loadMoreArchived, {
+  distance: 10,
+  canLoadMore: () =>
+    totalArchived.value === null ||
+    archivedProjects.value.length < (totalArchived.value ?? 0),
+});
 
 onMounted(() => {
   loadMoreIncoming();
   loadMoreExplore();
   loadMoreAccepted();
+  loadMoreArchived();
 });
 
 const breakpoints = useBreakpoints({
@@ -239,6 +303,11 @@ const tabs = computed(() => {
       label: isSmallScreen ? 'Accepted' : 'Accepted Projects',
       icon: 'i-lucide-clipboard-check',
       slot: 'accepted',
+    },
+    {
+      label: isSmallScreen ? 'Archive' : 'Archive',
+      icon: 'i-lucide-archive',
+      slot: 'archive',
     },
   ];
 });

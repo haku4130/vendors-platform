@@ -178,7 +178,39 @@ def get_my_accepted_projects(
         limit=limit,
     )
 
-    # Convert to ProjectPublic and enrich with owner rating
+    result = []
+    for project in projects:
+        project_public = ProjectPublic.model_validate(project)
+        if project.owner:
+            rating, count = reviews_crud.get_user_rating_stats(
+                session=session, user_id=project.owner.id
+            )
+            owner_public = UserPublic.model_validate(project.owner)
+            owner_public.rating = rating
+            owner_public.ratingCount = count
+            project_public.owner = owner_public
+        result.append(project_public)
+
+    return {"result": result, "total": total}
+
+
+@router.get(
+    "/me/archived-projects",
+    response_model=PaginatedProjectsPublic,
+)
+def get_my_archived_projects(
+    session: SessionDep,
+    current_vendor: CurrentVendorProfile,
+    skip: int = 0,
+    limit: int = 50,
+):
+    projects, total = projects_crud.get_archived_projects_for_vendor(
+        session=session,
+        vendor_profile_id=current_vendor.id,
+        skip=skip,
+        limit=limit,
+    )
+
     result = []
     for project in projects:
         project_public = ProjectPublic.model_validate(project)

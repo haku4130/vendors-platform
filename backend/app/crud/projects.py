@@ -17,10 +17,13 @@ def get_project(*, session: Session, project_id: UUID) -> Project | None:
     return session.get(Project, project_id)
 
 
-def get_projects_for_owner(*, session: Session, owner_id: UUID) -> Sequence[Project]:
+def get_projects_for_owner(
+    *, session: Session, owner_id: UUID, is_archived: bool = False
+) -> Sequence[Project]:
     projects = session.exec(
         select(Project)
         .where(Project.owner_id == owner_id)
+        .where(Project.is_archived == is_archived)
         .order_by(col(Project.created_at).desc())
     ).all()
 
@@ -64,6 +67,56 @@ def set_services(session: Session, project: Project, service_ids: list[UUID]):
     project.services.extend(session.exec(stmt).all())
     session.add(project)
     session.commit()
+
+
+def archive_project(*, session: Session, project: Project) -> Project:
+    project.is_archived = True
+    session.add(project)
+    session.commit()
+    session.refresh(project)
+    return project
+
+
+def get_archived_projects_for_vendor(
+    *,
+    session: Session,
+    vendor_profile_id: UUID,
+    skip: int,
+    limit: int,
+) -> tuple[Sequence[Project], int]:
+    P = Project
+    R = ProjectRequest
+
+    stmt = (
+        select(P)
+        .join(R, col(R.project_id) == P.id)
+        .where(
+            R.vendor_profile_id == vendor_profile_id,
+            P.is_archived == True,
+        )
+        .order_by(col(P.created_at).desc())
+        .offset(skip)
+        .limit(limit)
+        .options(
+            selectinload(P.services),  # type: ignore
+            selectinload(P.owner),  # type: ignore
+        )
+    )
+
+    projects = session.exec(stmt).all()
+
+    total_stmt = (
+        select(func.count())
+        .select_from(R)
+        .join(P, col(R.project_id) == P.id)
+        .where(
+            R.vendor_profile_id == vendor_profile_id,
+            P.is_archived == True,
+        )
+    )
+    total = session.exec(total_stmt).one()
+
+    return projects, total
 
 
 def get_accepted_projects_for_vendor(

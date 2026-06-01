@@ -1,4 +1,7 @@
 {
+    "common": {
+        "cancel": "Cancel"
+    },
     "brandName": "VendorHub",
     "pageTitle": "VendorHub — platform for company-vendor collaboration",
     "nav": {
@@ -206,6 +209,13 @@
                 "acceptedDesc": "Accepted projects will appear here."
             },
             "startProject": "Start a Project",
+            "tabActive": "Active",
+            "tabArchive": "Archive",
+            "noArchived": "No archived projects yet.",
+            "archived": "This project is archived",
+            "archiveProject": "Archive Project",
+            "archiveConfirmTitle": "Archive this project?",
+            "archiveConfirmDesc": "Vendors will no longer see this project. It will be moved to your Archive tab. Vendors who have applied will also see it in their Archive.",
             "myRecommendations": "My Recommendations",
             "noReviews": "You haven't left a review to anyone yet!",
             "modal": {

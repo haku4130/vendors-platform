@@ -126,7 +126,7 @@ def get_available_ranked_projects_for_vendor(
     )
 
     total = session.exec(
-        select(func.count()).select_from(P).where(not_(subq_exists))
+        select(func.count()).select_from(P).where(not_(subq_exists), P.is_archived == False)
     ).one()
 
     # Счётчик пересечений сервисов
@@ -144,7 +144,8 @@ def get_available_ranked_projects_for_vendor(
             isouter=True,
         )
         .where(
-            not_(subq_exists),  # нет существующих заявок с этой компанией
+            not_(subq_exists),
+            P.is_archived == False,
         )
         .group_by(col(P.id))
         .order_by(

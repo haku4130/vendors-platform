@@ -1,16 +1,36 @@
 <template>
   <div class="space-y-8">
     <section class="rounded-2xl p-6 shadow-sm space-y-4">
-      <h1 class="text-2xl font-semibold">{{ $t('dashboard.projects.title') }}</h1>
-      <MyProjectGrid
-        v-if="projects && projects.length > 0"
-        :items="projects"
-        class="my-6"
-      />
-      <div v-else class="w-full">
-        <h4 class="text-xl font-semibold">{{ $t('dashboard.projects.buildBrief') }}</h4>
-        <p class="mt-1 text-muted">{{ $t('dashboard.projects.buildBriefDesc') }}</p>
-      </div>
+      <h1 class="text-2xl font-semibold">
+        {{ $t('dashboard.projects.title') }}
+      </h1>
+      <UTabs :items="projectTabs" variant="link" class="w-full">
+        <template #active>
+          <MyProjectGrid
+            v-if="projects && projects.length > 0"
+            :items="projects"
+            class="my-6"
+          />
+          <div v-else class="w-full py-4">
+            <h4 class="text-xl font-semibold">
+              {{ $t('dashboard.projects.buildBrief') }}
+            </h4>
+            <p class="mt-1 text-muted">
+              {{ $t('dashboard.projects.buildBriefDesc') }}
+            </p>
+          </div>
+        </template>
+        <template #archive>
+          <MyProjectGrid
+            v-if="archivedProjects && archivedProjects.length > 0"
+            :items="archivedProjects"
+            class="my-6"
+          />
+          <div v-else class="w-full py-4">
+            <p class="text-muted">{{ $t('dashboard.projects.noArchived') }}</p>
+          </div>
+        </template>
+      </UTabs>
       <MultiStepModal
         v-model="answers"
         :step-index="stepIndex"
@@ -25,7 +45,9 @@
         @finish-create="handleCreateFinish"
         @finish="handleFinish"
       >
-        <template #step-1-title>{{ $t('dashboard.projects.modal.step1Title') }}</template>
+        <template #step-1-title>{{
+          $t('dashboard.projects.modal.step1Title')
+        }}</template>
         <template #step-1>
           <UForm
             :ref="
@@ -57,7 +79,9 @@
           </UForm>
         </template>
 
-        <template #step-2-title>{{ $t('dashboard.projects.modal.step2Title') }}</template>
+        <template #step-2-title>{{
+          $t('dashboard.projects.modal.step2Title')
+        }}</template>
         <template #step-2>
           <UForm
             :ref="
@@ -93,7 +117,9 @@
           </UForm>
         </template>
 
-        <template #step-3-title>{{ $t('dashboard.projects.modal.step3Title') }}</template>
+        <template #step-3-title>{{
+          $t('dashboard.projects.modal.step3Title')
+        }}</template>
         <template #step-3>
           <UForm
             :ref="
@@ -122,7 +148,9 @@
           </UForm>
         </template>
 
-        <template #step-4-title>{{ $t('dashboard.projects.modal.step4Title') }}</template>
+        <template #step-4-title>{{
+          $t('dashboard.projects.modal.step4Title')
+        }}</template>
         <template #step-4>
           <UForm
             :ref="
@@ -147,7 +175,9 @@
           </UForm>
         </template>
 
-        <template #step-5-title>{{ $t('dashboard.projects.modal.step5Title') }}</template>
+        <template #step-5-title>{{
+          $t('dashboard.projects.modal.step5Title')
+        }}</template>
         <template #step-5>
           <UForm
             :ref="
@@ -215,7 +245,9 @@
           </UForm>
         </template>
 
-        <template #step-6-title>{{ $t('dashboard.projects.modal.step6Title') }}</template>
+        <template #step-6-title>{{
+          $t('dashboard.projects.modal.step6Title')
+        }}</template>
         <template #step-6>
           <UForm
             :ref="
@@ -243,7 +275,9 @@
           </UForm>
         </template>
 
-        <template #step-7-title>{{ $t('dashboard.projects.modal.step7Title') }}</template>
+        <template #step-7-title>{{
+          $t('dashboard.projects.modal.step7Title')
+        }}</template>
         <template #step-7>
           <UForm
             :ref="
@@ -275,7 +309,9 @@
     </section>
 
     <section class="bg-white rounded-2xl p-6 shadow-sm">
-      <h3 class="text-lg font-semibold mb-4">{{ $t('dashboard.projects.myRecommendations') }}</h3>
+      <h3 class="text-lg font-semibold mb-4">
+        {{ $t('dashboard.projects.myRecommendations') }}
+      </h3>
       <div
         v-if="displayedReviews.length > 0"
         class="grid lg:grid-cols-2 xl:grid-cols-3 gap-3"
@@ -308,8 +344,27 @@ import {
 
 const auth = useAuth();
 const toast = useToast();
+const { t } = useI18n();
 
-let { data: projects } = await projectsListMyProjects();
+let { data: projects } = await projectsListMyProjects({
+  query: { is_archived: false },
+});
+let { data: archivedProjects } = await projectsListMyProjects({
+  query: { is_archived: true },
+});
+
+const projectTabs = computed(() => [
+  {
+    label: t('dashboard.projects.tabActive'),
+    icon: 'i-lucide-folder-open',
+    slot: 'active',
+  },
+  {
+    label: t('dashboard.projects.tabArchive'),
+    icon: 'i-lucide-archive',
+    slot: 'archive',
+  },
+]);
 
 const createdProjectId = ref('');
 
@@ -402,7 +457,8 @@ async function handleCreateFinish() {
     });
 
     createdProjectId.value = res.data.id;
-    projects = (await projectsListMyProjects()).data;
+    projects = (await projectsListMyProjects({ query: { is_archived: false } }))
+      .data;
 
     phase.value = 'vendors';
   } else {

@@ -271,6 +271,7 @@ class Project(ProjectBase, table=True):
     owner_id: uuid.UUID = Field(
         foreign_key="user.id", ondelete="SET NULL", nullable=True
     )
+    is_archived: bool = Field(default=False)
     owner: User | None = Relationship(back_populates="projects")
     services: list[Service] = Relationship(
         back_populates="projects", link_model=ProjectServiceLink
@@ -288,6 +289,7 @@ class ProjectCreate(ProjectBase):
 
 class ProjectPublic(ProjectBase):
     id: uuid.UUID
+    is_archived: bool
     owner: UserPublic
     services: list[Service]
     vendor_profile: VendorProfilePublic | None
