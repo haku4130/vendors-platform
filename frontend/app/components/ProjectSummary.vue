@@ -1,15 +1,20 @@
 <template>
   <div class="flex w-full max-w-5xl h-full gap-10 pb-6 text-start">
-    <aside class="w-1/3 py-6 flex flex-col">
-      <h2 class="text-xl font-semibold mb-6 px-3">Your Project Brief</h2>
+    <aside class="w-1/3 py-6 flex flex-col text-white">
+      <h2 class="text-xl font-semibold text-gray-300 mb-6 px-3">
+        Your Project Brief
+      </h2>
 
-      <ul class="space-y-4 text-sm px-3 text-gray-800">
+      <ul class="space-y-4 text-sm px-3">
         <li class="flex items-start gap-3">
-          <UIcon name="i-lucide-file-pen" class="text-2xl shrink-0" />
+          <UIcon
+            name="i-lucide-file-pen"
+            class="text-lg shrink-0 text-gray-300"
+          />
           <span class="leading-snug">Review your project details</span>
         </li>
         <li class="flex items-start gap-3">
-          <UIcon name="i-lucide-mail" class="text-2xl shrink-0" />
+          <UIcon name="i-lucide-mail" class="text-lg shrink-0 text-gray-300" />
           <span class="leading-snug"
             >We'll send your project to best-fit vendors</span
           >
@@ -17,7 +22,7 @@
         <li class="flex items-start gap-3">
           <UIcon
             name="i-lucide-message-square-text"
-            class="text-2xl shrink-0"
+            class="text-lg shrink-0 text-gray-300"
           />
           <span class="leading-snug"
             >Receive a response directly through platform</span
@@ -28,22 +33,22 @@
       <USeparator color="primary" class="my-6" />
 
       <div class="space-y-2 sticky top-0">
-        <p class="uppercase text-xs text-gray-700 tracking-wider mb-6 px-3">
+        <p
+          class="uppercase text-xs text-gray-300 font-semibold tracking-wider mb-6 px-3"
+        >
           Outline
         </p>
-        <button
+        <UButton
           v-for="(section, i) in links"
           :key="i"
-          class="block text-left w-full px-3 py-1.5 rounded-md transition"
-          :class="[
-            currentSection === section.id
-              ? 'bg-[#F4B98A] font-semibold'
-              : 'hover:bg-[#F6C6A2]',
-          ]"
+          :active="currentSection === section.id"
+          variant="ghost"
+          active-color="primary"
+          active-variant="solid"
+          class="w-full text-left px-3 text-white"
+          :label="section.text"
           @click="scrollToSection(section.id)"
-        >
-          {{ section.text }}
-        </button>
+        />
       </div>
     </aside>
 
@@ -111,7 +116,7 @@ onMounted(() => {
     },
     {
       rootMargin: '0px 0px -90% 0px',
-    }
+    },
   );
 
   links.forEach((link) => {

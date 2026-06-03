@@ -6,8 +6,8 @@
       header: phase === 'form' ? 'bg-vendor-gradient' : '',
       footer: 'justify-between',
       body: phase === 'form' ? '' : 'bg-vendor-gradient',
-      title: 'text-white',
-      close: 'text-white',
+      title: phase === 'form' ? 'text-white' : 'text-black',
+      close: phase === 'form' ? 'text-white' : 'text-black',
     }"
     fullscreen
   >

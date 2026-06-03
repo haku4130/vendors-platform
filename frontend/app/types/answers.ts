@@ -1,4 +1,6 @@
-import type { ServicePublicShort } from '~/generated/api';
+import type { RequirementItem, ServicePublicShort } from '~/generated/api';
+
+export type { RequirementItem as Requirement };
 
 export interface AnswersType {
     projectName: string;
@@ -10,5 +12,5 @@ export interface AnswersType {
     website: string | null;
     projectIntroduction: string;
     questions: string[];
-    requirements: string[];
+    requirements: RequirementItem[];
 }

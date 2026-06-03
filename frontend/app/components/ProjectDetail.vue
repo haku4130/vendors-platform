@@ -184,10 +184,9 @@
         @edit="editRequirements = true"
         @finish-edit="editRequirements = false"
       />
-      <ListInput
+      <RequirementsTable
         v-model="data.requirements"
         :editing="editRequirements"
-        add-item-placeholder="Add a requirement"
         :no-items-text="
           fromAuthor
             ? 'You can add your project requirements here.'

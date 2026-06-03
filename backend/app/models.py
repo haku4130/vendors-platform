@@ -244,6 +244,12 @@ class ServicePublic(ServicePublicShort):
     category: Category
 
 
+class RequirementItem(SQLModel):
+    group: str
+    requirement: str
+    priority: int = Field(ge=1, le=5)
+
+
 class ProjectBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
     description: str = Field(max_length=2000)
@@ -259,7 +265,7 @@ class ProjectBase(SQLModel):
         default=None,
         sa_column=sa.Column(JSONB),
     )
-    requirements: list[str] | None = Field(
+    requirements: list[RequirementItem] | None = Field(
         default=None,
         sa_column=sa.Column(JSONB),
     )

@@ -349,6 +349,18 @@ export type PrivateUserCreate = {
 };
 
 /**
+ * RequirementItem
+ */
+export type RequirementItem = {
+    group: string;
+    requirement: string;
+    /**
+     * Priority from 1 (lowest) to 5 (highest)
+     */
+    priority: number;
+};
+
+/**
  * ProjectCreate
  */
 export type ProjectCreate = {
@@ -380,7 +392,7 @@ export type ProjectCreate = {
     /**
      * Requirements
      */
-    requirements?: Array<string> | null;
+    requirements?: Array<RequirementItem> | null;
     /**
      * Created At
      */
@@ -423,7 +435,7 @@ export type ProjectPublic = {
     /**
      * Requirements
      */
-    requirements?: Array<string> | null;
+    requirements?: Array<RequirementItem> | null;
     /**
      * Created At
      */
@@ -559,7 +571,7 @@ export type ProjectWithIncomingCount = {
     /**
      * Requirements
      */
-    requirements?: Array<string> | null;
+    requirements?: Array<RequirementItem> | null;
     /**
      * Created At
      */
