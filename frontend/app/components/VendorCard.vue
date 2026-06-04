@@ -1,125 +1,216 @@
 <template>
   <div
-    class="flex flex-col md:flex-row justify-between gap-6 p-6 border border-gray-300 rounded-2xl bg-white shadow-md"
+    class="flex flex-col md:flex-row border border-gray-200 rounded-2xl bg-white shadow-sm overflow-hidden"
   >
-    <div class="flex flex-col md:w-fit">
-      <div class="mb-3">
+    <!-- Left panel -->
+    <div
+      class="flex flex-col p-6 md:w-72 shrink-0 border-b md:border-b-0 md:border-r border-gray-200"
+    >
+      <!-- Logo + name + contact -->
+      <div class="mb-4">
         <UUser
           :to="`/vendors/${vendor.id}`"
           :name="vendor.user?.company_name"
           :description="vendor.user?.full_name"
           :avatar="{
             src: vendor.user?.logo_url || undefined,
-            icon: 'i-lucide-camera',
+            icon: 'i-lucide-building-2',
           }"
-          :ui="{ avatar: 'rounded-lg border border-black' }"
+          :ui="{ avatar: 'rounded-xl border border-gray-200' }"
           size="3xl"
           class="text-start"
         />
       </div>
 
-      <div v-if="vendor.rating" class="flex items-center gap-1 mb-3">
-        <span class="font-semibold">{{ vendor.rating.toFixed(1) }}</span>
-        <StarRating :rating="vendor.rating" />
-        <span class="text-sm text-muted">({{ vendor.reviewsCount }})</span>
+      <!-- Rating -->
+      <div v-if="vendor.rating" class="flex items-center gap-2 mb-4">
+        <span class="text-xl font-bold">{{ vendor.rating.toFixed(1) }}</span>
+        <span class="text-gray-400">·</span>
+        <span class="text-sm text-gray-500"
+          >{{ vendor.reviewsCount }} {{ reviewsLabel }}</span
+        >
       </div>
-      <div v-else class="flex items-center gap-1 mb-3">
-        <span class="font-semibold">No rating yet</span>
-      </div>
+      <div v-else class="text-sm text-gray-400 mb-4">Нет отзывов</div>
 
-      <div class="flex flex-wrap max-w-[16rem] gap-2 mb-4">
+      <hr class="border-gray-200 mb-4" />
+
+      <!-- Специализация -->
+      <p
+        class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
+      >
+        Специализация
+      </p>
+      <div class="flex flex-wrap gap-2 mb-4">
         <span
-          v-for="tag in vendor.services"
+          v-for="(tag, index) in vendor.services"
           :key="tag.id"
-          class="bg-gray-200 px-3 py-1 rounded-full text-sm font-medium"
+          :class="[
+            'px-3 py-1 rounded-full text-sm font-medium border',
+            index === 0
+              ? 'bg-blue-500 text-white border-sky-500'
+              : 'bg-white text-gray-700 border-gray-300',
+          ]"
         >
           {{ tag.label }}
         </span>
       </div>
 
-      <hr />
+      <hr class="border-gray-200 mb-4" />
 
-      <div class="space-y-2 w-full border-gray-400 pt-3">
-        <UTooltip :delay-duration="0" text="Minimum Project Price">
-          <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-tag" />
-            <span>${{ vendor.min_project_size }}</span>
+      <!-- Stats -->
+      <div class="space-y-3 mb-6">
+        <div class="flex items-start gap-3">
+          <UIcon name="i-lucide-tag" class="mt-0.5 text-gray-400 shrink-0" />
+          <div>
+            <p class="text-xs text-gray-400">Мин. проект</p>
+            <p class="font-semibold">
+              ${{ formatNumber(vendor.min_project_size) }}
+            </p>
           </div>
-        </UTooltip>
-        <UTooltip :delay-duration="0" text="Avarage Hourly Rate">
-          <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-clock" />
-            <span>${{ vendor.avg_hourly_rate }}</span>
-          </div>
-        </UTooltip>
-        <UTooltip :delay-duration="0" text="Number of Employees">
-          <div class="flex items-center gap-2">
-            <UIcon name="i-lucide-users" />
-            <span>{{ vendor.employee_count }} people</span>
-          </div>
-        </UTooltip>
-        <div class="flex items-center gap-2 pb-3">
-          <UIcon name="i-lucide-map-pin" />
-          <span>{{ vendor.user?.location }}</span>
         </div>
-      </div>
-
-      <hr v-if="!incoming && currentProjectId" />
-
-      <UButton
-        v-if="!incoming && currentProjectId"
-        class="w-fit mt-2 px-0"
-        variant="link"
-        :leading-icon="
-          isShortlisted ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'
-        "
-        size="sm"
-        @click="toggleShortlist"
-      >
-        {{ isShortlisted ? 'Shortlisted' : 'Add to Shortlist' }}
-      </UButton>
-    </div>
-
-    <div class="flex-1 flex flex-col justify-between text-start">
-      <div v-if="reviews.length > 0">
-        <h4 class="font-semibold mb-2">What clients have said</h4>
-
-        <div class="grid xl:grid-cols-2 gap-3">
-          <div v-for="review in displayedReviews" :key="review.id">
-            <ReviewCard :review="review" show-author />
+        <div class="flex items-start gap-3">
+          <UIcon name="i-lucide-clock" class="mt-0.5 text-gray-400 shrink-0" />
+          <div>
+            <p class="text-xs text-gray-400">Ставка в час</p>
+            <p class="font-semibold">
+              ${{ formatNumber(vendor.avg_hourly_rate) }}
+            </p>
+          </div>
+        </div>
+        <div class="flex items-start gap-3">
+          <UIcon name="i-lucide-users" class="mt-0.5 text-gray-400 shrink-0" />
+          <div>
+            <p class="text-xs text-gray-400">Команда</p>
+            <p class="font-semibold">{{ vendor.employee_count }} человек</p>
+          </div>
+        </div>
+        <div v-if="vendor.user?.location" class="flex items-start gap-3">
+          <UIcon
+            name="i-lucide-map-pin"
+            class="mt-0.5 text-gray-400 shrink-0"
+          />
+          <div>
+            <p class="text-xs text-gray-400">Локация</p>
+            <p class="font-semibold">{{ vendor.user.location }}</p>
           </div>
         </div>
       </div>
 
-      <UEmpty
-        v-else
-        icon="i-lucide-star"
-        title="No reviews yet"
-        description="This vendor has not received any reviews yet."
-        class="h-full"
-      />
+      <div class="flex-1"></div>
 
-      <div v-if="currentProjectId" class="flex justify-end mt-4">
+      <!-- Buttons -->
+      <div v-if="!incoming && currentProjectId" class="space-y-2">
         <UButton
-          v-if="!incoming"
+          block
+          color="neutral"
+          variant="outline"
+          :leading-icon="
+            isShortlisted ? 'i-lucide-bookmark-check' : 'i-lucide-bookmark'
+          "
+          @click="toggleShortlist"
+        >
+          {{ isShortlisted ? 'В шорт-листе' : 'Добавить в шорт-лист' }}
+        </UButton>
+        <UButton
+          block
           :disabled="alreadySent"
+          trailing-icon="i-lucide-arrow-right"
           @click="handleVendorSelect(vendor.id)"
         >
-          {{ alreadySent ? 'Sent!' : 'Request a quote' }}
+          {{ alreadySent ? 'Отправлено!' : 'Запросить предложение' }}
         </UButton>
+      </div>
 
-        <div v-else-if="!alreadyProcessed" class="flex gap-2">
-          <UButton variant="solid" size="lg" @click="handleVendorAccept">
-            Accept
+      <div v-else-if="incoming">
+        <div v-if="!alreadyProcessed" class="flex gap-2">
+          <UButton block @click="handleVendorAccept">Принять</UButton>
+          <UButton
+            block
+            variant="outline"
+            color="neutral"
+            @click="handleVendorDeny"
+          >
+            Отклонить
           </UButton>
-          <UButton size="lg" @click="handleVendorDeny"> Deny </UButton>
+        </div>
+        <UButton v-else block disabled>{{ alreadyProcessed }}</UButton>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="flex-1 flex flex-col p-6 gap-5 min-w-0">
+      <!-- Reviews -->
+      <div class="flex-1">
+        <p
+          class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
+        >
+          Отзывы клиентов
+        </p>
+
+        <div v-if="reviews.length > 0" class="space-y-3">
+          <div
+            v-for="review in displayedReviews"
+            :key="review.id"
+            class="border border-gray-200 rounded-xl p-4 bg-gray-50"
+          >
+            <div class="flex items-center gap-3 mb-3">
+              <div
+                class="w-9 h-9 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0"
+                :style="{
+                  backgroundColor: avatarColor(review.author.company_name),
+                }"
+              >
+                {{ initials(review.author.company_name) }}
+              </div>
+              <div>
+                <p class="font-semibold text-sm leading-tight">
+                  {{ review.author.company_name }}
+                </p>
+                <p class="text-xs text-gray-400">
+                  {{ review.author.full_name }} ·
+                  {{ review.author.role === 'vendor' ? 'Vendor' : 'Company' }}
+                </p>
+              </div>
+            </div>
+            <p class="text-sm mb-2">{{ review.text }}</p>
+            <p v-if="review.created_at" class="text-xs text-gray-400">
+              {{ formatDateReview(review.created_at) }}
+            </p>
+          </div>
         </div>
 
-        <div v-else>
-          <UButton disabled>
-            {{ alreadyProcessed }}
-          </UButton>
-        </div>
+        <UEmpty
+          v-else
+          icon="i-lucide-star"
+          title="Нет отзывов"
+          description="Этот вендор пока не получил отзывов."
+          class="h-full"
+        />
+      </div>
+
+      <!-- Why choose -->
+      <div
+        v-if="highlights.length > 0"
+        class="border border-gray-200 rounded-xl p-4 bg-gray-50 shrink-0"
+      >
+        <p
+          class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
+        >
+          Почему стоит выбрать
+        </p>
+        <ul class="space-y-2">
+          <li
+            v-for="point in highlights"
+            :key="point"
+            class="flex items-start gap-2 text-sm"
+          >
+            <UIcon
+              name="i-lucide-check"
+              class="text-green-500 mt-0.5 shrink-0"
+            />
+            <span>{{ point }}</span>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -160,35 +251,95 @@ const alreadySent = ref(false);
 const alreadyProcessed = ref();
 const toast = useToast();
 
+const reviewsLabel = computed(() => {
+  const n = vendor.reviewsCount ?? 0;
+  if (n === 1) return 'отзыв';
+  if (n >= 2 && n <= 4) return 'отзыва';
+  return 'отзывов';
+});
+
+function formatNumber(n: number): string {
+  return n.toLocaleString('ru-RU');
+}
+
+function initials(name: string): string {
+  return name
+    .split(' ')
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join('')
+    .toUpperCase();
+}
+
+const AVATAR_COLORS = [
+  '#2563eb',
+  '#16a34a',
+  '#9333ea',
+  '#db2777',
+  '#d97706',
+  '#0891b2',
+  '#dc2626',
+  '#059669',
+  '#7c3aed',
+  '#0284c7',
+];
+
+function avatarColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+}
+
+const highlights = computed(() => {
+  const items: string[] = [];
+  if (vendor.services.length > 0)
+    items.push(
+      `Специализация: ${vendor.services
+        .slice(0, 2)
+        .map((s) => s.label)
+        .join(', ')}`,
+    );
+  if (vendor.employee_count)
+    items.push(
+      `Команда ${vendor.employee_count} специалистов${vendor.user?.location ? ` в ${vendor.user.location}` : ''}`,
+    );
+  if (vendor.min_project_size)
+    items.push(
+      `Минимальный проект от $${formatNumber(vendor.min_project_size)}`,
+    );
+  return items;
+});
+
 async function handleVendorSelect(vendorId: string) {
   if (!currentProjectId) {
     toast.add({
-      title: 'No project selected',
-      description: 'Please create a project first to send a request.',
+      title: 'Проект не выбран',
+      description: 'Сначала создайте проект, чтобы отправить запрос.',
       color: 'warning',
     });
     return;
   }
 
   const res = await projectsSendProjectRequestCompany({
-    path: {
-      project_id: currentProjectId,
-      vendor_profile_id: vendorId,
-    },
+    path: { project_id: currentProjectId, vendor_profile_id: vendorId },
   });
 
   if (res.error) {
     toast.add({
-      title: 'Error',
-      description: extractErrorMessage(res.error, 'Failed to send request'),
+      title: 'Ошибка',
+      description: extractErrorMessage(
+        res.error,
+        'Не удалось отправить запрос',
+      ),
       color: 'error',
     });
     return;
   }
 
   toast.add({
-    title: 'Request sent',
-    description: 'The vendor has been notified.',
+    title: 'Запрос отправлен',
+    description: 'Вендор получил уведомление.',
     color: 'success',
   });
   alreadySent.value = true;
@@ -197,74 +348,69 @@ async function handleVendorSelect(vendorId: string) {
 async function handleVendorAccept() {
   if (!requestId) {
     toast.add({
-      title: 'Error',
-      description: 'Request ID is missing',
+      title: 'Ошибка',
+      description: 'Отсутствует ID запроса',
       color: 'error',
     });
     return;
   }
 
-  const res = await requestsAcceptProject({
-    path: {
-      request_id: requestId,
-    },
-  });
+  const res = await requestsAcceptProject({ path: { request_id: requestId } });
 
   if (res.error) {
     toast.add({
-      title: 'Error',
-      description: extractErrorMessage(res.error, 'Failed to accept request'),
+      title: 'Ошибка',
+      description: extractErrorMessage(res.error, 'Не удалось принять запрос'),
       color: 'error',
     });
     return;
   }
 
   toast.add({
-    title: 'Request accepted!',
-    description: 'The vendor has been notified.',
+    title: 'Запрос принят!',
+    description: 'Вендор получил уведомление.',
     color: 'success',
   });
-  alreadyProcessed.value = 'Accepted';
+  alreadyProcessed.value = 'Принято';
 }
 
 async function handleVendorDeny() {
   if (!requestId) {
     toast.add({
-      title: 'Error',
-      description: 'Request ID is missing',
+      title: 'Ошибка',
+      description: 'Отсутствует ID запроса',
       color: 'error',
     });
     return;
   }
 
-  const res = await requestsDeclineProject({
-    path: {
-      request_id: requestId,
-    },
-  });
+  const res = await requestsDeclineProject({ path: { request_id: requestId } });
 
   if (res.error) {
     toast.add({
-      title: 'Error',
-      description: extractErrorMessage(res.error, 'Failed to decline request'),
+      title: 'Ошибка',
+      description: extractErrorMessage(
+        res.error,
+        'Не удалось отклонить запрос',
+      ),
       color: 'error',
     });
     return;
   }
 
   toast.add({
-    title: 'Request declined',
-    description: 'The vendor has been notified.',
+    title: 'Запрос отклонён',
+    description: 'Вендор получил уведомление.',
     color: 'success',
   });
-  alreadyProcessed.value = 'Denied';
+  alreadyProcessed.value = 'Отклонено';
 }
 
 async function toggleShortlist() {
   if (!currentProjectId) {
     toast.add({
-      title: 'No project selected',
-      description: 'Please create a project first to add to shortlist.',
+      title: 'Проект не выбран',
+      description: 'Сначала создайте проект, чтобы добавить в шорт-лист.',
       color: 'warning',
     });
     return;
@@ -274,26 +420,20 @@ async function toggleShortlist() {
 
   const res = wasShortlisted
     ? await shortlistRemoveVendorFromShortlist({
-        path: {
-          project_id: currentProjectId,
-          vendor_profile_id: vendor.id,
-        },
+        path: { project_id: currentProjectId, vendor_profile_id: vendor.id },
       })
     : await shortlistAddVendorToShortlist({
-        path: {
-          project_id: currentProjectId,
-          vendor_profile_id: vendor.id,
-        },
+        path: { project_id: currentProjectId, vendor_profile_id: vendor.id },
       });
 
   if (res.error) {
     toast.add({
-      title: 'Error',
+      title: 'Ошибка',
       description: extractErrorMessage(
         res.error,
         wasShortlisted
-          ? 'Failed to remove from shortlist'
-          : 'Failed to add to shortlist'
+          ? 'Не удалось удалить из шорт-листа'
+          : 'Не удалось добавить в шорт-лист',
       ),
       color: 'error',
     });
@@ -302,15 +442,14 @@ async function toggleShortlist() {
 
   isShortlisted.value = !wasShortlisted;
 
-  // If removed from shortlist, show toast with undo action
   if (wasShortlisted) {
     toast.add({
-      title: 'Removed from shortlist',
-      description: 'Vendor removed from your shortlist',
+      title: 'Удалено из шорт-листа',
+      description: 'Вендор удалён из вашего шорт-листа',
       color: 'success',
       actions: [
         {
-          label: 'Undo',
+          label: 'Отменить',
           color: 'primary',
           onClick: async () => {
             await undoShortlistRemoval();
@@ -320,8 +459,8 @@ async function toggleShortlist() {
     });
   } else {
     toast.add({
-      title: 'Added to shortlist',
-      description: 'Vendor added to your shortlist',
+      title: 'Добавлено в шорт-лист',
+      description: 'Вендор добавлен в ваш шорт-лист',
       color: 'success',
     });
   }
@@ -330,23 +469,18 @@ async function toggleShortlist() {
 }
 
 async function undoShortlistRemoval() {
-  if (!currentProjectId) {
-    return;
-  }
+  if (!currentProjectId) return;
 
   const res = await shortlistAddVendorToShortlist({
-    path: {
-      project_id: currentProjectId,
-      vendor_profile_id: vendor.id,
-    },
+    path: { project_id: currentProjectId, vendor_profile_id: vendor.id },
   });
 
   if (res.error) {
     toast.add({
-      title: 'Error',
+      title: 'Ошибка',
       description: extractErrorMessage(
         res.error,
-        'Failed to restore vendor to shortlist'
+        'Не удалось восстановить вендора в шорт-листе',
       ),
       color: 'error',
     });
@@ -355,31 +489,22 @@ async function undoShortlistRemoval() {
 
   isShortlisted.value = true;
   toast.add({
-    title: 'Restored',
-    description: 'Vendor restored to shortlist',
+    title: 'Восстановлено',
+    description: 'Вендор снова в шорт-листе',
     color: 'success',
   });
 
-  // Call the callback if provided (works even after component is unmounted)
-  if (onShortlistChanged) {
-    onShortlistChanged();
-  }
-
+  if (onShortlistChanged) onShortlistChanged();
   emit('shortlist-changed', isShortlisted.value);
 }
 
 const reviews = ref<ReviewPublic[]>([]);
-
 const displayedReviews = computed(() => reviews.value.slice(0, 4));
 
 async function loadReviews() {
   const res = await reviewsGetReviewsForVendor({
-    path: {
-      vendor_profile_id: vendor.id,
-    },
-    query: {
-      limit: 4,
-    },
+    path: { vendor_profile_id: vendor.id },
+    query: { limit: 4 },
   });
 
   if (res.error) {
