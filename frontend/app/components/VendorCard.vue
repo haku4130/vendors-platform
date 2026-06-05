@@ -40,12 +40,12 @@
       >
         Специализация
       </p>
-      <div class="flex flex-wrap gap-2 mb-4">
+      <div class="mb-2">
         <span
           v-for="(tag, index) in vendor.services"
           :key="tag.id"
           :class="[
-            'px-3 py-1 rounded-full text-sm font-medium border',
+            'inline-block mr-1.5 mb-1.5 px-3 py-1 rounded-full text-sm font-medium border',
             index === 0
               ? 'bg-blue-500 text-white border-sky-500'
               : 'bg-white text-gray-700 border-gray-300',
@@ -140,7 +140,7 @@
     <!-- Right panel -->
     <div class="flex-1 flex flex-col p-6 gap-5 min-w-0">
       <!-- Reviews -->
-      <div class="flex-1">
+      <div>
         <p
           class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
         >
@@ -184,14 +184,14 @@
           icon="i-lucide-star"
           title="Нет отзывов"
           description="Этот вендор пока не получил отзывов."
-          class="h-full"
+          class="py-4"
         />
       </div>
 
       <!-- Why choose -->
       <div
         v-if="highlights.length > 0"
-        class="border border-gray-200 rounded-xl p-4 bg-gray-50 shrink-0"
+        class="border border-gray-200 rounded-xl p-4 bg-gray-50 shrink-0 mt-auto"
       >
         <p
           class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
@@ -288,7 +288,8 @@ function avatarColor(name: string): string {
   let hash = 0;
   for (let i = 0; i < name.length; i++)
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+  const index = Math.abs(hash) % AVATAR_COLORS.length;
+  return AVATAR_COLORS[index] ?? AVATAR_COLORS[0] ?? '#2563eb';
 }
 
 const highlights = computed(() => {
