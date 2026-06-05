@@ -8,6 +8,7 @@ from app.crud import requests as crud
 from app.models import (
     ProjectRequest,
     ProjectRequestPublic,
+    ProjectRequestPublicVendorFull,
     RequestInitiator,
     RequestStatus,
     User,
@@ -15,6 +16,26 @@ from app.models import (
 )
 
 router = APIRouter(prefix="/requests", tags=["requests"])
+
+
+@router.get("/{request_id}", response_model=ProjectRequestPublicVendorFull)
+def get_request(
+    request_id: UUID,
+    session: SessionDep,
+    current_user: CurrentUser,
+):
+    req = crud.get_request_by_id(session=session, request_id=request_id)
+    if not req:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Request not found")
+
+    if req.initiator != RequestInitiator.vendor:
+        raise HTTPException(status.HTTP_403_FORBIDDEN)
+    if current_user.role != UserRole.company or (
+        req.project and req.project.owner_id != current_user.id
+    ):
+        raise HTTPException(status.HTTP_403_FORBIDDEN)
+
+    return req
 
 
 def process_request_status_change(

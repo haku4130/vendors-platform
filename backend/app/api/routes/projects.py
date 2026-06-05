@@ -125,7 +125,7 @@ def send_project_request_vendor(
     project_id: UUID,
     session: SessionDep,
     current_vendor_profile: CurrentVendorProfile,
-    body: VendorProposalBody = VendorProposalBody(),
+    body: VendorProposalBody,
 ):
     project = crud.get_project(session=session, project_id=project_id)
     if not project:
