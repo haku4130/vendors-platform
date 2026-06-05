@@ -14,17 +14,13 @@
             class="w-8 h-8 animate-spin text-muted"
           />
         </div>
-        <UContainer
-          v-else-if="incomingRequests.length"
-          class="flex justify-center"
-        >
+        <div v-else-if="incomingRequests.length" class="p-4 sm:p-6">
           <RequestGrid
             ref="incomingRequestsEl"
             :items="incomingRequests"
             to-url-postfix="incoming-request"
-            class="p-4 sm:p-6 w-full max-w-5xl"
           />
-        </UContainer>
+        </div>
         <UEmpty
           v-else
           icon="i-lucide-hourglass"
@@ -41,17 +37,13 @@
             class="w-8 h-8 animate-spin text-muted"
           />
         </div>
-        <UContainer
-          v-else-if="exploreProjects.length"
-          class="flex justify-center"
-        >
+        <div v-else-if="exploreProjects.length" class="p-4 sm:p-6">
           <ProjectGrid
             ref="exploreProjectsEl"
             :items="exploreProjects"
             to-url-postfix="proposal"
-            class="p-4 sm:p-6 w-full max-w-5xl"
           />
-        </UContainer>
+        </div>
         <UEmpty
           v-else
           icon="i-lucide-hourglass"
@@ -81,7 +73,10 @@
           </div>
 
           <div v-if="loadingProposals" class="flex justify-center py-12">
-            <UIcon name="i-lucide-loader-2" class="w-8 h-8 animate-spin text-muted" />
+            <UIcon
+              name="i-lucide-loader-2"
+              class="w-8 h-8 animate-spin text-muted"
+            />
           </div>
           <div
             v-else-if="proposals.length"
@@ -111,16 +106,9 @@
             class="w-8 h-8 animate-spin text-muted"
           />
         </div>
-        <UContainer
-          v-else-if="archivedProjects.length"
-          class="flex justify-center"
-        >
-          <ProjectGrid
-            ref="archivedProjectsEl"
-            :items="archivedProjects"
-            class="p-4 sm:p-6 w-full max-w-5xl"
-          />
-        </UContainer>
+        <div v-else-if="archivedProjects.length" class="p-4 sm:p-6">
+          <ProjectGrid ref="archivedProjectsEl" :items="archivedProjects" />
+        </div>
         <UEmpty
           v-else
           icon="i-lucide-archive"
@@ -134,35 +122,35 @@
 </template>
 
 <script setup lang="ts">
-import { useInfiniteScroll, useBreakpoints } from '@vueuse/core';
+import { useInfiniteScroll, useBreakpoints } from "@vueuse/core";
 import {
   vendorsGetIncomingRequestsForVendor,
   vendorsGetAvailableProjectsForVendor,
   vendorsGetMyProposals,
   vendorsGetMyArchivedProjects,
-} from '~/generated/api';
+} from "~/generated/api";
 import type {
   ProjectPublic,
   ProjectRequestPublicProjectFull,
-} from '~/generated/api';
+} from "~/generated/api";
 
-const incomingRequestsEl = useTemplateRef('incomingRequestsEl');
+const incomingRequestsEl = useTemplateRef("incomingRequestsEl");
 const incomingRequests = ref<ProjectRequestPublicProjectFull[]>([]);
 const totalIncoming = ref<number | null>(null);
 const loadingIncoming = ref(false);
 
-const exploreProjectsEl = useTemplateRef('exploreProjectsEl');
+const exploreProjectsEl = useTemplateRef("exploreProjectsEl");
 const exploreProjects = ref<ProjectPublic[]>([]);
 const totalExplore = ref<number | null>(null);
 const loadingExplore = ref(false);
 
-const proposalsEl = useTemplateRef('proposalsEl');
+const proposalsEl = useTemplateRef("proposalsEl");
 const proposals = ref<ProjectRequestPublicProjectFull[]>([]);
 const totalProposals = ref<number | null>(null);
 const loadingProposals = ref(false);
-const proposalStatus = ref<'sent' | 'accepted' | 'declined' | null>(null);
+const proposalStatus = ref<"sent" | "accepted" | "declined" | null>(null);
 
-const archivedProjectsEl = useTemplateRef('archivedProjectsEl');
+const archivedProjectsEl = useTemplateRef("archivedProjectsEl");
 const archivedProjects = ref<ProjectPublic[]>([]);
 const totalArchived = ref<number | null>(null);
 const loadingArchived = ref(false);
@@ -170,13 +158,13 @@ const loadingArchived = ref(false);
 const toast = useToast();
 
 const proposalFilters = [
-  { label: 'Все', value: null },
-  { label: 'На рассмотрении', value: 'sent' as const },
-  { label: 'Принято', value: 'accepted' as const },
-  { label: 'Отклонено', value: 'declined' as const },
+  { label: "Все", value: null },
+  { label: "На рассмотрении", value: "sent" as const },
+  { label: "Принято", value: "accepted" as const },
+  { label: "Отклонено", value: "declined" as const },
 ];
 
-function setProposalFilter(val: 'sent' | 'accepted' | 'declined' | null) {
+function setProposalFilter(val: "sent" | "accepted" | "declined" | null) {
   proposalStatus.value = val;
   proposals.value = [];
   totalProposals.value = null;
@@ -191,7 +179,11 @@ async function loadMoreIncoming() {
   });
   loadingIncoming.value = false;
   if (res.error) {
-    toast.add({ title: "Can't get incoming projects", description: extractErrorMessage(res.error), color: 'error' });
+    toast.add({
+      title: "Can't get incoming projects",
+      description: extractErrorMessage(res.error),
+      color: "error",
+    });
   } else {
     incomingRequests.value.push(...res.data.result);
     totalIncoming.value = res.data.total;
@@ -206,7 +198,11 @@ async function loadMoreExplore() {
   });
   loadingExplore.value = false;
   if (res.error) {
-    toast.add({ title: "Can't get projects", description: extractErrorMessage(res.error), color: 'error' });
+    toast.add({
+      title: "Can't get projects",
+      description: extractErrorMessage(res.error),
+      color: "error",
+    });
   } else {
     exploreProjects.value.push(...res.data.result);
     totalExplore.value = res.data.total;
@@ -225,7 +221,11 @@ async function loadMoreProposals() {
   });
   loadingProposals.value = false;
   if (res.error) {
-    toast.add({ title: "Can't get proposals", description: extractErrorMessage(res.error), color: 'error' });
+    toast.add({
+      title: "Can't get proposals",
+      description: extractErrorMessage(res.error),
+      color: "error",
+    });
   } else {
     proposals.value.push(...res.data.result);
     totalProposals.value = res.data.total;
@@ -240,7 +240,11 @@ async function loadMoreArchived() {
   });
   loadingArchived.value = false;
   if (res.error) {
-    toast.add({ title: "Can't get archived projects", description: extractErrorMessage(res.error), color: 'error' });
+    toast.add({
+      title: "Can't get archived projects",
+      description: extractErrorMessage(res.error),
+      color: "error",
+    });
   } else {
     archivedProjects.value.push(...res.data.result);
     totalArchived.value = res.data.total;
@@ -249,19 +253,27 @@ async function loadMoreArchived() {
 
 useInfiniteScroll(incomingRequestsEl, loadMoreIncoming, {
   distance: 10,
-  canLoadMore: () => totalIncoming.value === null || incomingRequests.value.length < (totalIncoming.value ?? 0),
+  canLoadMore: () =>
+    totalIncoming.value === null ||
+    incomingRequests.value.length < (totalIncoming.value ?? 0),
 });
 useInfiniteScroll(exploreProjectsEl, loadMoreExplore, {
   distance: 10,
-  canLoadMore: () => totalExplore.value === null || exploreProjects.value.length < (totalExplore.value ?? 0),
+  canLoadMore: () =>
+    totalExplore.value === null ||
+    exploreProjects.value.length < (totalExplore.value ?? 0),
 });
 useInfiniteScroll(proposalsEl, loadMoreProposals, {
   distance: 10,
-  canLoadMore: () => totalProposals.value === null || proposals.value.length < (totalProposals.value ?? 0),
+  canLoadMore: () =>
+    totalProposals.value === null ||
+    proposals.value.length < (totalProposals.value ?? 0),
 });
 useInfiniteScroll(archivedProjectsEl, loadMoreArchived, {
   distance: 10,
-  canLoadMore: () => totalArchived.value === null || archivedProjects.value.length < (totalArchived.value ?? 0),
+  canLoadMore: () =>
+    totalArchived.value === null ||
+    archivedProjects.value.length < (totalArchived.value ?? 0),
 });
 
 onMounted(() => {
@@ -274,12 +286,12 @@ onMounted(() => {
 const route = useRoute();
 const router = useRouter();
 
-const VALID_TABS = ['incoming', 'search', 'proposals', 'archive'];
+const VALID_TABS = ["incoming", "search", "proposals", "archive"];
 
 const activeTab = computed({
   get() {
     const tab = route.query.tab as string;
-    return VALID_TABS.includes(tab) ? tab : 'search';
+    return VALID_TABS.includes(tab) ? tab : "search";
   },
   set(val: string) {
     router.replace({ query: { ...route.query, tab: val } });
@@ -294,28 +306,28 @@ const tabs = computed(() => {
   const isSmallScreen = !breakpoints.sm.value;
   return [
     {
-      label: isSmallScreen ? 'Incoming' : 'Incoming Projects',
-      icon: 'i-lucide-inbox',
-      slot: 'incoming',
-      value: 'incoming',
+      label: isSmallScreen ? "Incoming" : "Incoming Projects",
+      icon: "i-lucide-inbox",
+      slot: "incoming",
+      value: "incoming",
     },
     {
-      label: isSmallScreen ? 'Find' : 'Find a Project',
-      icon: 'i-lucide-compass',
-      slot: 'search',
-      value: 'search',
+      label: isSmallScreen ? "Find" : "Find a Project",
+      icon: "i-lucide-compass",
+      slot: "search",
+      value: "search",
     },
     {
-      label: isSmallScreen ? 'Заявки' : 'Мои заявки',
-      icon: 'i-lucide-file-text',
-      slot: 'proposals',
-      value: 'proposals',
+      label: isSmallScreen ? "Заявки" : "Мои заявки",
+      icon: "i-lucide-file-text",
+      slot: "proposals",
+      value: "proposals",
     },
     {
-      label: isSmallScreen ? 'Archive' : 'Archive',
-      icon: 'i-lucide-archive',
-      slot: 'archive',
-      value: 'archive',
+      label: isSmallScreen ? "Archive" : "Archive",
+      icon: "i-lucide-archive",
+      slot: "archive",
+      value: "archive",
     },
   ];
 });
