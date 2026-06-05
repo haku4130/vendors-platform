@@ -82,6 +82,17 @@ def update_request_status(
 
         request.project.vendor_profile_id = request.vendor_profile_id
 
+        other_requests = session.exec(
+            select(ProjectRequest).where(
+                ProjectRequest.project_id == request.project_id,
+                ProjectRequest.id != request.id,
+                ProjectRequest.status == RequestStatus.sent,
+            )
+        ).all()
+        for other in other_requests:
+            other.status = RequestStatus.declined
+            session.add(other)
+
     session.add(request)
     session.commit()
     session.refresh(request)
