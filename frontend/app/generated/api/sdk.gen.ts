@@ -566,6 +566,28 @@ export const vendorsGetIncomingRequestsForVendor = <ThrowOnError extends boolean
 };
 
 /**
+ * Get My Proposal
+ */
+export const vendorsGetMyProposal = <ThrowOnError extends boolean = false>(options: Options<VendorsGetMyProposalData, ThrowOnError>) => {
+    return (options?.client ?? client).get<VendorsGetMyProposalResponses, VendorsGetMyProposalErrors, ThrowOnError>({
+        security: [{ scheme: 'bearer', type: 'http' }],
+        ...options,
+        url: '/api/v1/vendors/me/proposals/{request_id}',
+    });
+};
+
+/**
+ * Get My Proposals
+ */
+export const vendorsGetMyProposals = <ThrowOnError extends boolean = false>(options?: Options<VendorsGetMyProposalsData, ThrowOnError>) => {
+    return (options?.client ?? client).get<VendorsGetMyProposalsResponses, VendorsGetMyProposalsErrors, ThrowOnError>({
+        security: [{ scheme: 'bearer', type: 'http' }],
+        ...options,
+        url: '/api/v1/vendors/me/proposals',
+    });
+};
+
+/**
  * Get My Accepted Projects
  */
 export const vendorsGetMyAcceptedProjects = <ThrowOnError extends boolean = false>(options?: Options<VendorsGetMyAcceptedProjectsData, ThrowOnError>) => {
@@ -826,7 +848,15 @@ export const projectsArchiveProject = <ThrowOnError extends boolean = false>(opt
 /**
  * Accept Project
  */
-export const requestsAcceptProject = <ThrowOnError extends boolean = false>(options: Options<RequestsAcceptProjectData, ThrowOnError>) => {
+export const requestsGetRequest = <ThrowOnError extends boolean = false>(options: Options<RequestsGetRequestData, ThrowOnError>) => {
+    return (options?.client ?? client).get<RequestsGetRequestResponses, RequestsGetRequestErrors, ThrowOnError>({
+        security: [{ scheme: 'bearer', type: 'http' }],
+        ...options,
+        url: '/api/v1/requests/{request_id}',
+    });
+};
+
+export const requestsAcceptProject =<ThrowOnError extends boolean = false>(options: Options<RequestsAcceptProjectData, ThrowOnError>) => {
     return (options.client ?? client).post<RequestsAcceptProjectResponses, RequestsAcceptProjectErrors, ThrowOnError>({
         security: [
             {

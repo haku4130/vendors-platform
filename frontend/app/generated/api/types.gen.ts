@@ -1995,6 +1995,51 @@ export type VendorsGetIncomingRequestsForVendorResponses = {
 
 export type VendorsGetIncomingRequestsForVendorResponse = VendorsGetIncomingRequestsForVendorResponses[keyof VendorsGetIncomingRequestsForVendorResponses];
 
+export type VendorsGetMyProposalData = {
+    body?: never;
+    path: {
+        request_id: string;
+    };
+    query?: never;
+    url: '/api/v1/vendors/me/proposals/{request_id}';
+};
+
+export type VendorsGetMyProposalErrors = {
+    422: HttpValidationError;
+    404: HttpValidationError;
+};
+
+export type VendorsGetMyProposalError = VendorsGetMyProposalErrors[keyof VendorsGetMyProposalErrors];
+
+export type VendorsGetMyProposalResponses = {
+    200: ProjectRequestPublicProjectFull;
+};
+
+export type VendorsGetMyProposalResponse = VendorsGetMyProposalResponses[keyof VendorsGetMyProposalResponses];
+
+export type VendorsGetMyProposalsData = {
+    body?: never;
+    path?: never;
+    query?: {
+        request_status?: 'sent' | 'accepted' | 'declined' | null;
+        skip?: number;
+        limit?: number;
+    };
+    url: '/api/v1/vendors/me/proposals';
+};
+
+export type VendorsGetMyProposalsErrors = {
+    422: HttpValidationError;
+};
+
+export type VendorsGetMyProposalsError = VendorsGetMyProposalsErrors[keyof VendorsGetMyProposalsErrors];
+
+export type VendorsGetMyProposalsResponses = {
+    200: PaginatedProjectRequestsPublicProjectFull;
+};
+
+export type VendorsGetMyProposalsResponse = VendorsGetMyProposalsResponses[keyof VendorsGetMyProposalsResponses];
+
 export type VendorsGetMyAcceptedProjectsData = {
     body?: never;
     path?: never;
@@ -2504,6 +2549,28 @@ export type ProjectsArchiveProjectResponses = {
 };
 
 export type ProjectsArchiveProjectResponse = ProjectsArchiveProjectResponses[keyof ProjectsArchiveProjectResponses];
+
+export type RequestsGetRequestData = {
+    body?: never;
+    path: {
+        request_id: string;
+    };
+    query?: never;
+    url: '/api/v1/requests/{request_id}';
+};
+
+export type RequestsGetRequestErrors = {
+    403: HttpValidationError;
+    404: HttpValidationError;
+};
+
+export type RequestsGetRequestError = RequestsGetRequestErrors[keyof RequestsGetRequestErrors];
+
+export type RequestsGetRequestResponses = {
+    200: ProjectRequestPublicVendorFull;
+};
+
+export type RequestsGetRequestResponse = RequestsGetRequestResponses[keyof RequestsGetRequestResponses];
 
 export type RequestsAcceptProjectData = {
     body?: never;
