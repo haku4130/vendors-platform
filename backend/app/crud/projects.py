@@ -52,6 +52,12 @@ def get_projects_for_owner(
 def create_project(*, session: Session, owner_id: UUID, data: ProjectCreate) -> Project:
     project = Project.model_validate(data, update={"owner_id": owner_id})
 
+    if project.requirements:
+        project.requirements = [
+            r if isinstance(r, dict) else r.model_dump()
+            for r in project.requirements
+        ]
+
     session.add(project)
     session.commit()
     session.refresh(project)

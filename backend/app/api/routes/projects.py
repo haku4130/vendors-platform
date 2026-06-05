@@ -19,6 +19,7 @@ from app.models import (
     ProjectWithIncomingCount,
     RequestInitiator,
     RequestStatus,
+    VendorProposalBody,
 )
 
 router = APIRouter(prefix="/projects", tags=["projects"])
@@ -124,6 +125,7 @@ def send_project_request_vendor(
     project_id: UUID,
     session: SessionDep,
     current_vendor_profile: CurrentVendorProfile,
+    body: VendorProposalBody = VendorProposalBody(),
 ):
     project = crud.get_project(session=session, project_id=project_id)
     if not project:
@@ -138,11 +140,32 @@ def send_project_request_vendor(
     if existing:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, "Request already sent")
 
+    if project.questions:
+        if not body.question_answers or len(body.question_answers) != len(project.questions):
+            raise HTTPException(
+                status.HTTP_422_UNPROCESSABLE_ENTITY,
+                "All project questions must be answered",
+            )
+        if any(not a.strip() for a in body.question_answers):
+            raise HTTPException(
+                status.HTTP_422_UNPROCESSABLE_ENTITY,
+                "Question answers must not be empty",
+            )
+
+    if project.requirements:
+        if not body.feasibility_scores or len(body.feasibility_scores) != len(project.requirements):
+            raise HTTPException(
+                status.HTTP_422_UNPROCESSABLE_ENTITY,
+                "All project requirements must have a feasibility score",
+            )
+
     req = requests_crud.create_request(
         session=session,
         project_id=project_id,
         vendor_profile_id=current_vendor_profile.id,
         initiator=RequestInitiator.vendor,
+        question_answers=body.question_answers,
+        feasibility_scores=body.feasibility_scores,
     )
     return req
 

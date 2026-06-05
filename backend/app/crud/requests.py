@@ -4,7 +4,7 @@ from uuid import UUID
 from fastapi import HTTPException, status
 from sqlmodel import Session, col, func, select
 
-from app.models import Project, ProjectRequest, RequestInitiator, RequestStatus
+from app.models import FeasibilityItem, Project, ProjectRequest, RequestInitiator, RequestStatus
 
 
 def get_request(
@@ -28,12 +28,19 @@ def create_request(
     project_id: UUID,
     vendor_profile_id: UUID,
     initiator: RequestInitiator,
+    question_answers: list[str] | None = None,
+    feasibility_scores: list[FeasibilityItem] | None = None,
 ) -> ProjectRequest:
     request = ProjectRequest(
         project_id=project_id,
         vendor_profile_id=vendor_profile_id,
         status=RequestStatus.sent,
         initiator=initiator,
+        question_answers=question_answers,
+        feasibility_scores=[
+            s if isinstance(s, dict) else s.model_dump()
+            for s in feasibility_scores
+        ] if feasibility_scores else None,
     )
 
     session.add(request)

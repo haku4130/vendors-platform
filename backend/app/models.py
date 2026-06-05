@@ -250,6 +250,12 @@ class RequirementItem(SQLModel):
     priority: int = Field(ge=1, le=5)
 
 
+class FeasibilityItem(SQLModel):
+    group: str
+    requirement: str
+    feasibility: int = Field(ge=1, le=10)
+
+
 class ProjectBase(SQLModel):
     title: str = Field(min_length=1, max_length=255)
     description: str = Field(max_length=2000)
@@ -319,6 +325,14 @@ class ProjectRequestBase(SQLModel):
             "onupdate": lambda: dt.datetime.now(dt.UTC),
         },
     )
+    question_answers: list[str] | None = Field(
+        default=None,
+        sa_column=sa.Column(JSONB, nullable=True),
+    )
+    feasibility_scores: list[FeasibilityItem] | None = Field(
+        default=None,
+        sa_column=sa.Column(JSONB, nullable=True),
+    )
 
 
 class ProjectRequest(ProjectRequestBase, table=True):
@@ -332,6 +346,11 @@ class ProjectRequest(ProjectRequestBase, table=True):
 
     project: Project | None = Relationship(back_populates="requests")
     vendor_profile: VendorProfile | None = Relationship(back_populates="requests")
+
+
+class VendorProposalBody(SQLModel):
+    question_answers: list[str] | None = None
+    feasibility_scores: list[FeasibilityItem] | None = None
 
 
 class ProjectRequestPublic(ProjectRequestBase):
