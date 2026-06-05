@@ -130,6 +130,37 @@ def get_vendor_ids_from_project_requests(
     return session.exec(stmt).all()
 
 
+def get_vendor_proposals(
+    *,
+    session: Session,
+    vendor_profile_id: UUID,
+    status: RequestStatus | None = None,
+    skip: int = 0,
+    limit: int = 50,
+) -> tuple[Sequence[ProjectRequest], int]:
+    filters = [
+        ProjectRequest.vendor_profile_id == vendor_profile_id,
+        ProjectRequest.initiator == RequestInitiator.vendor,
+        Project.is_archived == False,
+    ]
+    if status is not None:
+        filters.append(ProjectRequest.status == status)
+
+    base = (
+        select(ProjectRequest)
+        .join(Project, col(ProjectRequest.project_id) == Project.id)
+        .where(*filters)  # type: ignore
+    )
+
+    total = session.exec(
+        select(func.count()).select_from(base.subquery())
+    ).one()
+
+    stmt = base.order_by(col(ProjectRequest.created_at).desc()).offset(skip).limit(limit)
+
+    return session.exec(stmt).all(), total
+
+
 def get_incoming_requests_for_vendor(
     *, session: Session, vendor_profile_id: UUID, skip: int, limit: int
 ) -> tuple[Sequence[ProjectRequest], int]:

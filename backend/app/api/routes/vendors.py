@@ -13,6 +13,7 @@ from app.models import (
     PaginatedVendorProfilesPublic,
     ProjectPublic,
     ProjectRequestPublicProjectFull,
+    RequestStatus,
     UserPublic,
     UserRole,
     VendorProfileCreate,
@@ -157,6 +158,66 @@ def get_incoming_requests_for_vendor(
             owner_public.ratingCount = count
             request_public.project.owner = owner_public
         result.append(request_public)
+
+    return {"result": result, "total": total}
+
+
+@router.get(
+    "/me/proposals/{request_id}",
+    response_model=ProjectRequestPublicProjectFull,
+)
+def get_my_proposal(
+    request_id: UUID,
+    session: SessionDep,
+    current_vendor: CurrentVendorProfile,
+):
+    req = requests_crud.get_request_by_id(session=session, request_id=request_id)
+    if not req or req.vendor_profile_id != current_vendor.id or req.initiator.value != 'vendor':
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Proposal not found")
+
+    req_public = ProjectRequestPublicProjectFull.model_validate(req)
+    if req.project and req.project.owner:
+        rating, count = reviews_crud.get_user_rating_stats(
+            session=session, user_id=req.project.owner.id
+        )
+        owner_public = UserPublic.model_validate(req.project.owner)
+        owner_public.rating = rating
+        owner_public.ratingCount = count
+        req_public.project.owner = owner_public
+    return req_public
+
+
+@router.get(
+    "/me/proposals",
+    response_model=PaginatedProjectRequestsPublicProjectFull,
+)
+def get_my_proposals(
+    session: SessionDep,
+    current_vendor: CurrentVendorProfile,
+    request_status: RequestStatus | None = None,
+    skip: int = 0,
+    limit: int = 50,
+):
+    requests, total = requests_crud.get_vendor_proposals(
+        session=session,
+        vendor_profile_id=current_vendor.id,
+        status=request_status,
+        skip=skip,
+        limit=limit,
+    )
+
+    result = []
+    for req in requests:
+        req_public = ProjectRequestPublicProjectFull.model_validate(req)
+        if req.project and req.project.owner:
+            rating, count = reviews_crud.get_user_rating_stats(
+                session=session, user_id=req.project.owner.id
+            )
+            owner_public = UserPublic.model_validate(req.project.owner)
+            owner_public.rating = rating
+            owner_public.ratingCount = count
+            req_public.project.owner = owner_public
+        result.append(req_public)
 
     return {"result": result, "total": total}
 
