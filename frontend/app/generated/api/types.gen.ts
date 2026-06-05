@@ -2393,6 +2393,9 @@ export type FeasibilityItem = {
 export type VendorProposalBody = {
     question_answers?: Array<string> | null;
     feasibility_scores?: Array<FeasibilityItem> | null;
+    days_to_start: number;
+    duration_days: number;
+    proposed_cost: number;
 };
 
 export type ProjectsSendProjectRequestVendorData = {

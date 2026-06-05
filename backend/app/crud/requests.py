@@ -30,6 +30,9 @@ def create_request(
     initiator: RequestInitiator,
     question_answers: list[str] | None = None,
     feasibility_scores: list[FeasibilityItem] | None = None,
+    days_to_start: int | None = None,
+    duration_days: int | None = None,
+    proposed_cost: float | None = None,
 ) -> ProjectRequest:
     request = ProjectRequest(
         project_id=project_id,
@@ -41,6 +44,9 @@ def create_request(
             s if isinstance(s, dict) else s.model_dump()
             for s in feasibility_scores
         ] if feasibility_scores else None,
+        days_to_start=days_to_start,
+        duration_days=duration_days,
+        proposed_cost=proposed_cost,
     )
 
     session.add(request)

@@ -11,6 +11,67 @@
 
     <ExistingProjectDetail :project-id="projectId" />
 
+    <!-- Duration & Cost -->
+    <div class="border border-gray-200 rounded-2xl p-6 bg-white space-y-6">
+      <div class="space-y-4">
+        <h3 class="font-semibold text-base">Сроки проекта</h3>
+        <div class="grid grid-cols-2 gap-6">
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Когда сможете начать</label>
+            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+              <button
+                class="px-4 py-2.5 text-lg font-medium text-gray-600 hover:bg-gray-100 transition"
+                @click="daysToStart = Math.max(0, daysToStart - 1)"
+              >−</button>
+              <div class="flex-1 text-center py-2.5 text-sm font-medium">{{ daysToStart }} дн.</div>
+              <button
+                class="px-4 py-2.5 text-lg font-medium text-gray-600 hover:bg-gray-100 transition"
+                @click="daysToStart++"
+              >+</button>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Сколько времени займёт</label>
+            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+              <button
+                class="px-4 py-2.5 text-lg font-medium text-gray-600 hover:bg-gray-100 transition"
+                @click="durationDays = Math.max(1, durationDays - 1)"
+              >−</button>
+              <div class="flex-1 text-center py-2.5 text-sm font-medium">{{ durationDays }} дн.</div>
+              <button
+                class="px-4 py-2.5 text-lg font-medium text-gray-600 hover:bg-gray-100 transition"
+                @click="durationDays++"
+              >+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        <h3 class="font-semibold text-base">Стоимость проекта</h3>
+        <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden max-w-xs">
+          <button
+            class="px-4 py-2.5 text-lg font-medium text-gray-600 hover:bg-gray-100 transition"
+            @click="proposedCost = Math.max(0, proposedCost - 1000)"
+          >−</button>
+          <div class="flex-1 text-center py-2.5 text-sm font-medium">${{ proposedCost.toLocaleString('ru-RU') }}</div>
+          <button
+            class="px-4 py-2.5 text-lg font-medium text-gray-600 hover:bg-gray-100 transition"
+            @click="proposedCost += 1000"
+          >+</button>
+        </div>
+        <p class="text-xs text-gray-400">Шаг: $1 000. Можно ввести вручную.</p>
+        <UInput
+          v-model.number="proposedCost"
+          type="number"
+          min="0"
+          step="1000"
+          placeholder="Введите сумму"
+          class="max-w-xs"
+        />
+      </div>
+    </div>
+
     <!-- Question answers -->
     <div v-if="questions.length > 0" class="border border-gray-200 rounded-2xl p-6 bg-white space-y-4">
       <h3 class="font-semibold text-base">Вопросы от заказчика</h3>
@@ -113,6 +174,10 @@ const requirements = ref<RequirementItem[]>([]);
 const questionAnswers = ref<string[]>([]);
 const feasibilityScores = ref<string[]>([]);
 
+const daysToStart = ref(0);
+const durationDays = ref(1);
+const proposedCost = ref(0);
+
 const feasibilityOptions = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
 onMounted(async () => {
@@ -133,7 +198,13 @@ const allFeasibilityFilled = computed(() =>
   requirements.value.every((_, i) => !!feasibilityScores.value[i])
 );
 
-const canSubmit = computed(() => allQuestionsAnswered.value && allFeasibilityFilled.value);
+const canSubmit = computed(
+  () =>
+    allQuestionsAnswered.value &&
+    allFeasibilityFilled.value &&
+    durationDays.value >= 1 &&
+    proposedCost.value > 0
+);
 
 async function handleSendRequest() {
   const res = await projectsSendProjectRequestVendor({
@@ -148,6 +219,9 @@ async function handleSendRequest() {
               feasibility: Number(feasibilityScores.value[i]),
             }))
           : undefined,
+      days_to_start: daysToStart.value,
+      duration_days: durationDays.value,
+      proposed_cost: proposedCost.value,
     },
   });
 

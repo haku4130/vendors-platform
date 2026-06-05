@@ -333,6 +333,9 @@ class ProjectRequestBase(SQLModel):
         default=None,
         sa_column=sa.Column(JSONB, nullable=True),
     )
+    days_to_start: int | None = Field(default=None, nullable=True)
+    duration_days: int | None = Field(default=None, nullable=True)
+    proposed_cost: float | None = Field(default=None, nullable=True)
 
 
 class ProjectRequest(ProjectRequestBase, table=True):
@@ -351,6 +354,9 @@ class ProjectRequest(ProjectRequestBase, table=True):
 class VendorProposalBody(SQLModel):
     question_answers: list[str] | None = None
     feasibility_scores: list[FeasibilityItem] | None = None
+    days_to_start: int = Field(ge=0)
+    duration_days: int = Field(ge=1)
+    proposed_cost: float = Field(ge=0)
 
 
 class ProjectRequestPublic(ProjectRequestBase):

@@ -166,6 +166,9 @@ def send_project_request_vendor(
         initiator=RequestInitiator.vendor,
         question_answers=body.question_answers,
         feasibility_scores=body.feasibility_scores,
+        days_to_start=body.days_to_start,
+        duration_days=body.duration_days,
+        proposed_cost=body.proposed_cost,
     )
     return req
 
