@@ -2381,8 +2381,22 @@ export type ProjectsSendProjectRequestCompanyResponses = {
 
 export type ProjectsSendProjectRequestCompanyResponse = ProjectsSendProjectRequestCompanyResponses[keyof ProjectsSendProjectRequestCompanyResponses];
 
+export type FeasibilityItem = {
+    group: string;
+    requirement: string;
+    /**
+     * Feasibility score from 1 (lowest) to 10 (highest)
+     */
+    feasibility: number;
+};
+
+export type VendorProposalBody = {
+    question_answers?: Array<string> | null;
+    feasibility_scores?: Array<FeasibilityItem> | null;
+};
+
 export type ProjectsSendProjectRequestVendorData = {
-    body?: never;
+    body?: VendorProposalBody;
     path: {
         /**
          * Project Id
