@@ -31,7 +31,14 @@
           </div>
         </template>
       </UTabs>
+      <div v-if="isDev" class="flex items-center gap-2 p-2 bg-yellow-50 border border-yellow-300 rounded-lg text-xs">
+        <span class="font-mono text-yellow-700">DEV</span>
+        <UInput v-model="devProjectId" placeholder="Project ID" size="xs" class="flex-1 font-mono" />
+        <UButton size="xs" color="warning" variant="outline" @click="devOpenVendors">Open Vendors Phase</UButton>
+      </div>
+
       <MultiStepModal
+        ref="modalRef"
         v-model="answers"
         :step-index="stepIndex"
         :total-steps="totalSteps"
@@ -366,7 +373,21 @@ const projectTabs = computed(() => [
   },
 ]);
 
+const isDev = import.meta.dev;
+
 const createdProjectId = ref('');
+
+const modalRef = useTemplateRef('modalRef');
+const devProjectId = ref('');
+
+function devOpenVendors() {
+  if (!devProjectId.value.trim()) return;
+  createdProjectId.value = devProjectId.value.trim();
+  phase.value = 'vendors';
+  nextTick(() => {
+    if (modalRef.value) modalRef.value.open = true;
+  });
+}
 
 const stepIndex = ref(0);
 const totalSteps = ref(7);

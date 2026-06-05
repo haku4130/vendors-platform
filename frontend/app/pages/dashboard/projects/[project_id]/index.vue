@@ -1,11 +1,12 @@
 <template>
-  <div>
+  <div class="max-w-3xl mx-auto w-full space-y-4">
     <UButton
       icon="i-lucide-arrow-left"
       variant="outline"
-      @click="navigateTo('/dashboard/projects')"
+      color="neutral"
+      @click="router.back()"
     >
-      Back
+      Назад
     </UButton>
 
     <ExistingProjectDetail :project-id="useRoute().params.project_id" />
@@ -17,4 +18,6 @@ definePageMeta({
   layout: 'dashboard',
   middleware: ['auth'],
 });
+
+const router = useRouter();
 </script>

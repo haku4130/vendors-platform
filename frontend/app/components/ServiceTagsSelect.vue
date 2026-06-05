@@ -59,7 +59,7 @@
           :class="[
             'px-3 py-1 border rounded-sm text-sm font-medium disabled:cursor-not-allowed disabled:opacity-75 transition',
             isSelected(tag.id)
-              ? 'bg-vendor-gradient text-black border-[#a68d66] hover:bg-[#eeb488]'
+              ? 'bg-vendor-gradient text-white border-[#a68d66] hover:bg-[#eeb488]'
               : 'border-gray-400 text-gray-800 hover:bg-gray-100',
           ]"
           @click="toggleTag(tag)"

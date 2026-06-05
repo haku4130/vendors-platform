@@ -1,16 +1,5 @@
 <template>
-  <UModal
-    v-model:open="open"
-    :title="title"
-    :ui="{
-      header: phase === 'form' ? 'bg-vendor-gradient' : '',
-      footer: 'justify-between',
-      body: phase === 'form' ? '' : 'bg-vendor-gradient',
-      title: phase === 'form' ? 'text-white' : 'text-black',
-      close: phase === 'form' ? 'text-white' : 'text-black',
-    }"
-    fullscreen
-  >
+  <UModal v-model:open="open" :title="title" :ui="modalUi" fullscreen>
     <UButton size="xl"> {{ triggerLabel }} </UButton>
 
     <template #body>
@@ -22,6 +11,7 @@
         />
 
         <div
+          v-if="phase !== 'vendors'"
           class="flex-1 flex flex-col items-center justify-center my-4 text-center"
         >
           <template v-if="phase === 'form'">
@@ -35,7 +25,7 @@
             </h3>
 
             <div class="w-full max-w-xl">
-              <slot :name="'step-' + stepNumber" />
+              <slot :name="'step-' + stepNumber"> </slot>
             </div>
           </template>
 
@@ -45,10 +35,12 @@
               @submit="$emit('finish-create')"
             />
           </template>
+        </div>
 
-          <template v-else-if="phase === 'vendors'">
+        <div v-else-if="phase === 'vendors'" class="flex-1 overflow-y-auto">
+          <div class="mx-auto max-w-5xl px-6 py-4">
             <VendorSelection :project-id="createdProjectId" />
-          </template>
+          </div>
         </div>
       </div>
     </template>
@@ -81,13 +73,13 @@
       </UTooltip>
     </template>
     <template v-else-if="phase === 'summary'" #footer>
-      <div />
+      <div></div>
       <UButton variant="solid" size="xl" @click="$emit('finish-create')">
         Select Vendors
       </UButton>
     </template>
     <template v-else-if="phase === 'vendors'" #footer>
-      <div />
+      <div></div>
       <UButton variant="solid" size="xl" @click="finishAndClose">
         Send to Vendors
       </UButton>
@@ -98,29 +90,46 @@
 <script setup lang="ts">
 import type { AnswersType } from '@/types/answers';
 
-const {
-  title = 'Project Brief',
-  triggerLabel = 'Start a Project',
-  stepIndex,
-} = defineProps<{
-  title?: string;
-  triggerLabel?: string;
-  stepIndex: number;
-  totalSteps: number;
-  isValidCurrentStep: boolean;
-  createdProjectId: string;
-  phase: 'form' | 'summary' | 'vendors';
-}>();
+const props = withDefaults(
+  defineProps<{
+    title?: string;
+    triggerLabel?: string;
+    stepIndex: number;
+    totalSteps: number;
+    isValidCurrentStep: boolean;
+    createdProjectId: string;
+    phase: 'form' | 'summary' | 'vendors';
+  }>(),
+  {
+    title: 'Project Brief',
+    triggerLabel: 'Start a Project',
+  },
+);
 
 const answers = defineModel<AnswersType>({ required: true });
 
 const emit = defineEmits(['next-step', 'prev-step', 'finish-create', 'finish']);
 
 const open = ref(false);
-const stepNumber = computed(() => stepIndex + 1);
+const stepNumber = computed(() => props.stepIndex + 1);
+
+const modalUi = computed(() => {
+  return {
+    header: props.phase === 'form' ? 'bg-vendor-gradient' : '',
+    footer: 'justify-between',
+    body: [
+      props.phase === 'form' ? '' : 'bg-vendor-gradient',
+      props.phase === 'vendors' ? '!py-0' : '',
+    ],
+    title: props.phase === 'form' ? 'text-white' : 'text-black',
+    close: props.phase === 'form' ? 'text-white' : 'text-black',
+  };
+});
 
 function finishAndClose() {
   open.value = false;
   emit('finish');
 }
+
+defineExpose({ open });
 </script>

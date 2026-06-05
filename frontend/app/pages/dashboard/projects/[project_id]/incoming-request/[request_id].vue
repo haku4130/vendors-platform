@@ -3,7 +3,7 @@
     <UButton
       icon="i-lucide-arrow-left"
       variant="outline"
-      @click="navigateTo('/dashboard/projects')"
+      @click="router.back()"
     >
       Back
     </UButton>
@@ -36,6 +36,7 @@ definePageMeta({
 });
 
 const route = useRoute();
+const router = useRouter();
 const alreadyProcessed = ref();
 const toast = useToast();
 

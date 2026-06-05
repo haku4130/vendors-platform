@@ -1,6 +1,7 @@
 <template>
   <div class="overflow-scroll">
     <UTabs
+      v-model="activeTab"
       :items="tabs"
       variant="link"
       class="w-full"
@@ -282,6 +283,21 @@ onMounted(() => {
   loadMoreArchived();
 });
 
+const route = useRoute();
+const router = useRouter();
+
+const VALID_TABS = ['incoming', 'search', 'accepted', 'archive'];
+
+const activeTab = computed({
+  get() {
+    const tab = route.query.tab as string;
+    return VALID_TABS.includes(tab) ? tab : 'search';
+  },
+  set(val: string) {
+    router.replace({ query: { ...route.query, tab: val } });
+  },
+});
+
 const breakpoints = useBreakpoints({
   sm: 640,
 });
@@ -293,21 +309,25 @@ const tabs = computed(() => {
       label: isSmallScreen ? 'Incoming' : 'Incoming Projects',
       icon: 'i-lucide-inbox',
       slot: 'incoming',
+      value: 'incoming',
     },
     {
       label: isSmallScreen ? 'Find' : 'Find a Project',
       icon: 'i-lucide-compass',
       slot: 'search',
+      value: 'search',
     },
     {
       label: isSmallScreen ? 'Accepted' : 'Accepted Projects',
       icon: 'i-lucide-clipboard-check',
       slot: 'accepted',
+      value: 'accepted',
     },
     {
       label: isSmallScreen ? 'Archive' : 'Archive',
       icon: 'i-lucide-archive',
       slot: 'archive',
+      value: 'archive',
     },
   ];
 });

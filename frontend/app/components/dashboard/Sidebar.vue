@@ -37,7 +37,7 @@
           :to="$localePath(`/dashboard/${item.id}`)"
           :active="route.path.includes(`/dashboard/${item.id}`)"
           variant="ghost"
-          class="hover:bg-gray-100"
+          color="neutral"
           active-class="font-semibold bg-gray-100"
           size="lg"
         >
@@ -51,7 +51,9 @@
 
       <template v-if="auth.user.value?.is_superuser">
         <USeparator class="my-1" />
-        <p class="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wide">
+        <p
+          class="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wide"
+        >
           {{ $t('dashboard.admin.contentPages') }}
         </p>
         <nav class="flex flex-col gap-1 w-full">
@@ -67,7 +69,11 @@
           >
             {{ page.label }}
             <template #trailing>
-              <UIcon name="i-lucide-file-pen-line" size="16" class="ml-auto text-gray-400" />
+              <UIcon
+                name="i-lucide-file-pen-line"
+                size="16"
+                class="ml-auto text-gray-400"
+              />
             </template>
           </UButton>
         </nav>

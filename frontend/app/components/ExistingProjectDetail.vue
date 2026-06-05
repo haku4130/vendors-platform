@@ -1,8 +1,8 @@
 <template>
-  <div class="max-w-3xl">
+  <div class="max-w-3xl mx-auto w-full">
     <div
       v-if="project?.is_archived"
-      class="mb-4 flex items-center gap-2 px-4 py-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800"
+      class="my-4 flex items-center gap-2 px-4 py-3 rounded-lg bg-amber-50 border border-amber-200 text-amber-800"
     >
       <UIcon name="i-lucide-archive" class="w-5 h-5 shrink-0" />
       <span class="font-medium">{{ $t('dashboard.projects.archived') }}</span>
