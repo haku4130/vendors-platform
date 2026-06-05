@@ -121,19 +121,14 @@
         </UButton>
       </div>
 
-      <div v-else-if="incoming">
-        <div v-if="!alreadyProcessed" class="flex gap-2">
-          <UButton block @click="handleVendorAccept">Принять</UButton>
-          <UButton
-            block
-            variant="outline"
-            color="neutral"
-            @click="handleVendorDeny"
-          >
-            Отклонить
-          </UButton>
-        </div>
-        <UButton v-else block disabled>{{ alreadyProcessed }}</UButton>
+      <div v-else-if="incoming && currentProjectId">
+        <UButton
+          block
+          trailing-icon="i-lucide-arrow-right"
+          :to="`/dashboard/projects/${currentProjectId}/incoming-request/${requestId}`"
+        >
+          Просмотреть предложение
+        </UButton>
       </div>
     </div>
 
