@@ -1,290 +1,370 @@
 <template>
-  <div class="space-y-8">
-    <!-- Header Section -->
-    <UCard class="bg-vendor-gradient shadow-lg">
-      <div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
-        <NuxtImg
-          :src="vendor.user?.logo_url || '/placeholder-avatar.png'"
-          class="rounded-lg border-2 border-white shadow-md w-full h-full md:w-48 md:h-48 object-cover"
-        />
+  <div class="max-w-5xl mx-auto space-y-6">
+    <!-- Hero -->
+    <div
+      class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden"
+    >
+      <div class="h-24 bg-gradient-to-r from-blue-500 to-blue-400" />
+      <div class="px-8 pb-8">
+        <div class="flex items-end gap-5 -mt-10 mb-5">
+          <div
+            class="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-2xl font-bold shrink-0 border-4 border-white shadow-md"
+            :style="{
+              backgroundColor: avatarColor(vendor.user?.company_name ?? ''),
+            }"
+          >
+            {{ initials(vendor.user?.company_name ?? "") }}
+          </div>
+        </div>
 
-        <div class="flex-1 text-black">
-          <div class="flex items-center">
-            <h1 class="text-3xl font-semibold">
+        <div
+          class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4"
+        >
+          <div class="min-w-0">
+            <h1 class="text-2xl font-bold text-gray-900">
               {{ vendor.user?.company_name }}
             </h1>
-          </div>
-
-          <div class="flex mb-4 sm:mb-2">
-            <span class="text-sm align-middle">
+            <p class="text-sm text-gray-500 mt-0.5">
               {{ vendor.user?.full_name }}
-            </span>
-          </div>
+            </p>
 
-          <div class="flex flex-wrap gap-x-4 gap-y-1 text-sm mb-4">
-            <div v-if="vendor.user?.location" class="flex items-center gap-1">
-              <UIcon name="i-lucide-map-pin" class="w-4 h-4" />
-              <span>{{ vendor.user.location }}</span>
-            </div>
-            <div class="flex items-center gap-1">
-              <UIcon name="i-lucide-calendar" class="w-4 h-4" />
-              <span>Founded {{ vendor.founded_year }}</span>
-            </div>
-            <div v-if="vendor.company_website" class="flex items-center gap-1">
-              <UButton
+            <div class="flex flex-wrap items-center gap-3 mt-3">
+              <div
+                v-if="vendor.user?.location"
+                class="flex items-center gap-1.5 text-sm text-gray-500"
+              >
+                <UIcon name="i-lucide-map-pin" class="w-4 h-4 shrink-0" />
+                <span>{{ vendor.user.location }}</span>
+              </div>
+              <div
+                v-if="vendor.founded_year"
+                class="flex items-center gap-1.5 text-sm text-gray-500"
+              >
+                <UIcon name="i-lucide-calendar" class="w-4 h-4 shrink-0" />
+                <span>Основана в {{ vendor.founded_year }}</span>
+              </div>
+              <a
+                v-if="vendor.company_website"
                 :href="
-                  vendor.company_website?.startsWith('http')
+                  vendor.company_website.startsWith('http')
                     ? vendor.company_website
                     : `https://${vendor.company_website}`
                 "
                 target="_blank"
-                variant="link"
-                leading-icon="i-lucide-globe"
-                trailing-icon="i-lucide-external-link"
-                :ui="{ leadingIcon: 'w-4 h-4', trailingIcon: 'w-4 h-4' }"
-                class="px-0"
+                class="flex items-center gap-1.5 text-sm text-blue-600 hover:underline"
               >
-                Website
-              </UButton>
-            </div>
-            <div
-              v-if="vendor.rating"
-              class="w-fit flex items-center gap-2 bg-white/30 px-3 py-1 rounded-full"
-            >
-              <span class="font-semibold">{{ vendor.rating.toFixed(1) }}</span>
-              <StarRating :rating="vendor.rating" />
-              <span class="text-sm text-muted"
-                >({{ vendor.reviewsCount || 0 }})</span
+                <UIcon name="i-lucide-globe" class="w-4 h-4 shrink-0" />
+                <span>Сайт</span>
+                <UIcon name="i-lucide-external-link" class="w-3 h-3" />
+              </a>
+
+              <div
+                v-if="vendor.rating"
+                class="flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-100 rounded-full"
               >
+                <UIcon
+                  name="i-lucide-star"
+                  class="w-3.5 h-3.5 text-amber-400 fill-amber-400"
+                />
+                <span class="text-sm font-semibold text-amber-700">{{
+                  vendor.rating.toFixed(1)
+                }}</span>
+                <span class="text-xs text-amber-600"
+                  >· {{ vendor.reviewsCount }}
+                  {{ reviewsLabel(vendor.reviewsCount ?? 0) }}</span
+                >
+              </div>
+              <div
+                v-else
+                class="flex items-center gap-1.5 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full"
+              >
+                <UIcon name="i-lucide-star" class="w-3.5 h-3.5 text-gray-400" />
+                <span class="text-sm text-gray-500">Нет оценок</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </UCard>
+    </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <!-- Main Content -->
+    <!-- Body: main + sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Main -->
       <div class="lg:col-span-2 space-y-6">
-        <!-- About Section -->
-        <UCard>
-          <template #header>
-            <h2 class="text-xl font-semibold">About</h2>
-          </template>
-          <template #default>
-            <p class="leading-relaxed whitespace-pre-line">
-              {{ vendor.description }}
-            </p>
-          </template>
-        </UCard>
+        <!-- About -->
+        <div
+          v-if="vendor.description"
+          class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
+        >
+          <h2 class="text-base font-semibold mb-3">О компании</h2>
+          <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
+            {{ vendor.description }}
+          </p>
+        </div>
 
-        <!-- Services Section -->
-        <UCard>
-          <template #header>
-            <h2 class="text-xl font-semibold">Services</h2>
-          </template>
-          <template #default>
-            <div class="flex flex-wrap gap-2">
-              <span
-                v-for="service in vendor.services"
-                :key="service.id"
-                class="bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-full text-sm font-medium transition-colors"
+        <!-- Main goal -->
+        <div
+          v-if="vendor.main_goal"
+          class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
+        >
+          <h2 class="text-base font-semibold mb-3">Основная цель</h2>
+          <p class="text-sm text-gray-700 leading-relaxed">
+            {{ vendor.main_goal }}
+          </p>
+        </div>
+
+        <!-- Services -->
+        <div
+          v-if="vendor.services.length"
+          class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
+        >
+          <h2 class="text-base font-semibold mb-3">Специализация</h2>
+          <div>
+            <span
+              v-for="(svc, i) in vendor.services"
+              :key="svc.id"
+              :class="[
+                'inline-block mr-1.5 mb-1.5 px-3 py-1 rounded-full text-sm font-medium border',
+                i === 0
+                  ? 'bg-blue-500 text-white border-blue-500'
+                  : 'bg-white text-gray-700 border-gray-300',
+              ]"
+            >
+              {{ svc.label }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Reviews -->
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+          <div class="flex items-center justify-between mb-5">
+            <h2 class="text-base font-semibold">Отзывы</h2>
+            <span v-if="totalReviews" class="text-sm text-gray-400">
+              {{ totalReviews }} {{ reviewsLabel(totalReviews) }}
+            </span>
+          </div>
+
+          <div v-if="reviews.length > 0" class="space-y-4">
+            <div class="grid lg:grid-cols-2 gap-3">
+              <ReviewCard
+                v-for="review in reviews"
+                :key="review.id"
+                :review="review"
+                show-author
+              />
+            </div>
+            <div v-if="hasMoreReviews" class="text-center pt-2">
+              <UButton
+                variant="outline"
+                color="neutral"
+                :loading="loadingMore"
+                @click="loadMoreReviews"
               >
-                {{ service.label }}
-              </span>
+                Загрузить ещё
+              </UButton>
             </div>
-          </template>
-        </UCard>
-
-        <!-- Reviews Section -->
-        <UCard>
-          <template #header>
-            <div class="flex justify-between items-center">
-              <h2 class="text-xl font-semibold">Reviews</h2>
-              <span v-if="vendor.reviewsCount" class="text-sm text-muted">
-                {{ vendor.reviewsCount }} total review(s)
-              </span>
-            </div>
-          </template>
-          <template #default>
-            <div v-if="reviews.length > 0" class="space-y-4">
-              <div v-for="review in reviews" :key="review.id">
-                <ReviewCard :review="review" show-author />
-              </div>
-
-              <div v-if="hasMoreReviews" class="text-center pt-4">
-                <UButton
-                  variant="outline"
-                  :loading="loadingMore"
-                  @click="loadMoreReviews"
-                >
-                  Load More Reviews
-                </UButton>
-              </div>
-            </div>
-            <UEmpty
-              v-else
-              icon="i-lucide-star"
-              title="No reviews yet"
-              description="This vendor has not received any reviews yet."
-            />
-          </template>
-        </UCard>
+          </div>
+          <UEmpty
+            v-else
+            icon="i-lucide-star"
+            title="Отзывов пока нет"
+            description="Этот вендор ещё не получил отзывов."
+            class="py-6"
+          />
+        </div>
       </div>
 
       <!-- Sidebar -->
       <div class="space-y-6">
-        <!-- Key Information -->
-        <UCard>
-          <template #header>
-            <h3 class="text-lg font-semibold">Key Information</h3>
-          </template>
-          <template #default>
-            <div class="space-y-4">
-              <div>
-                <p class="text-sm text-muted mb-1">Minimum Project Size</p>
-                <p class="text-lg font-semibold">
-                  ${{ vendor.min_project_size }}
-                </p>
+        <!-- Stats -->
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+          <h3 class="text-base font-semibold mb-4">Показатели</h3>
+          <div class="space-y-4">
+            <div class="flex items-start gap-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
+              >
+                <UIcon name="i-lucide-tag" class="w-4 h-4 text-blue-500" />
               </div>
               <div>
-                <p class="text-sm text-muted mb-1">Average Hourly Rate</p>
-                <p class="text-lg font-semibold">
-                  ${{ vendor.avg_hourly_rate }}
+                <p class="text-xs text-gray-400">Мин. проект</p>
+                <p class="font-semibold text-sm">
+                  ${{ formatNumber(vendor.min_project_size) }}
                 </p>
               </div>
-              <div>
-                <p class="text-sm text-muted mb-1">Employees</p>
-                <p class="text-lg font-semibold">
-                  {{ vendor.employee_count }} people
-                </p>
+            </div>
+            <div class="flex items-start gap-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
+              >
+                <UIcon name="i-lucide-clock" class="w-4 h-4 text-blue-500" />
               </div>
               <div>
-                <p class="text-sm text-muted mb-1">Turnover</p>
-                <p class="text-lg font-semibold">
+                <p class="text-xs text-gray-400">Ставка в час</p>
+                <p class="font-semibold text-sm">
+                  ${{ formatNumber(vendor.avg_hourly_rate) }}
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
+              >
+                <UIcon name="i-lucide-users" class="w-4 h-4 text-blue-500" />
+              </div>
+              <div>
+                <p class="text-xs text-gray-400">Команда</p>
+                <p class="font-semibold text-sm">
+                  {{ vendor.employee_count }} человек
+                </p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
+              >
+                <UIcon
+                  name="i-lucide-trending-up"
+                  class="w-4 h-4 text-blue-500"
+                />
+              </div>
+              <div>
+                <p class="text-xs text-gray-400">Оборот</p>
+                <p class="font-semibold text-sm">
                   ${{ formatTurnover(vendor.turnover) }}
                 </p>
               </div>
             </div>
-          </template>
-        </UCard>
+          </div>
+        </div>
 
-        <!-- Contact Information -->
-        <UCard>
-          <template #header>
-            <h3 class="text-lg font-semibold">Contact</h3>
-          </template>
-          <template #default>
-            <div class="space-y-3">
-              <div>
-                <p class="text-sm text-muted mb-1">Sales Email</p>
+        <!-- Contact -->
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+          <h3 class="text-base font-semibold mb-4">Контакты</h3>
+          <div class="space-y-3">
+            <div v-if="vendor.sales_email" class="flex items-start gap-3">
+              <div
+                class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0"
+              >
+                <UIcon name="i-lucide-mail" class="w-4 h-4 text-gray-500" />
+              </div>
+              <div class="min-w-0">
+                <p class="text-xs text-gray-400">Email</p>
                 <a
                   :href="`mailto:${vendor.sales_email}`"
-                  class="text-blue-600 hover:underline break-all"
+                  class="text-sm text-blue-600 hover:underline break-all"
                 >
                   {{ vendor.sales_email }}
                 </a>
               </div>
+            </div>
+            <div
+              v-if="vendor.admin_contact_phone"
+              class="flex items-start gap-3"
+            >
+              <div
+                class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0"
+              >
+                <UIcon name="i-lucide-phone" class="w-4 h-4 text-gray-500" />
+              </div>
               <div>
-                <p class="text-sm text-muted mb-1">Phone</p>
+                <p class="text-xs text-gray-400">Телефон</p>
                 <a
                   :href="`tel:${vendor.admin_contact_phone}`"
-                  class="text-blue-600 hover:underline"
+                  class="text-sm text-blue-600 hover:underline"
                 >
                   {{ vendor.admin_contact_phone }}
                 </a>
               </div>
             </div>
-          </template>
-        </UCard>
-
-        <!-- Main Goal -->
-        <UCard v-if="vendor.main_goal">
-          <template #header>
-            <h3 class="text-lg font-semibold">Main Goal</h3>
-          </template>
-          <template #default>
-            <p class="">{{ vendor.main_goal }}</p>
-          </template>
-        </UCard>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { VendorProfilePublic, ReviewPublic } from '~/generated/api';
-import { reviewsGetReviewsForVendor } from '~/generated/api';
+import type { VendorProfilePublic, ReviewPublic } from "~/generated/api";
+import { reviewsGetReviewsForVendor } from "~/generated/api";
 
 const props = defineProps<{
   vendor: VendorProfilePublic;
 }>();
 
+const AVATAR_COLORS = [
+  "#2563eb",
+  "#16a34a",
+  "#9333ea",
+  "#db2777",
+  "#d97706",
+  "#0891b2",
+  "#dc2626",
+  "#059669",
+  "#7c3aed",
+  "#0284c7",
+];
+
+function avatarColor(name: string): string {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length]!;
+}
+
+function initials(name: string): string {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+}
+
+function reviewsLabel(n: number): string {
+  if (n === 1) return "отзыв";
+  if (n >= 2 && n <= 4) return "отзыва";
+  return "отзывов";
+}
+
+function formatNumber(n: number): string {
+  return n.toLocaleString("ru-RU");
+}
+
+function formatTurnover(n: number): string {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(1) + "K";
+  return n.toString();
+}
+
 const reviews = ref<ReviewPublic[]>([]);
 const loadingMore = ref(false);
-const skip = ref(0);
-const limit = 10;
-const totalReviews = ref<number | null>(null);
+const totalReviews = ref<number>(0);
 
-const hasMoreReviews = computed(() => {
-  return (
-    totalReviews.value !== null && reviews.value.length < totalReviews.value
-  );
-});
+const hasMoreReviews = computed(
+  () => reviews.value.length < totalReviews.value,
+);
 
 async function loadReviews() {
   const res = await reviewsGetReviewsForVendor({
-    path: {
-      vendor_profile_id: props.vendor.id,
-    },
-    query: {
-      skip: 0,
-      limit: limit,
-    },
+    path: { vendor_profile_id: props.vendor.id },
+    query: { skip: 0, limit: 6 },
   });
-
-  if (res.error) {
-    console.error('Failed to load reviews:', res.error);
-    return;
-  }
-
+  if (res.error) return;
   reviews.value = res.data.result || [];
   totalReviews.value = res.data.total;
 }
 
 async function loadMoreReviews() {
   if (loadingMore.value || !hasMoreReviews.value) return;
-
   loadingMore.value = true;
-  skip.value = reviews.value.length;
-
   const res = await reviewsGetReviewsForVendor({
-    path: {
-      vendor_profile_id: props.vendor.id,
-    },
-    query: {
-      skip: skip.value,
-      limit: limit,
-    },
+    path: { vendor_profile_id: props.vendor.id },
+    query: { skip: reviews.value.length, limit: 6 },
   });
-
   loadingMore.value = false;
-
-  if (res.error) {
-    console.error('Failed to load more reviews:', res.error);
-    return;
-  }
-
+  if (res.error) return;
   reviews.value.push(...(res.data.result || []));
-}
-
-function formatTurnover(turnover: number): string {
-  if (turnover >= 1000000) {
-    return `${(turnover / 1000000).toFixed(1)}M`;
-  }
-  if (turnover >= 1000) {
-    return `${(turnover / 1000).toFixed(1)}K`;
-  }
-  return turnover.toString();
 }
 
 onMounted(() => {
