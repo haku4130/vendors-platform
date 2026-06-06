@@ -367,8 +367,8 @@ class ProjectRequestPublic(ProjectRequestBase):
 
 class ProjectRequestPublicVendorFull(ProjectRequestBase):
     id: uuid.UUID
-    vendor_profile: VendorProfilePublic
-    project_id: uuid.UUID
+    vendor_profile: VendorProfilePublic | None
+    project_id: uuid.UUID | None
 
 
 class PaginatedProjectRequestsPublicVendorFull(PaginatedResponse):
@@ -377,8 +377,8 @@ class PaginatedProjectRequestsPublicVendorFull(PaginatedResponse):
 
 class ProjectRequestPublicProjectFull(ProjectRequestBase):
     id: uuid.UUID
-    vendor_profile_id: uuid.UUID
-    project: ProjectPublic
+    vendor_profile_id: uuid.UUID | None
+    project: ProjectPublic | None
 
 
 class PaginatedProjectRequestsPublicProjectFull(PaginatedResponse):
