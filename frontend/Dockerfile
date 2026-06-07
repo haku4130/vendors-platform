@@ -23,7 +23,7 @@ RUN npm ci
 COPY . ./
 
 # Build the project
-RUN npm run build
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
 
 # Build Stage 2
 
