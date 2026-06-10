@@ -1,15 +1,17 @@
 <template>
-  <UContainer>
+  <UContainer class="space-y-4">
     <UButton
       icon="i-lucide-arrow-left"
       variant="outline"
       @click="navigateTo('/dashboard/projects')"
     >
-      Back
+      {{ $t("proposal.back") }}
     </UButton>
 
-    <h1 class="text-center my-5 text-2xl font-semibold">
-      Select from best fit vendors for your project
+    <RecommendationBanner />
+
+    <h1 class="text-center text-2xl font-semibold">
+      {{ $t("explore.title") }}
     </h1>
 
     <VendorSelectionCards :project-id="$route.params.project_id" />
@@ -17,5 +19,5 @@
 </template>
 
 <script setup lang="ts">
-definePageMeta({ layout: 'dashboard', middleware: ['auth', 'company-only'] });
+definePageMeta({ layout: "dashboard", middleware: ["auth", "company-only"] });
 </script>
