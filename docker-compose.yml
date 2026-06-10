@@ -157,6 +157,8 @@ services:
     networks:
       - traefik-public
       - default
+    volumes:
+      - frontend-content-data:/app/server/data
     build:
       context: ./frontend
       args:
@@ -331,6 +333,7 @@ services:
 volumes:
   app-db-data:
   media-data:
+  frontend-content-data:
   prometheus-data:
   grafana-data:
 

@@ -23,7 +23,9 @@ RUN npm ci
 COPY . ./
 
 # Build the project
-RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build
+RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build && \
+    mkdir -p .output/server/data && \
+    cp server/data/content.json .output/server/data/content.json
 
 # Build Stage 2
 
