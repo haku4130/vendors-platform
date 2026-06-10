@@ -19,15 +19,24 @@
           >
             {{ item.owner.company_name }}
           </NuxtLink>
-          <p class="text-xs text-gray-400 truncate">{{ item.owner.full_name }}</p>
+          <p class="text-xs text-gray-400 truncate">
+            {{ item.owner.full_name }}
+          </p>
         </div>
 
         <div class="ml-auto shrink-0">
           <div v-if="item.owner.rating" class="flex items-center gap-1">
-            <UIcon name="i-lucide-star" class="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-            <span class="text-sm font-semibold">{{ item.owner.rating.toFixed(1) }}</span>
+            <UIcon
+              name="i-lucide-star"
+              class="w-3.5 h-3.5 text-amber-400 fill-amber-400"
+            />
+            <span class="text-sm font-semibold">{{
+              item.owner.rating.toFixed(1)
+            }}</span>
           </div>
-          <span v-else class="text-xs text-gray-400">Нет оценки</span>
+          <span v-else class="text-xs text-gray-400">{{
+            $t("projectCard.noRating")
+          }}</span>
         </div>
       </div>
 
@@ -56,16 +65,22 @@
 
     <div class="px-5 pb-4 space-y-2">
       <div class="flex items-center gap-2 text-sm text-gray-600">
-        <UIcon name="i-lucide-banknote" class="w-4 h-4 text-gray-400 shrink-0" />
+        <UIcon
+          name="i-lucide-banknote"
+          class="w-4 h-4 text-gray-400 shrink-0"
+        />
         <span class="font-medium">${{ formatBudget(item.budget) }}</span>
       </div>
       <div class="flex items-center gap-2 text-sm text-gray-600">
-        <UIcon name="i-lucide-calendar" class="w-4 h-4 text-gray-400 shrink-0" />
+        <UIcon
+          name="i-lucide-calendar"
+          class="w-4 h-4 text-gray-400 shrink-0"
+        />
         <span>{{ item.start_date }}</span>
       </div>
       <div class="flex items-center gap-2 text-sm text-gray-600">
         <UIcon name="i-lucide-map-pin" class="w-4 h-4 text-gray-400 shrink-0" />
-        <span>{{ item.location ?? 'Без привязки к месту' }}</span>
+        <span>{{ item.location ?? $t("projectCard.noLocation") }}</span>
       </div>
     </div>
 
@@ -78,38 +93,53 @@
         trailing-icon="i-lucide-arrow-right"
         :to="`/dashboard/projects/${item.id}/${toUrlPostfix}`"
       >
-        Смотреть бриф
+        {{ $t("projectCard.viewBrief") }}
       </UButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ProjectPublic } from '~/generated/api';
+import type { ProjectPublic } from "~/generated/api";
 
-const { toUrlPostfix = '' } = defineProps<{
+const { toUrlPostfix = "" } = defineProps<{
   item: ProjectPublic;
   toUrlPostfix?: string;
 }>();
 
 const AVATAR_COLORS = [
-  '#2563eb', '#16a34a', '#9333ea', '#db2777', '#d97706',
-  '#0891b2', '#dc2626', '#059669', '#7c3aed', '#0284c7',
+  "#2563eb",
+  "#16a34a",
+  "#9333ea",
+  "#db2777",
+  "#d97706",
+  "#0891b2",
+  "#dc2626",
+  "#059669",
+  "#7c3aed",
+  "#0284c7",
 ];
 
 function avatarColor(name: string): string {
   let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  for (let i = 0; i < name.length; i++)
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
   return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
 }
 
 function initials(name: string): string {
-  return name.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
 }
 
 function formatBudget(n: number): string {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1) + 'M';
-  if (n >= 1_000) return (n / 1_000).toFixed(n % 1_000 === 0 ? 0 : 1) + 'K';
-  return n.toLocaleString('ru-RU');
+  if (n >= 1_000_000)
+    return (n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1) + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(n % 1_000 === 0 ? 0 : 1) + "K";
+  return n.toLocaleString("ru-RU");
 }
 </script>

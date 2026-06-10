@@ -6,7 +6,7 @@
       class="mb-4"
       @click="navigateTo('/dashboard/reviews')"
     >
-      Back to Reviews
+      {{ $t("dashboard.reviews.backToReviews") }}
     </UButton>
 
     <div class="max-w-2xl mx-auto">
@@ -17,13 +17,15 @@
       <div v-else-if="!reviewedUser" class="text-center py-12">
         <UEmpty
           icon="i-lucide-alert-circle"
-          title="User not found"
-          description="The user you're trying to review doesn't exist."
+          :title="$t('dashboard.reviews.userNotFound')"
+          :description="$t('dashboard.reviews.userNotFoundDesc')"
         />
       </div>
 
       <div v-else class="bg-white rounded-2xl p-6 shadow-sm space-y-6">
-        <h1 class="text-2xl font-semibold">Write a Review</h1>
+        <h1 class="text-2xl font-semibold">
+          {{ $t("dashboard.reviews.writeReview") }}
+        </h1>
 
         <UUser
           :name="reviewedUser.company_name"
@@ -63,7 +65,7 @@
           class="space-y-6"
           @submit="onSubmit"
         >
-          <UFormField label="Rating" name="rating">
+          <UFormField :label="$t('dashboard.reviews.rating')" name="rating">
             <StarRating
               v-model:rating="form.rating"
               clickable
@@ -72,7 +74,7 @@
             />
           </UFormField>
 
-          <UFormField label="Your Review" name="text">
+          <UFormField :label="$t('dashboard.reviews.yourReview')" name="text">
             <UTextarea
               v-model="form.text"
               placeholder="Share your experience working with this partner..."
@@ -84,14 +86,14 @@
 
           <div class="flex gap-3">
             <UButton type="submit" size="lg" :loading="submitting">
-              Submit Review
+              {{ $t("dashboard.reviews.submitReview") }}
             </UButton>
             <UButton
               variant="outline"
               size="lg"
               @click="navigateTo('/dashboard/reviews')"
             >
-              Cancel
+              {{ $t("common.cancel") }}
             </UButton>
           </div>
         </UForm>
@@ -101,13 +103,13 @@
 </template>
 
 <script setup lang="ts">
-import * as v from 'valibot';
-import type { UserPublic } from '~/generated/api';
-import { usersReadUserById, reviewsCreateReview } from '~/generated/api';
+import * as v from "valibot";
+import type { UserPublic } from "~/generated/api";
+import { usersReadUserById, reviewsCreateReview } from "~/generated/api";
 
 definePageMeta({
-  layout: 'dashboard',
-  middleware: ['auth'],
+  layout: "dashboard",
+  middleware: ["auth"],
 });
 
 const route = useRoute();
@@ -121,7 +123,7 @@ const reviewedUser = ref<UserPublic | null>(null);
 
 const form = reactive({
   rating: 5,
-  text: '',
+  text: "",
 });
 
 async function loadUser() {
@@ -140,9 +142,12 @@ async function loadUser() {
 
   if (res.error) {
     toast.add({
-      title: 'Error',
-      description: extractErrorMessage(res.error, 'Failed to load user'),
-      color: 'error',
+      title: "Ошибка",
+      description: extractErrorMessage(
+        res.error,
+        "Не удалось загрузить пользователя",
+      ),
+      color: "error",
     });
     return;
   }
@@ -165,20 +170,20 @@ async function onSubmit() {
 
   if (res.error) {
     toast.add({
-      title: 'Error',
-      description: extractErrorMessage(res.error, 'Failed to submit review'),
-      color: 'error',
+      title: "Ошибка",
+      description: extractErrorMessage(res.error, "Не удалось отправить отзыв"),
+      color: "error",
     });
     return;
   }
 
   toast.add({
-    title: 'Success',
-    description: 'Your review has been submitted!',
-    color: 'success',
+    title: "Успешно",
+    description: "Ваш отзыв отправлен!",
+    color: "success",
   });
 
-  navigateTo('/dashboard/reviews');
+  navigateTo("/dashboard/reviews");
 }
 
 onMounted(() => {

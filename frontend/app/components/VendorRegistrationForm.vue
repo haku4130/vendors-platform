@@ -14,7 +14,12 @@
         :ui="{ base: 'rounded-none' }"
       />
       <div class="flex justify-center text-muted mt-4">
-        Vendor Registration · Step {{ currentStep }}/{{ totalSteps }}
+        {{
+          $t("vendorRegistration.step", {
+            step: currentStep,
+            total: totalSteps,
+          })
+        }}
       </div>
     </template>
 
@@ -29,7 +34,7 @@
     >
       <template #main-goal>
         <h1 class="text-xl text-center font-bold mb-6">
-          What is your main goal?
+          {{ $t("vendorRegistration.mainGoal.title") }}
         </h1>
         <UForm
           :ref="setFormRef('main-goal')"
@@ -50,11 +55,7 @@
               variant="card"
               indicator="hidden"
               class="space-y-4"
-              :items="[
-                'Collect reviews and improve my reputation',
-                'Generate and convert leads for my business',
-                'Get recognized as a leading service provider',
-              ]"
+              :items="mainGoalOptions"
             />
           </UFormField>
         </UForm>
@@ -62,7 +63,7 @@
 
       <template #company-information>
         <h1 class="text-xl text-center font-bold mb-6">
-          Add Company Information
+          {{ $t("vendorRegistration.companyInfo.title") }}
         </h1>
         <UForm
           :ref="setFormRef('company-information')"
@@ -103,7 +104,10 @@
           "
           class="space-y-4"
         >
-          <UFormField label="Sales Email" name="sales_email">
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.salesEmail')"
+            name="sales_email"
+          >
             <UInput
               v-model="answers.sales_email"
               placeholder="example@mail.com"
@@ -111,7 +115,10 @@
               class="w-full"
             />
           </UFormField>
-          <UFormField label="Admin Contact Phone" name="admin_contact_phone">
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.phone')"
+            name="admin_contact_phone"
+          >
             <UFieldGroup class="w-full">
               <USelectMenu
                 v-model="phone_country_code"
@@ -149,17 +156,26 @@
               <UInput v-model="contact_phone" type="tel" class="w-full" />
             </UFieldGroup>
           </UFormField>
-          <UFormField label="Total Employees" name="employee_count">
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.employees')"
+            name="employee_count"
+          >
             <UInputNumber v-model="answers.employee_count" class="w-full" />
           </UFormField>
-          <UFormField label="Company Website" name="company_website">
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.website')"
+            name="company_website"
+          >
             <UInput
               v-model="answers.company_website"
               placeholder="https://yourcompany.com"
               class="w-full"
             />
           </UFormField>
-          <UFormField label="Founding Year" name="founded_year">
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.foundingYear')"
+            name="founded_year"
+          >
             <UInputNumber
               v-model="answers.founded_year"
               class="w-full"
@@ -169,7 +185,10 @@
               }"
             />
           </UFormField>
-          <UFormField label="Company's Value" name="turnover">
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.turnover')"
+            name="turnover"
+          >
             <UInputNumber
               v-model="answers.turnover"
               class="w-full"
@@ -184,7 +203,7 @@
 
       <template #description-step>
         <h1 class="text-xl text-center font-bold mb-6">
-          Give a brief description of your company
+          {{ $t("vendorRegistration.description.title") }}
         </h1>
         <UForm
           :ref="setFormRef('description-step')"
@@ -213,7 +232,7 @@
 
       <template #project-size>
         <h1 class="text-xl text-center font-bold mb-6">
-          Add Project Size & Rate
+          {{ $t("vendorRegistration.projectSize.title") }}
         </h1>
         <UForm
           :ref="setFormRef('project-size')"
@@ -232,7 +251,10 @@
           "
           class="space-y-4"
         >
-          <UFormField label="Minimum Project Size" name="min_project_size">
+          <UFormField
+            :label="$t('vendorRegistration.projectSize.minProject')"
+            name="min_project_size"
+          >
             <UInputNumber
               v-model="answers.min_project_size"
               class="w-full"
@@ -242,7 +264,10 @@
               }"
             />
           </UFormField>
-          <UFormField label="Average Hourly Rate" name="avg_hourly_rate">
+          <UFormField
+            :label="$t('vendorRegistration.projectSize.hourlyRate')"
+            name="avg_hourly_rate"
+          >
             <UInputNumber
               v-model="answers.avg_hourly_rate"
               class="w-full"
@@ -257,7 +282,7 @@
 
       <template #services>
         <h1 class="text-xl text-center font-bold mb-6">
-          Add Services You Provide
+          {{ $t("vendorRegistration.services.title") }}
         </h1>
         <UForm
           :ref="setFormRef('services')"
@@ -276,7 +301,7 @@
           "
           class="space-y-4 max-w-xl mx-auto"
         >
-          <UFormField label="Minimum Project Size">
+          <UFormField :label="$t('vendorRegistration.projectSize.minProject')">
             <ServiceTagsSelect
               v-model="services"
               :errors="forms['services']?.getErrors() || []"
@@ -297,12 +322,12 @@
             currentStep--;
           "
         >
-          Prev
+          {{ $t("vendorRegistration.prev") }}
         </UButton>
 
         <UTooltip
           :delay-duration="0"
-          text="Please complete the current step before proceeding"
+          :text="$t('vendorRegistration.completeStep')"
           :disabled="isValidCurrentStep"
           :disable-closing-trigger="true"
         >
@@ -312,7 +337,7 @@
             :disabled="!isValidCurrentStep"
             @click="handleNextStep"
           >
-            Next
+            {{ $t("vendorRegistration.next") }}
           </UButton>
         </UTooltip>
       </div>
@@ -321,28 +346,36 @@
 </template>
 
 <script setup lang="ts">
-import * as v from 'valibot';
-import type { StepperItem, Form } from '@nuxt/ui';
-import type { VendorProfileCreate, ServicePublicShort } from '~/generated/api';
-import { vendorsCreateVendorProfile } from '~/generated/api';
+import * as v from "valibot";
+import type { StepperItem, Form } from "@nuxt/ui";
+import type { VendorProfileCreate, ServicePublicShort } from "~/generated/api";
+import { vendorsCreateVendorProfile } from "~/generated/api";
+
+const { t } = useI18n();
 
 const items: StepperItem[] = [
-  { slot: 'main-goal' as const },
-  { slot: 'company-information' as const },
-  { slot: 'description-step' as const },
-  { slot: 'project-size' as const },
-  { slot: 'services' as const },
+  { slot: "main-goal" as const },
+  { slot: "company-information" as const },
+  { slot: "description-step" as const },
+  { slot: "project-size" as const },
+  { slot: "services" as const },
 ];
 
+const mainGoalOptions = computed(() => [
+  t("vendorRegistration.mainGoal.option1"),
+  t("vendorRegistration.mainGoal.option2"),
+  t("vendorRegistration.mainGoal.option3"),
+]);
+
 const answers = ref<VendorProfileCreate>({
-  main_goal: '',
-  sales_email: '',
-  admin_contact_phone: '',
+  main_goal: "",
+  sales_email: "",
+  admin_contact_phone: "",
   employee_count: 15,
-  company_website: '',
+  company_website: "",
   founded_year: 2000,
   turnover: 15000,
-  description: '',
+  description: "",
   min_project_size: 100,
   avg_hourly_rate: 15,
   service_ids: [],
@@ -356,7 +389,7 @@ const fullPhoneNumber = computed({
     if (phone_country_code.value?.dial_code && contact_phone.value) {
       return `${phone_country_code.value.dial_code}${contact_phone.value}`;
     }
-    return '';
+    return "";
   },
   set: (value: string) => {
     answers.value.admin_contact_phone = value;
@@ -380,7 +413,7 @@ const {
     image: string;
     dial_code: string;
   }[]
->('/countries.json', {
+>("/countries.json", {
   immediate: false,
 });
 
@@ -393,7 +426,7 @@ function onOpen() {
 const totalSteps = items.length;
 const currentStep = ref(1);
 
-const stepper = useTemplateRef('stepper');
+const stepper = useTemplateRef("stepper");
 
 const forms = reactive<Record<string, Form<VendorProfileCreate> | null>>({});
 
@@ -404,7 +437,7 @@ function setFormRef(name: string) {
 }
 
 async function handleNextStep() {
-  const key = items[currentStep.value - 1]?.slot ?? '';
+  const key = items[currentStep.value - 1]?.slot ?? "";
 
   const form = forms[key];
   if (!form) return;
@@ -437,23 +470,23 @@ async function handleFinish() {
   });
   if (!res.error) {
     toast.add({
-      title: 'Success',
-      description: 'Vendor Profile created successfully!',
-      color: 'success',
+      title: "Success",
+      description: "Vendor Profile created successfully!",
+      color: "success",
     });
 
     await useAuth().loadUser();
-    navigateTo('/dashboard');
+    navigateTo("/dashboard");
   } else {
     toast.add({
-      title: 'Vendor Profile creation failed',
+      title: "Vendor Profile creation failed",
       description: extractErrorMessage(res.error),
-      color: 'error',
+      color: "error",
     });
   }
 }
 
 const isValidCurrentStep = computed(() => {
-  return !forms[items[currentStep.value - 1]?.slot ?? '']?.getErrors().length;
+  return !forms[items[currentStep.value - 1]?.slot ?? ""]?.getErrors().length;
 });
 </script>

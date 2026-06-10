@@ -54,7 +54,9 @@
                 class="flex items-center gap-1.5 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full"
               >
                 <UIcon name="i-lucide-star" class="w-3.5 h-3.5 text-gray-400" />
-                <span class="text-sm text-gray-500">Нет оценок</span>
+                <span class="text-sm text-gray-500">{{
+                  t("common.noRatings")
+                }}</span>
               </div>
             </div>
           </div>
@@ -65,7 +67,7 @@
     <!-- Reviews -->
     <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
       <div class="flex items-center justify-between mb-5">
-        <h2 class="text-lg font-semibold">Отзывы</h2>
+        <h2 class="text-lg font-semibold">{{ t("common.reviews") }}</h2>
         <span v-if="totalReviews > 0" class="text-sm text-gray-400"
           >{{ totalReviews }} {{ reviewsLabel(totalReviews) }}</span
         >
@@ -94,7 +96,7 @@
             :loading="loadingMoreReviews"
             @click="loadMoreReviews"
           >
-            Загрузить ещё
+            {{ t("common.loadMore") }}
           </UButton>
         </div>
       </div>
@@ -102,8 +104,8 @@
       <UEmpty
         v-else
         icon="i-lucide-star"
-        title="Отзывов пока нет"
-        description="Эта компания ещё не получила отзывов."
+        :title="t('companyProfile.noReviews')"
+        :description="t('companyProfile.noReviewsDesc')"
         class="py-6"
       />
     </div>
@@ -117,6 +119,8 @@ import { reviewsGetReviewsForUser } from "~/generated/api";
 const { company } = defineProps<{
   company: UserPublic;
 }>();
+
+const { t } = useI18n();
 
 const AVATAR_COLORS = [
   "#2563eb",
@@ -148,9 +152,9 @@ function initials(name: string): string {
 }
 
 function reviewsLabel(n: number): string {
-  if (n === 1) return "отзыв";
-  if (n >= 2 && n <= 4) return "отзыва";
-  return "отзывов";
+  if (n === 1) return t("common.reviewCount.singular");
+  if (n >= 2 && n <= 4) return t("common.reviewCount.few");
+  return t("common.reviewCount.many");
 }
 
 const reviews = ref<ReviewPublic[]>([]);

@@ -2,7 +2,7 @@
   <div class="flex w-full max-w-5xl h-full gap-10 pb-6 text-start">
     <aside class="w-1/3 py-6 flex flex-col text-white">
       <h2 class="text-xl font-semibold text-gray-300 mb-6 px-3">
-        Your Project Brief
+        {{ $t("projectSummary.title") }}
       </h2>
 
       <ul class="space-y-4 text-sm px-3">
@@ -11,22 +11,24 @@
             name="i-lucide-file-pen"
             class="text-lg shrink-0 text-gray-300"
           />
-          <span class="leading-snug">Review your project details</span>
+          <span class="leading-snug">{{
+            $t("projectSummary.reviewDetails")
+          }}</span>
         </li>
         <li class="flex items-start gap-3">
           <UIcon name="i-lucide-mail" class="text-lg shrink-0 text-gray-300" />
-          <span class="leading-snug"
-            >We'll send your project to best-fit vendors</span
-          >
+          <span class="leading-snug">{{
+            $t("projectSummary.sendToVendors")
+          }}</span>
         </li>
         <li class="flex items-start gap-3">
           <UIcon
             name="i-lucide-message-square-text"
             class="text-lg shrink-0 text-gray-300"
           />
-          <span class="leading-snug"
-            >Receive a response directly through platform</span
-          >
+          <span class="leading-snug">{{
+            $t("projectSummary.receiveResponse")
+          }}</span>
         </li>
       </ul>
 
@@ -36,7 +38,7 @@
         <p
           class="uppercase text-xs text-gray-300 font-semibold tracking-wider mb-6 px-3"
         >
-          Outline
+          {{ $t("projectSummary.outline") }}
         </p>
         <UButton
           v-for="(section, i) in links"
@@ -64,42 +66,29 @@
 </template>
 
 <script setup lang="ts">
-import type { AnswersType } from '@/types/answers';
+import type { AnswersType } from "@/types/answers";
 
 const auth = useAuth();
 
 const answers = defineModel<AnswersType>({ required: true });
 
-const links = [
-  {
-    id: 'key-information',
-    text: 'Key Information',
-  },
-  {
-    id: 'introduction',
-    text: 'Introduction',
-  },
-  {
-    id: 'services',
-    text: 'Services Needed',
-  },
-  {
-    id: 'questions',
-    text: 'Questions',
-  },
-  {
-    id: 'requirements',
-    text: 'Requirements',
-  },
-];
+const { t } = useI18n();
 
-const currentSection = ref('key-information');
+const links = computed(() => [
+  { id: "key-information", text: t("projectSummary.sections.keyInformation") },
+  { id: "introduction", text: t("projectSummary.sections.introduction") },
+  { id: "services", text: t("projectSummary.sections.services") },
+  { id: "questions", text: t("projectSummary.sections.questions") },
+  { id: "requirements", text: t("projectSummary.sections.requirements") },
+]);
+
+const currentSection = ref("key-information");
 
 function scrollToSection(section: string) {
   currentSection.value = section;
   const el = document.getElementById(section);
   if (el) {
-    el.scrollIntoView({ behavior: 'smooth' });
+    el.scrollIntoView({ behavior: "smooth" });
   }
 }
 
@@ -115,11 +104,11 @@ onMounted(() => {
       }
     },
     {
-      rootMargin: '0px 0px -90% 0px',
+      rootMargin: "0px 0px -90% 0px",
     },
   );
 
-  links.forEach((link) => {
+  links.value.forEach((link) => {
     const el = document.getElementById(link.id);
     if (el) observer.observe(el);
   });

@@ -6,19 +6,19 @@
           name="i-lucide-loader-2"
           class="w-8 h-8 animate-spin mx-auto mb-4"
         />
-        <p class="text-muted">Loading company profile...</p>
+        <p class="text-muted">{{ $t("companyProfile.loading") }}</p>
       </div>
     </div>
 
     <UEmpty
       v-else-if="error"
       icon="i-lucide-alert-circle"
-      title="Company not found"
-      description="The company you are looking for does not exist."
+      :title="$t('companyProfile.notFound')"
+      :description="$t('companyProfile.notFoundDesc')"
       :actions="[
         {
           icon: 'i-lucide-arrow-left',
-          label: 'Go to Dashboard',
+          label: $t('common.goToDashboard'),
           to: '/dashboard',
         },
       ]"
@@ -30,11 +30,11 @@
 </template>
 
 <script setup lang="ts">
-import type { UserPublic } from '~/generated/api';
-import { usersReadUserById } from '~/generated/api';
+import type { UserPublic } from "~/generated/api";
+import { usersReadUserById } from "~/generated/api";
 
 definePageMeta({
-  layout: 'default',
+  layout: "default",
 });
 
 const route = useRoute();
@@ -58,19 +58,18 @@ async function loadCompanyProfile() {
 
   if (res.error) {
     if (res.response?.status === 404) {
-      error.value = 'Company profile not found';
+      error.value = "Company profile not found";
     } else {
       error.value = extractErrorMessage(
         res.error,
-        'Failed to load company profile',
+        "Failed to load company profile",
       );
     }
     return;
   }
 
-  // Check if user is a company
-  if (res.data.role !== 'company') {
-    error.value = 'This user is not a company';
+  if (res.data.role !== "company") {
+    error.value = "This user is not a company";
     return;
   }
 

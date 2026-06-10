@@ -6,7 +6,7 @@
       color="neutral"
       @click="router.back()"
     >
-      Назад
+      {{ $t("proposal.back") }}
     </UButton>
 
     <div v-if="loading" class="flex justify-center py-12">
@@ -25,9 +25,13 @@
         >
           {{ statusStyle.label }}
         </span>
-        <span class="text-sm text-gray-400"
-          >Отправлено {{ formatDateReview(proposal.created_at) }}</span
-        >
+        <span class="text-sm text-gray-400">
+          {{
+            $t("proposal.sentAt", {
+              date: formatDateReview(proposal.created_at),
+            })
+          }}
+        </span>
       </div>
 
       <!-- Project brief -->
@@ -41,23 +45,25 @@
       <!-- Duration & Cost -->
       <div class="border border-gray-200 rounded-2xl p-6 bg-white space-y-5">
         <h3 class="font-semibold text-base">
-          Ваше предложение по срокам и стоимости
+          {{ $t("proposal.timing") }}
         </h3>
         <div class="grid grid-cols-3 gap-4">
           <div class="space-y-1">
-            <p class="text-xs text-gray-400">Готов начать через</p>
+            <p class="text-xs text-gray-400">
+              {{ $t("proposal.daysToStart") }}
+            </p>
             <p class="font-semibold text-lg">
               {{ proposal.days_to_start ?? "—" }} дн.
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-gray-400">Длительность</p>
+            <p class="text-xs text-gray-400">{{ $t("proposal.duration") }}</p>
             <p class="font-semibold text-lg">
               {{ proposal.duration_days ?? "—" }} дн.
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-gray-400">Стоимость</p>
+            <p class="text-xs text-gray-400">{{ $t("proposal.cost") }}</p>
             <p class="font-semibold text-lg">
               {{
                 proposal.proposed_cost != null
@@ -74,7 +80,9 @@
         v-if="proposal.project.questions?.length"
         class="border border-gray-200 rounded-2xl p-6 bg-white space-y-4"
       >
-        <h3 class="font-semibold text-base">Ответы на вопросы заказчика</h3>
+        <h3 class="font-semibold text-base">
+          {{ $t("proposal.questionAnswers") }}
+        </h3>
         <div
           v-for="(question, i) in proposal.project.questions"
           :key="i"
@@ -171,18 +179,34 @@ const route = useRoute();
 const router = useRouter();
 const requestId = route.params.request_id as string;
 
+const { t } = useI18n();
+
 const loading = ref(true);
 const proposal = ref<ProjectRequestPublicProjectFull | null>(null);
 
-const STATUS_STYLES = {
-  sent: { label: "На рассмотрении", bg: "bg-amber-50", text: "text-amber-700" },
-  accepted: { label: "Принято", bg: "bg-green-50", text: "text-green-700" },
-  declined: { label: "Отклонено", bg: "bg-red-50", text: "text-red-600" },
-} as const;
+const STATUS_STYLES = computed(() => ({
+  sent: {
+    label: t("proposalCard.statusSent"),
+    bg: "bg-amber-50",
+    text: "text-amber-700",
+  },
+  accepted: {
+    label: t("proposalCard.statusAccepted"),
+    bg: "bg-green-50",
+    text: "text-green-700",
+  },
+  declined: {
+    label: t("proposalCard.statusDeclined"),
+    bg: "bg-red-50",
+    text: "text-red-600",
+  },
+}));
 
 const statusStyle = computed(() => {
-  const s = proposal.value?.status as keyof typeof STATUS_STYLES;
-  return STATUS_STYLES[s] ?? STATUS_STYLES.sent;
+  const s = proposal.value?.status as keyof ReturnType<
+    typeof STATUS_STYLES.value
+  >;
+  return STATUS_STYLES.value[s] ?? STATUS_STYLES.value.sent;
 });
 
 const groupedFeasibilityRows = computed(() => {

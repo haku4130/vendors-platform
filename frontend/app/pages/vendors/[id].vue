@@ -6,19 +6,19 @@
           name="i-lucide-loader-2"
           class="w-8 h-8 animate-spin mx-auto mb-4"
         />
-        <p class="text-muted">Loading vendor profile...</p>
+        <p class="text-muted">{{ $t("vendorProfile.loading") }}</p>
       </div>
     </div>
 
     <UEmpty
       v-else-if="error"
       icon="i-lucide-alert-circle"
-      title="Vendor not found"
-      description="The vendor you are looking for does not exist."
+      :title="$t('vendorProfile.notFound')"
+      :description="$t('vendorProfile.notFoundDesc')"
       :actions="[
         {
           icon: 'i-lucide-arrow-left',
-          label: 'Go to Dashboard',
+          label: $t('common.goToDashboard'),
           to: '/dashboard',
         },
       ]"
@@ -30,11 +30,11 @@
 </template>
 
 <script setup lang="ts">
-import type { VendorProfilePublic } from '~/generated/api';
-import { vendorsGetVendorProfile } from '~/generated/api';
+import type { VendorProfilePublic } from "~/generated/api";
+import { vendorsGetVendorProfile } from "~/generated/api";
 
 definePageMeta({
-  layout: 'default',
+  layout: "default",
 });
 
 const route = useRoute();
@@ -58,11 +58,11 @@ async function loadVendorProfile() {
 
   if (res.error) {
     if (res.response?.status === 404) {
-      error.value = 'Vendor profile not found';
+      error.value = "Vendor profile not found";
     } else {
       error.value = extractErrorMessage(
         res.error,
-        'Failed to load vendor profile',
+        "Failed to load vendor profile",
       );
     }
     return;

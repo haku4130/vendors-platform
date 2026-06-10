@@ -12,12 +12,18 @@
           shortlistedVendorIds.has(request.vendor_profile.id)
         "
       />
-      <div v-if="loading">Loading...</div>
+      <div v-if="loading" class="flex items-center justify-center gap-2">
+        <UIcon
+          name="i-lucide-loader-2"
+          class="w-6 h-6 animate-spin text-muted"
+        />
+        <span class="text-muted">{{ $t("vendorCompare.loading") }}</span>
+      </div>
       <div v-else-if="!requests.length">
         <UEmpty
           icon="i-lucide-hourglass"
-          title="Awaiting vendor requests"
-          description="We'll list their requests here as soon as they come in."
+          :title="$t('vendorCompare.noVendors')"
+          :description="$t('vendorCompare.noVendorsDesc')"
           class="w-fit mx-auto"
         />
       </div>
@@ -26,16 +32,16 @@
 </template>
 
 <script setup lang="ts">
-import { useInfiniteScroll } from '@vueuse/core';
+import { useInfiniteScroll } from "@vueuse/core";
 import {
   projectsGetProjectRequests,
   shortlistGetShortlistedVendors,
-} from '~/generated/api';
+} from "~/generated/api";
 import type {
   RequestInitiator,
   RequestStatus,
   ProjectRequestPublicVendorFull,
-} from '~/generated/api';
+} from "~/generated/api";
 
 const { projectId, incoming } = defineProps<{
   projectId: string;
@@ -60,8 +66,8 @@ async function loadMore() {
       project_id: projectId,
     },
     query: {
-      initiator: 'vendor' as RequestInitiator,
-      request_status: 'sent' as RequestStatus,
+      initiator: "vendor" as RequestInitiator,
+      request_status: "sent" as RequestStatus,
       skip: offset,
       limit: 5,
     },
@@ -69,9 +75,9 @@ async function loadMore() {
 
   if (res.error) {
     toast.add({
-      title: "Can't get vendors",
+      title: "Ошибка",
       description: extractErrorMessage(res.error),
-      color: 'error',
+      color: "error",
     });
   } else {
     requests.value.push(...res.data.result);

@@ -24,8 +24,8 @@
         <UEmpty
           v-else
           icon="i-lucide-hourglass"
-          title="Awaiting companies requests"
-          description="We'll list their requests here as soon as they come in."
+          :title="$t('dashboard.vendorSection.empty.incomingTitle')"
+          :description="$t('dashboard.vendorSection.empty.incomingDesc')"
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
@@ -47,8 +47,8 @@
         <UEmpty
           v-else
           icon="i-lucide-hourglass"
-          title="Awaiting companies projects"
-          description="We'll list their projects here as soon as they come in."
+          :title="$t('dashboard.vendorSection.empty.findTitle')"
+          :description="$t('dashboard.vendorSection.empty.findDesc')"
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
@@ -92,8 +92,8 @@
           <UEmpty
             v-else
             icon="i-lucide-file-text"
-            title="Заявок нет"
-            description="Здесь появятся ваши отклики на проекты."
+            :title="$t('dashboard.vendorSection.empty.proposalsTitle')"
+            :description="$t('dashboard.vendorSection.empty.proposalsDesc')"
             class="w-fit mx-auto my-8"
           />
         </div>
@@ -112,8 +112,8 @@
         <UEmpty
           v-else
           icon="i-lucide-archive"
-          title="No archived projects"
-          description="Projects you applied to that were archived will appear here."
+          :title="$t('dashboard.vendorSection.empty.archiveTitle')"
+          :description="$t('dashboard.vendorSection.empty.archiveDesc')"
           class="w-fit mx-auto my-8 max-w-4/5"
         />
       </template>
@@ -133,6 +133,8 @@ import type {
   ProjectPublic,
   ProjectRequestPublicProjectFull,
 } from "~/generated/api";
+
+const { t } = useI18n();
 
 const incomingRequestsEl = useTemplateRef("incomingRequestsEl");
 const incomingRequests = ref<ProjectRequestPublicProjectFull[]>([]);
@@ -157,12 +159,18 @@ const loadingArchived = ref(false);
 
 const toast = useToast();
 
-const proposalFilters = [
-  { label: "Все", value: null },
-  { label: "На рассмотрении", value: "sent" as const },
-  { label: "Принято", value: "accepted" as const },
-  { label: "Отклонено", value: "declined" as const },
-];
+const proposalFilters = computed(() => [
+  { label: t("dashboard.vendorSection.filters.all"), value: null },
+  { label: t("dashboard.vendorSection.filters.sent"), value: "sent" as const },
+  {
+    label: t("dashboard.vendorSection.filters.accepted"),
+    value: "accepted" as const,
+  },
+  {
+    label: t("dashboard.vendorSection.filters.declined"),
+    value: "declined" as const,
+  },
+]);
 
 function setProposalFilter(val: "sent" | "accepted" | "declined" | null) {
   proposalStatus.value = val;
@@ -180,7 +188,7 @@ async function loadMoreIncoming() {
   loadingIncoming.value = false;
   if (res.error) {
     toast.add({
-      title: "Can't get incoming projects",
+      title: "Ошибка",
       description: extractErrorMessage(res.error),
       color: "error",
     });
@@ -199,7 +207,7 @@ async function loadMoreExplore() {
   loadingExplore.value = false;
   if (res.error) {
     toast.add({
-      title: "Can't get projects",
+      title: "Ошибка",
       description: extractErrorMessage(res.error),
       color: "error",
     });
@@ -222,7 +230,7 @@ async function loadMoreProposals() {
   loadingProposals.value = false;
   if (res.error) {
     toast.add({
-      title: "Can't get proposals",
+      title: "Ошибка",
       description: extractErrorMessage(res.error),
       color: "error",
     });
@@ -241,7 +249,7 @@ async function loadMoreArchived() {
   loadingArchived.value = false;
   if (res.error) {
     toast.add({
-      title: "Can't get archived projects",
+      title: "Ошибка",
       description: extractErrorMessage(res.error),
       color: "error",
     });
@@ -306,25 +314,31 @@ const tabs = computed(() => {
   const isSmallScreen = !breakpoints.sm.value;
   return [
     {
-      label: isSmallScreen ? "Incoming" : "Incoming Projects",
+      label: isSmallScreen
+        ? t("dashboard.vendorSection.tabs.incomingShort")
+        : t("dashboard.vendorSection.tabs.incoming"),
       icon: "i-lucide-inbox",
       slot: "incoming",
       value: "incoming",
     },
     {
-      label: isSmallScreen ? "Find" : "Find a Project",
+      label: isSmallScreen
+        ? t("dashboard.vendorSection.tabs.findShort")
+        : t("dashboard.vendorSection.tabs.find"),
       icon: "i-lucide-compass",
       slot: "search",
       value: "search",
     },
     {
-      label: isSmallScreen ? "Заявки" : "Мои заявки",
+      label: isSmallScreen
+        ? t("dashboard.vendorSection.tabs.proposalsShort")
+        : t("dashboard.vendorSection.tabs.proposals"),
       icon: "i-lucide-file-text",
       slot: "proposals",
       value: "proposals",
     },
     {
-      label: isSmallScreen ? "Archive" : "Archive",
+      label: t("dashboard.vendorSection.tabs.archive"),
       icon: "i-lucide-archive",
       slot: "archive",
       value: "archive",

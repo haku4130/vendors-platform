@@ -1,9 +1,9 @@
 <template>
   <section class="bg-vendor-gradient p-6 rounded-2xl">
     <h1 class="text-2xl font-semibold text-white">
-      {{ $t('dashboard.shortlist.title') }}
+      {{ $t("dashboard.shortlist.title") }}
     </h1>
-    <p class="mt-1 text-white">{{ $t('dashboard.shortlist.subtitle') }}</p>
+    <p class="mt-1 text-white">{{ $t("dashboard.shortlist.subtitle") }}</p>
   </section>
   <div
     v-if="Object.values(shortlistCounts).every((count) => count === 0)"
@@ -12,7 +12,7 @@
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white rounded-2xl p-6 shadow-sm">
         <h3 class="text-lg font-semibold mb-6">
-          {{ $t('dashboard.shortlist.howItWorks') }}
+          {{ $t("dashboard.shortlist.howItWorks") }}
         </h3>
 
         <UStepper
@@ -28,14 +28,14 @@
         class="bg-white rounded-2xl p-6 shadow-sm flex flex-col justify-center max-h-fit"
       >
         <h3 class="text-lg font-semibold mb-4">
-          {{ $t('dashboard.shortlist.notPicked') }}
+          {{ $t("dashboard.shortlist.notPicked") }}
         </h3>
         <UButton
           size="xl"
           class="w-fit"
           :to="$localePath('/dashboard/projects')"
         >
-          {{ $t('dashboard.shortlist.findPartner') }}
+          {{ $t("dashboard.shortlist.findPartner") }}
         </UButton>
       </div>
     </section>
@@ -47,15 +47,15 @@
           name="i-lucide-loader-2"
           class="w-8 h-8 animate-spin mx-auto mb-4"
         />
-        <p class="text-muted">Loading shortlist...</p>
+        <p class="text-muted">{{ $t("dashboard.shortlist.loading") }}</p>
       </div>
     </div>
 
     <div v-else-if="projects.length === 0">
       <UEmpty
         icon="i-lucide-bookmark"
-        title="No projects yet"
-        description="Create a project first, then you can add vendors to your shortlist."
+        :title="$t('dashboard.shortlist.noProjects')"
+        :description="$t('dashboard.shortlist.noProjectsDesc')"
         class="w-fit mx-auto"
       />
     </div>
@@ -70,7 +70,11 @@
             <div>
               <h3 class="text-lg font-semibold">{{ project.title }}</h3>
               <p class="text-sm text-muted">
-                {{ shortlistCounts[project.id] || 0 }} vendor(s) in shortlist
+                {{
+                  $t("dashboard.shortlist.vendorCount", {
+                    count: shortlistCounts[project.id] || 0,
+                  })
+                }}
               </p>
             </div>
             <UButton
@@ -78,7 +82,7 @@
               variant="outline"
               size="sm"
             >
-              {{ $t('dashboard.shortlist.findMore') }}
+              {{ $t("dashboard.shortlist.findMore") }}
             </UButton>
           </div>
 
@@ -108,8 +112,8 @@
           <UEmpty
             v-else
             icon="i-lucide-bookmark"
-            title="No vendors in shortlist"
-            description="Browse vendors and add them to your shortlist for this project."
+            :title="$t('dashboard.shortlist.noVendors')"
+            :description="$t('dashboard.shortlist.noVendorsDesc')"
             class="w-fit mx-auto py-8"
           />
         </div>
@@ -119,30 +123,30 @@
 </template>
 
 <script setup lang="ts">
-import type { StepperItem } from '@nuxt/ui';
+import type { StepperItem } from "@nuxt/ui";
 import type {
   ProjectWithIncomingCount,
   VendorProfilePublic,
-} from '~/generated/api';
+} from "~/generated/api";
 import {
   projectsListMyProjects,
   shortlistGetShortlistedVendors,
-} from '~/generated/api';
+} from "~/generated/api";
 
 const { t } = useI18n();
 
 const items = computed<StepperItem[]>(() => [
   {
-    title: t('dashboard.shortlist.steps.startProject.title'),
-    description: t('dashboard.shortlist.steps.startProject.description'),
+    title: t("dashboard.shortlist.steps.startProject.title"),
+    description: t("dashboard.shortlist.steps.startProject.description"),
   },
   {
-    title: t('dashboard.shortlist.steps.getMatched.title'),
-    description: t('dashboard.shortlist.steps.getMatched.description'),
+    title: t("dashboard.shortlist.steps.getMatched.title"),
+    description: t("dashboard.shortlist.steps.getMatched.description"),
   },
   {
-    title: t('dashboard.shortlist.steps.shortlistDecide.title'),
-    description: t('dashboard.shortlist.steps.shortlistDecide.description'),
+    title: t("dashboard.shortlist.steps.shortlistDecide.title"),
+    description: t("dashboard.shortlist.steps.shortlistDecide.description"),
   },
 ]);
 
@@ -164,16 +168,18 @@ async function loadProjects() {
 
   if (res.error) {
     toast.add({
-      title: 'Error',
-      description: extractErrorMessage(res.error, 'Failed to load projects'),
-      color: 'error',
+      title: "Ошибка",
+      description: extractErrorMessage(
+        res.error,
+        "Не удалось загрузить проекты",
+      ),
+      color: "error",
     });
     return;
   }
 
   projects.value = (res.data ?? []) as ProjectWithIncomingCount[];
 
-  // Load shortlists for each project
   for (const project of projects.value) {
     loadShortlistForProject(project.id);
   }
@@ -191,7 +197,7 @@ async function loadShortlistForProject(projectId: string) {
   loadingShortlists.value[projectId] = false;
 
   if (res.error) {
-    console.error('Failed to load shortlist:', res.error);
+    console.error("Failed to load shortlist:", res.error);
     shortlistedVendors.value[projectId] = [];
     shortlistCounts.value[projectId] = 0;
     return;

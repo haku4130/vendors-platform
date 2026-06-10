@@ -6,7 +6,7 @@
       color="neutral"
       @click="router.back()"
     >
-      Назад
+      {{ $t("proposal.back") }}
     </UButton>
 
     <div v-if="loading" class="flex justify-center py-12">
@@ -55,22 +55,26 @@
 
       <!-- Proposal details -->
       <div class="border border-gray-200 rounded-2xl p-6 bg-white space-y-5">
-        <h3 class="font-semibold text-base">Предложение вендора</h3>
+        <h3 class="font-semibold text-base">
+          {{ $t("proposal.vendorProposal") }}
+        </h3>
         <div class="grid grid-cols-3 gap-4">
           <div class="space-y-1">
-            <p class="text-xs text-gray-400">Готов начать через</p>
+            <p class="text-xs text-gray-400">
+              {{ $t("proposal.daysToStart") }}
+            </p>
             <p class="font-semibold text-lg">
               {{ request.days_to_start ?? "—" }} дн.
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-gray-400">Длительность</p>
+            <p class="text-xs text-gray-400">{{ $t("proposal.duration") }}</p>
             <p class="font-semibold text-lg">
               {{ request.duration_days ?? "—" }} дн.
             </p>
           </div>
           <div class="space-y-1">
-            <p class="text-xs text-gray-400">Стоимость</p>
+            <p class="text-xs text-gray-400">{{ $t("proposal.cost") }}</p>
             <p class="font-semibold text-lg">
               {{
                 request.proposed_cost != null
@@ -90,7 +94,9 @@
         v-if="request.question_answers?.length"
         class="border border-gray-200 rounded-2xl p-6 bg-white space-y-4"
       >
-        <h3 class="font-semibold text-base">Ответы на вопросы</h3>
+        <h3 class="font-semibold text-base">
+          {{ $t("proposal.questionAnswersShort") }}
+        </h3>
         <div
           v-for="(answer, i) in request.question_answers"
           :key="i"
@@ -176,10 +182,10 @@
             size="lg"
             @click="handleDeny"
           >
-            Отклонить
+            {{ $t("proposal.decline") }}
           </UButton>
           <UButton size="lg" @click="handleAccept">
-            Принять предложение
+            {{ $t("proposal.acceptProposal") }}
           </UButton>
         </template>
         <UButton v-else disabled size="lg">{{ alreadyProcessed }}</UButton>

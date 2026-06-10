@@ -30,7 +30,9 @@
           >{{ vendor.reviewsCount }} {{ reviewsLabel }}</span
         >
       </div>
-      <div v-else class="text-sm text-gray-400 mb-4">Нет отзывов</div>
+      <div v-else class="text-sm text-gray-400 mb-4">
+        {{ $t("vendorCard.noReviews") }}
+      </div>
 
       <hr class="border-gray-200 mb-4" />
 
@@ -38,7 +40,7 @@
       <p
         class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
       >
-        Специализация
+        {{ $t("vendorCard.specialization") }}
       </p>
       <div class="mb-2">
         <span
@@ -62,7 +64,9 @@
         <div class="flex items-start gap-3">
           <UIcon name="i-lucide-tag" class="mt-0.5 text-gray-400 shrink-0" />
           <div>
-            <p class="text-xs text-gray-400">Мин. проект</p>
+            <p class="text-xs text-gray-400">
+              {{ $t("vendorCard.minProject") }}
+            </p>
             <p class="font-semibold">
               ${{ formatNumber(vendor.min_project_size) }}
             </p>
@@ -71,7 +75,9 @@
         <div class="flex items-start gap-3">
           <UIcon name="i-lucide-clock" class="mt-0.5 text-gray-400 shrink-0" />
           <div>
-            <p class="text-xs text-gray-400">Ставка в час</p>
+            <p class="text-xs text-gray-400">
+              {{ $t("vendorCard.hourlyRate") }}
+            </p>
             <p class="font-semibold">
               ${{ formatNumber(vendor.avg_hourly_rate) }}
             </p>
@@ -80,8 +86,10 @@
         <div class="flex items-start gap-3">
           <UIcon name="i-lucide-users" class="mt-0.5 text-gray-400 shrink-0" />
           <div>
-            <p class="text-xs text-gray-400">Команда</p>
-            <p class="font-semibold">{{ vendor.employee_count }} человек</p>
+            <p class="text-xs text-gray-400">{{ $t("vendorCard.team") }}</p>
+            <p class="font-semibold">
+              {{ $t("vendorCard.employees", { count: vendor.employee_count }) }}
+            </p>
           </div>
         </div>
         <div v-if="vendor.user?.location" class="flex items-start gap-3">
@@ -90,7 +98,7 @@
             class="mt-0.5 text-gray-400 shrink-0"
           />
           <div>
-            <p class="text-xs text-gray-400">Локация</p>
+            <p class="text-xs text-gray-400">{{ $t("vendorCard.location") }}</p>
             <p class="font-semibold">{{ vendor.user.location }}</p>
           </div>
         </div>
@@ -109,7 +117,11 @@
           "
           @click="toggleShortlist"
         >
-          {{ isShortlisted ? 'В шорт-листе' : 'Добавить в шорт-лист' }}
+          {{
+            isShortlisted
+              ? $t("vendorCard.inShortlist")
+              : $t("vendorCard.addToShortlist")
+          }}
         </UButton>
         <UButton
           block
@@ -117,7 +129,11 @@
           trailing-icon="i-lucide-arrow-right"
           @click="handleVendorSelect(vendor.id)"
         >
-          {{ alreadySent ? 'Отправлено!' : 'Запросить предложение' }}
+          {{
+            alreadySent
+              ? $t("vendorCard.requestSent")
+              : $t("vendorCard.requestProposal")
+          }}
         </UButton>
       </div>
 
@@ -127,7 +143,7 @@
           trailing-icon="i-lucide-arrow-right"
           :to="`/dashboard/projects/${currentProjectId}/incoming-request/${requestId}`"
         >
-          Просмотреть предложение
+          {{ $t("vendorCard.viewProposal") }}
         </UButton>
       </div>
     </div>
@@ -139,7 +155,7 @@
         <p
           class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
         >
-          Отзывы клиентов
+          {{ $t("vendorCard.clientReviews") }}
         </p>
 
         <div v-if="reviews.length > 0" class="space-y-3">
@@ -163,7 +179,7 @@
                 </p>
                 <p class="text-xs text-gray-400">
                   {{ review.author.full_name }} ·
-                  {{ review.author.role === 'vendor' ? 'Vendor' : 'Company' }}
+                  {{ review.author.role === "vendor" ? "Vendor" : "Company" }}
                 </p>
               </div>
             </div>
@@ -177,8 +193,8 @@
         <UEmpty
           v-else
           icon="i-lucide-star"
-          title="Нет отзывов"
-          description="Этот вендор пока не получил отзывов."
+          :title="$t('vendorCard.noClientReviews')"
+          :description="$t('vendorCard.noClientReviewsDesc')"
           class="py-4"
         />
       </div>
@@ -191,7 +207,7 @@
         <p
           class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-3"
         >
-          Почему стоит выбрать
+          {{ $t("vendorCard.whyChoose") }}
         </p>
         <ul class="space-y-2">
           <li
@@ -212,7 +228,7 @@
 </template>
 
 <script setup lang="ts">
-import type { VendorProfilePublic, ReviewPublic } from '~/generated/api';
+import type { VendorProfilePublic, ReviewPublic } from "~/generated/api";
 
 import {
   projectsSendProjectRequestCompany,
@@ -221,9 +237,9 @@ import {
   reviewsGetReviewsForVendor,
   shortlistAddVendorToShortlist,
   shortlistRemoveVendorFromShortlist,
-} from '~/generated/api';
+} from "~/generated/api";
 
-const emit = defineEmits(['select', 'add-shortlist', 'shortlist-changed']);
+const emit = defineEmits(["select", "add-shortlist", "shortlist-changed"]);
 
 const {
   vendor,
@@ -241,6 +257,8 @@ const {
   onShortlistChanged?: () => void;
 }>();
 
+const { t } = useI18n();
+
 const isShortlisted = ref(initiallyShortlisted);
 const alreadySent = ref(false);
 const alreadyProcessed = ref();
@@ -248,35 +266,35 @@ const toast = useToast();
 
 const reviewsLabel = computed(() => {
   const n = vendor.reviewsCount ?? 0;
-  if (n === 1) return 'отзыв';
-  if (n >= 2 && n <= 4) return 'отзыва';
-  return 'отзывов';
+  if (n === 1) return t("common.reviewCount.singular");
+  if (n >= 2 && n <= 4) return t("common.reviewCount.few");
+  return t("common.reviewCount.many");
 });
 
 function formatNumber(n: number): string {
-  return n.toLocaleString('ru-RU');
+  return n.toLocaleString("ru-RU");
 }
 
 function initials(name: string): string {
   return name
-    .split(' ')
+    .split(" ")
     .slice(0, 2)
     .map((w) => w[0])
-    .join('')
+    .join("")
     .toUpperCase();
 }
 
 const AVATAR_COLORS = [
-  '#2563eb',
-  '#16a34a',
-  '#9333ea',
-  '#db2777',
-  '#d97706',
-  '#0891b2',
-  '#dc2626',
-  '#059669',
-  '#7c3aed',
-  '#0284c7',
+  "#2563eb",
+  "#16a34a",
+  "#9333ea",
+  "#db2777",
+  "#d97706",
+  "#0891b2",
+  "#dc2626",
+  "#059669",
+  "#7c3aed",
+  "#0284c7",
 ];
 
 function avatarColor(name: string): string {
@@ -284,25 +302,39 @@ function avatarColor(name: string): string {
   for (let i = 0; i < name.length; i++)
     hash = name.charCodeAt(i) + ((hash << 5) - hash);
   const index = Math.abs(hash) % AVATAR_COLORS.length;
-  return AVATAR_COLORS[index] ?? AVATAR_COLORS[0] ?? '#2563eb';
+  return AVATAR_COLORS[index] ?? AVATAR_COLORS[0] ?? "#2563eb";
 }
 
 const highlights = computed(() => {
   const items: string[] = [];
   if (vendor.services.length > 0)
     items.push(
-      `Специализация: ${vendor.services
-        .slice(0, 2)
-        .map((s) => s.label)
-        .join(', ')}`,
+      t("vendorCard.specializationHighlight", {
+        services: vendor.services
+          .slice(0, 2)
+          .map((s) => s.label)
+          .join(", "),
+      }),
     );
-  if (vendor.employee_count)
-    items.push(
-      `Команда ${vendor.employee_count} специалистов${vendor.user?.location ? ` в ${vendor.user.location}` : ''}`,
-    );
+  if (vendor.employee_count) {
+    if (vendor.user?.location) {
+      items.push(
+        t("vendorCard.teamHighlightLocation", {
+          count: vendor.employee_count,
+          location: vendor.user.location,
+        }),
+      );
+    } else {
+      items.push(
+        t("vendorCard.teamHighlight", { count: vendor.employee_count }),
+      );
+    }
+  }
   if (vendor.min_project_size)
     items.push(
-      `Минимальный проект от $${formatNumber(vendor.min_project_size)}`,
+      t("vendorCard.minProjectHighlight", {
+        amount: formatNumber(vendor.min_project_size),
+      }),
     );
   return items;
 });
@@ -310,9 +342,9 @@ const highlights = computed(() => {
 async function handleVendorSelect(vendorId: string) {
   if (!currentProjectId) {
     toast.add({
-      title: 'Проект не выбран',
-      description: 'Сначала создайте проект, чтобы отправить запрос.',
-      color: 'warning',
+      title: "Проект не выбран",
+      description: "Сначала создайте проект, чтобы отправить запрос.",
+      color: "warning",
     });
     return;
   }
@@ -323,20 +355,20 @@ async function handleVendorSelect(vendorId: string) {
 
   if (res.error) {
     toast.add({
-      title: 'Ошибка',
+      title: "Ошибка",
       description: extractErrorMessage(
         res.error,
-        'Не удалось отправить запрос',
+        "Не удалось отправить запрос",
       ),
-      color: 'error',
+      color: "error",
     });
     return;
   }
 
   toast.add({
-    title: 'Запрос отправлен',
-    description: 'Вендор получил уведомление.',
-    color: 'success',
+    title: "Запрос отправлен",
+    description: "Вендор получил уведомление.",
+    color: "success",
   });
   alreadySent.value = true;
 }
@@ -344,9 +376,9 @@ async function handleVendorSelect(vendorId: string) {
 async function handleVendorAccept() {
   if (!requestId) {
     toast.add({
-      title: 'Ошибка',
-      description: 'Отсутствует ID запроса',
-      color: 'error',
+      title: "Ошибка",
+      description: "Отсутствует ID запроса",
+      color: "error",
     });
     return;
   }
@@ -355,27 +387,27 @@ async function handleVendorAccept() {
 
   if (res.error) {
     toast.add({
-      title: 'Ошибка',
-      description: extractErrorMessage(res.error, 'Не удалось принять запрос'),
-      color: 'error',
+      title: "Ошибка",
+      description: extractErrorMessage(res.error, "Не удалось принять запрос"),
+      color: "error",
     });
     return;
   }
 
   toast.add({
-    title: 'Запрос принят!',
-    description: 'Вендор получил уведомление.',
-    color: 'success',
+    title: "Запрос принят!",
+    description: "Вендор получил уведомление.",
+    color: "success",
   });
-  alreadyProcessed.value = 'Принято';
+  alreadyProcessed.value = "Принято";
 }
 
 async function handleVendorDeny() {
   if (!requestId) {
     toast.add({
-      title: 'Ошибка',
-      description: 'Отсутствует ID запроса',
-      color: 'error',
+      title: "Ошибка",
+      description: "Отсутствует ID запроса",
+      color: "error",
     });
     return;
   }
@@ -384,30 +416,30 @@ async function handleVendorDeny() {
 
   if (res.error) {
     toast.add({
-      title: 'Ошибка',
+      title: "Ошибка",
       description: extractErrorMessage(
         res.error,
-        'Не удалось отклонить запрос',
+        "Не удалось отклонить запрос",
       ),
-      color: 'error',
+      color: "error",
     });
     return;
   }
 
   toast.add({
-    title: 'Запрос отклонён',
-    description: 'Вендор получил уведомление.',
-    color: 'success',
+    title: "Запрос отклонён",
+    description: "Вендор получил уведомление.",
+    color: "success",
   });
-  alreadyProcessed.value = 'Отклонено';
+  alreadyProcessed.value = "Отклонено";
 }
 
 async function toggleShortlist() {
   if (!currentProjectId) {
     toast.add({
-      title: 'Проект не выбран',
-      description: 'Сначала создайте проект, чтобы добавить в шорт-лист.',
-      color: 'warning',
+      title: "Проект не выбран",
+      description: "Сначала создайте проект, чтобы добавить в шорт-лист.",
+      color: "warning",
     });
     return;
   }
@@ -424,14 +456,14 @@ async function toggleShortlist() {
 
   if (res.error) {
     toast.add({
-      title: 'Ошибка',
+      title: "Ошибка",
       description: extractErrorMessage(
         res.error,
         wasShortlisted
-          ? 'Не удалось удалить из шорт-листа'
-          : 'Не удалось добавить в шорт-лист',
+          ? "Не удалось удалить из шорт-листа"
+          : "Не удалось добавить в шорт-лист",
       ),
-      color: 'error',
+      color: "error",
     });
     return;
   }
@@ -440,13 +472,13 @@ async function toggleShortlist() {
 
   if (wasShortlisted) {
     toast.add({
-      title: 'Удалено из шорт-листа',
-      description: 'Вендор удалён из вашего шорт-листа',
-      color: 'success',
+      title: "Удалено из шорт-листа",
+      description: "Вендор удалён из вашего шорт-листа",
+      color: "success",
       actions: [
         {
-          label: 'Отменить',
-          color: 'primary',
+          label: "Отменить",
+          color: "primary",
           onClick: async () => {
             await undoShortlistRemoval();
           },
@@ -455,13 +487,13 @@ async function toggleShortlist() {
     });
   } else {
     toast.add({
-      title: 'Добавлено в шорт-лист',
-      description: 'Вендор добавлен в ваш шорт-лист',
-      color: 'success',
+      title: "Добавлено в шорт-лист",
+      description: "Вендор добавлен в ваш шорт-лист",
+      color: "success",
     });
   }
 
-  emit('shortlist-changed', isShortlisted.value);
+  emit("shortlist-changed", isShortlisted.value);
 }
 
 async function undoShortlistRemoval() {
@@ -473,25 +505,25 @@ async function undoShortlistRemoval() {
 
   if (res.error) {
     toast.add({
-      title: 'Ошибка',
+      title: "Ошибка",
       description: extractErrorMessage(
         res.error,
-        'Не удалось восстановить вендора в шорт-листе',
+        "Не удалось восстановить вендора в шорт-листе",
       ),
-      color: 'error',
+      color: "error",
     });
     return;
   }
 
   isShortlisted.value = true;
   toast.add({
-    title: 'Восстановлено',
-    description: 'Вендор снова в шорт-листе',
-    color: 'success',
+    title: "Восстановлено",
+    description: "Вендор снова в шорт-листе",
+    color: "success",
   });
 
   if (onShortlistChanged) onShortlistChanged();
-  emit('shortlist-changed', isShortlisted.value);
+  emit("shortlist-changed", isShortlisted.value);
 }
 
 const reviews = ref<ReviewPublic[]>([]);
@@ -504,7 +536,7 @@ async function loadReviews() {
   });
 
   if (res.error) {
-    console.error('Failed to load reviews:', res.error);
+    console.error("Failed to load reviews:", res.error);
     return;
   }
 

@@ -83,7 +83,11 @@
 
     <div class="mt-auto px-5 pb-5 pt-3 border-t border-gray-100 space-y-2">
       <p class="text-xs text-gray-400">
-        Отправлено {{ formatDateReview(proposal.created_at) }}
+        {{
+          $t("proposalCard.sentAt", {
+            date: formatDateReview(proposal.created_at),
+          })
+        }}
       </p>
       <UButton
         block
@@ -92,7 +96,7 @@
         trailing-icon="i-lucide-arrow-right"
         :to="`/dashboard/proposals/${proposal.id}`"
       >
-        Смотреть бриф
+        {{ $t("proposalCard.viewBrief") }}
       </UButton>
       <UButton
         v-if="proposal.status === 'accepted'"
@@ -103,40 +107,54 @@
         :to="`mailto:${proposal.project.owner.email}`"
         target="_blank"
       >
-        Написать заказчику
+        {{ $t("proposalCard.contactClient") }}
       </UButton>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type { ProjectRequestPublicProjectFull } from '~/generated/api';
+import type { ProjectRequestPublicProjectFull } from "~/generated/api";
 
 const { proposal } = defineProps<{
   proposal: ProjectRequestPublicProjectFull;
 }>();
 
-const STATUS_STYLES = {
-  sent: { label: 'На рассмотрении', bg: 'bg-amber-50', text: 'text-amber-700' },
-  accepted: { label: 'Принято', bg: 'bg-green-50', text: 'text-green-700' },
-  declined: { label: 'Отклонено', bg: 'bg-red-50', text: 'text-red-600' },
-} as const;
+const { t } = useI18n();
+
+const STATUS_STYLES = computed(() => ({
+  sent: {
+    label: t("proposalCard.statusSent"),
+    bg: "bg-amber-50",
+    text: "text-amber-700",
+  },
+  accepted: {
+    label: t("proposalCard.statusAccepted"),
+    bg: "bg-green-50",
+    text: "text-green-700",
+  },
+  declined: {
+    label: t("proposalCard.statusDeclined"),
+    bg: "bg-red-50",
+    text: "text-red-600",
+  },
+}));
 
 const statusStyle = computed(
-  () => STATUS_STYLES[proposal.status] ?? STATUS_STYLES.sent,
+  () => STATUS_STYLES.value[proposal.status] ?? STATUS_STYLES.value.sent,
 );
 
 const AVATAR_COLORS = [
-  '#2563eb',
-  '#16a34a',
-  '#9333ea',
-  '#db2777',
-  '#d97706',
-  '#0891b2',
-  '#dc2626',
-  '#059669',
-  '#7c3aed',
-  '#0284c7',
+  "#2563eb",
+  "#16a34a",
+  "#9333ea",
+  "#db2777",
+  "#d97706",
+  "#0891b2",
+  "#dc2626",
+  "#059669",
+  "#7c3aed",
+  "#0284c7",
 ];
 
 function avatarColor(name: string): string {
@@ -148,17 +166,17 @@ function avatarColor(name: string): string {
 
 function initials(name: string): string {
   return name
-    .split(' ')
+    .split(" ")
     .slice(0, 2)
     .map((w) => w[0])
-    .join('')
+    .join("")
     .toUpperCase();
 }
 
 function formatBudget(n: number): string {
   if (n >= 1_000_000)
-    return (n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1) + 'M';
-  if (n >= 1_000) return (n / 1_000).toFixed(n % 1_000 === 0 ? 0 : 1) + 'K';
-  return n.toLocaleString('ru-RU');
+    return (n / 1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 1) + "M";
+  if (n >= 1_000) return (n / 1_000).toFixed(n % 1_000 === 0 ? 0 : 1) + "K";
+  return n.toLocaleString("ru-RU");
 }
 </script>

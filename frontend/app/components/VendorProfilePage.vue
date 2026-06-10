@@ -41,7 +41,9 @@
                 class="flex items-center gap-1.5 text-sm text-gray-500"
               >
                 <UIcon name="i-lucide-calendar" class="w-4 h-4 shrink-0" />
-                <span>Основана в {{ vendor.founded_year }}</span>
+                <span>{{
+                  t("vendorProfile.foundedIn", { year: vendor.founded_year })
+                }}</span>
               </div>
               <a
                 v-if="vendor.company_website"
@@ -54,7 +56,7 @@
                 class="flex items-center gap-1.5 text-sm text-blue-600 hover:underline"
               >
                 <UIcon name="i-lucide-globe" class="w-4 h-4 shrink-0" />
-                <span>Сайт</span>
+                <span>{{ t("common.website") }}</span>
                 <UIcon name="i-lucide-external-link" class="w-3 h-3" />
               </a>
 
@@ -79,7 +81,9 @@
                 class="flex items-center gap-1.5 px-3 py-1 bg-gray-50 border border-gray-200 rounded-full"
               >
                 <UIcon name="i-lucide-star" class="w-3.5 h-3.5 text-gray-400" />
-                <span class="text-sm text-gray-500">Нет оценок</span>
+                <span class="text-sm text-gray-500">{{
+                  t("common.noRatings")
+                }}</span>
               </div>
             </div>
           </div>
@@ -96,7 +100,9 @@
           v-if="vendor.description"
           class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
         >
-          <h2 class="text-base font-semibold mb-3">О компании</h2>
+          <h2 class="text-base font-semibold mb-3">
+            {{ t("vendorProfile.about") }}
+          </h2>
           <p class="text-sm text-gray-700 leading-relaxed whitespace-pre-line">
             {{ vendor.description }}
           </p>
@@ -107,7 +113,9 @@
           v-if="vendor.main_goal"
           class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
         >
-          <h2 class="text-base font-semibold mb-3">Основная цель</h2>
+          <h2 class="text-base font-semibold mb-3">
+            {{ t("vendorProfile.mainGoal") }}
+          </h2>
           <p class="text-sm text-gray-700 leading-relaxed">
             {{ vendor.main_goal }}
           </p>
@@ -118,7 +126,9 @@
           v-if="vendor.services.length"
           class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6"
         >
-          <h2 class="text-base font-semibold mb-3">Специализация</h2>
+          <h2 class="text-base font-semibold mb-3">
+            {{ t("vendorProfile.specialization") }}
+          </h2>
           <div>
             <span
               v-for="(svc, i) in vendor.services"
@@ -138,7 +148,7 @@
         <!-- Reviews -->
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
           <div class="flex items-center justify-between mb-5">
-            <h2 class="text-base font-semibold">Отзывы</h2>
+            <h2 class="text-base font-semibold">{{ t("common.reviews") }}</h2>
             <span v-if="totalReviews" class="text-sm text-gray-400">
               {{ totalReviews }} {{ reviewsLabel(totalReviews) }}
             </span>
@@ -160,15 +170,15 @@
                 :loading="loadingMore"
                 @click="loadMoreReviews"
               >
-                Загрузить ещё
+                {{ t("common.loadMore") }}
               </UButton>
             </div>
           </div>
           <UEmpty
             v-else
             icon="i-lucide-star"
-            title="Отзывов пока нет"
-            description="Этот вендор ещё не получил отзывов."
+            :title="t('vendorProfile.noReviews')"
+            :description="t('vendorProfile.noReviewsDesc')"
             class="py-6"
           />
         </div>
@@ -178,7 +188,9 @@
       <div class="space-y-6">
         <!-- Stats -->
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-          <h3 class="text-base font-semibold mb-4">Показатели</h3>
+          <h3 class="text-base font-semibold mb-4">
+            {{ t("vendorProfile.stats") }}
+          </h3>
           <div class="space-y-4">
             <div class="flex items-start gap-3">
               <div
@@ -187,7 +199,9 @@
                 <UIcon name="i-lucide-tag" class="w-4 h-4 text-blue-500" />
               </div>
               <div>
-                <p class="text-xs text-gray-400">Мин. проект</p>
+                <p class="text-xs text-gray-400">
+                  {{ t("vendorProfile.minProject") }}
+                </p>
                 <p class="font-semibold text-sm">
                   ${{ formatNumber(vendor.min_project_size) }}
                 </p>
@@ -200,7 +214,9 @@
                 <UIcon name="i-lucide-clock" class="w-4 h-4 text-blue-500" />
               </div>
               <div>
-                <p class="text-xs text-gray-400">Ставка в час</p>
+                <p class="text-xs text-gray-400">
+                  {{ t("vendorProfile.hourlyRate") }}
+                </p>
                 <p class="font-semibold text-sm">
                   ${{ formatNumber(vendor.avg_hourly_rate) }}
                 </p>
@@ -213,9 +229,15 @@
                 <UIcon name="i-lucide-users" class="w-4 h-4 text-blue-500" />
               </div>
               <div>
-                <p class="text-xs text-gray-400">Команда</p>
+                <p class="text-xs text-gray-400">
+                  {{ t("vendorProfile.team") }}
+                </p>
                 <p class="font-semibold text-sm">
-                  {{ vendor.employee_count }} человек
+                  {{
+                    t("vendorProfile.employees", {
+                      count: vendor.employee_count,
+                    })
+                  }}
                 </p>
               </div>
             </div>
@@ -229,7 +251,9 @@
                 />
               </div>
               <div>
-                <p class="text-xs text-gray-400">Оборот</p>
+                <p class="text-xs text-gray-400">
+                  {{ t("vendorProfile.turnover") }}
+                </p>
                 <p class="font-semibold text-sm">
                   ${{ formatTurnover(vendor.turnover) }}
                 </p>
@@ -240,7 +264,9 @@
 
         <!-- Contact -->
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-          <h3 class="text-base font-semibold mb-4">Контакты</h3>
+          <h3 class="text-base font-semibold mb-4">
+            {{ t("common.contacts") }}
+          </h3>
           <div class="space-y-3">
             <div v-if="vendor.sales_email" class="flex items-start gap-3">
               <div
@@ -268,7 +294,7 @@
                 <UIcon name="i-lucide-phone" class="w-4 h-4 text-gray-500" />
               </div>
               <div>
-                <p class="text-xs text-gray-400">Телефон</p>
+                <p class="text-xs text-gray-400">{{ t("common.phone") }}</p>
                 <a
                   :href="`tel:${vendor.admin_contact_phone}`"
                   class="text-sm text-blue-600 hover:underline"
@@ -291,6 +317,8 @@ import { reviewsGetReviewsForVendor } from "~/generated/api";
 const props = defineProps<{
   vendor: VendorProfilePublic;
 }>();
+
+const { t } = useI18n();
 
 const AVATAR_COLORS = [
   "#2563eb",
@@ -322,9 +350,9 @@ function initials(name: string): string {
 }
 
 function reviewsLabel(n: number): string {
-  if (n === 1) return "отзыв";
-  if (n >= 2 && n <= 4) return "отзыва";
-  return "отзывов";
+  if (n === 1) return t("common.reviewCount.singular");
+  if (n >= 2 && n <= 4) return t("common.reviewCount.few");
+  return t("common.reviewCount.many");
 }
 
 function formatNumber(n: number): string {

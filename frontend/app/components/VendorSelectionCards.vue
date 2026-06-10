@@ -14,13 +14,13 @@
           name="i-lucide-loader-2"
           class="w-6 h-6 animate-spin text-muted"
         />
-        <span class="text-muted">Loading...</span>
+        <span class="text-muted">{{ $t("vendorSelection.loading") }}</span>
       </div>
       <div v-else-if="!vendors.length">
         <UEmpty
           icon="i-lucide-search-x"
-          title="No matching vendors found"
-          description="However, vendors have received your request. Their responses will appear soon."
+          :title="$t('vendorSelection.noVendors')"
+          :description="$t('vendorSelection.noVendorsDesc')"
           class="w-fit mx-auto"
         />
       </div>
@@ -29,12 +29,12 @@
 </template>
 
 <script setup lang="ts">
-import { useInfiniteScroll } from '@vueuse/core';
+import { useInfiniteScroll } from "@vueuse/core";
 import {
   projectsGetMatchingVendors,
   shortlistGetShortlistedVendors,
-} from '~/generated/api';
-import type { VendorProfilePublic } from '~/generated/api';
+} from "~/generated/api";
+import type { VendorProfilePublic } from "~/generated/api";
 
 const { projectId } = defineProps<{
   projectId: string;
@@ -65,9 +65,9 @@ async function loadMore() {
 
   if (res.error) {
     toast.add({
-      title: "Can't get vendors",
+      title: "Ошибка",
       description: extractErrorMessage(res.error),
-      color: 'error',
+      color: "error",
     });
   } else {
     vendors.value.push(...res.data.result);

@@ -61,7 +61,7 @@
         class="flex items-center gap-2 text-sm text-gray-400"
       >
         <UIcon name="i-lucide-archive" class="w-4 h-4" />
-        <span>В архиве</span>
+        <span>{{ $t("projectCard.archived") }}</span>
       </div>
 
       <template v-else-if="item.vendor_profile">
@@ -72,7 +72,9 @@
             name="i-lucide-circle-check"
             class="w-4 h-4 text-green-600 shrink-0"
           />
-          <span class="text-sm font-medium text-green-700">Вендор выбран</span>
+          <span class="text-sm font-medium text-green-700">{{
+            $t("projectCard.vendorSelected")
+          }}</span>
         </div>
         <UButton
           block
@@ -81,7 +83,7 @@
           trailing-icon="i-lucide-arrow-right"
           :to="`/vendors/${item.vendor_profile.id}`"
         >
-          Посмотреть вендора
+          {{ $t("projectCard.viewVendor") }}
         </UButton>
       </template>
 
@@ -94,12 +96,9 @@
             name="i-lucide-inbox"
             class="w-4 h-4 text-amber-600 shrink-0"
           />
-          <span class="text-sm font-medium text-amber-700"
-            >{{ item.incoming_count }}
-            {{
-              item.incoming_count === 1 ? "предложение" : "предложений"
-            }}</span
-          >
+          <span class="text-sm font-medium text-amber-700">{{
+            proposalsLabel
+          }}</span>
         </div>
         <div class="grid grid-cols-2 gap-2">
           <UButton
@@ -108,10 +107,10 @@
             color="neutral"
             :to="`/dashboard/projects/${item.id}/explore`"
           >
-            Найти вендоров
+            {{ $t("projectCard.findVendors") }}
           </UButton>
           <UButton block :to="`/dashboard/projects/${item.id}/compare`">
-            Предложения
+            {{ $t("projectCard.proposals") }}
           </UButton>
         </div>
       </template>
@@ -122,7 +121,16 @@
 <script setup lang="ts">
 import type { ProjectWithIncomingCount } from "~/generated/api";
 
-defineProps<{ item: ProjectWithIncomingCount }>();
+const { item } = defineProps<{ item: ProjectWithIncomingCount }>();
+
+const { t } = useI18n();
+
+const proposalsLabel = computed(() => {
+  const n = item.incoming_count ?? 0;
+  if (n === 1) return t("projectCard.proposalSingular", { count: n });
+  if (n >= 2 && n <= 4) return t("projectCard.proposalFew", { count: n });
+  return t("projectCard.proposalMany", { count: n });
+});
 
 function formatBudget(n: number): string {
   if (n >= 1_000_000)
