@@ -4,7 +4,7 @@
       <template #title>
         <div class="flex items-center gap-2 font-bold text-blue-600">
           <Logo />
-          {{ $t('brandName') }}
+          {{ $t("brandName") }}
         </div>
       </template>
 
@@ -15,15 +15,15 @@
         <div class="hidden items-center gap-2 lg:flex">
           <template v-if="auth.user.value">
             <UButton :to="$localePath('/dashboard/projects')">{{
-              $t('nav.dashboard')
+              $t("nav.dashboard")
             }}</UButton>
           </template>
           <template v-else>
             <UButton :to="$localePath('/sign-in')">{{
-              $t('nav.signIn')
+              $t("nav.signIn")
             }}</UButton>
             <UButton :to="$localePath('/register')" variant="solid">{{
-              $t('nav.getStarted')
+              $t("nav.getStarted")
             }}</UButton>
           </template>
         </div>
@@ -38,15 +38,15 @@
         <div class="flex flex-col gap-2 px-2.5 pb-4">
           <template v-if="auth.user.value">
             <UButton :to="$localePath('/dashboard/projects')" block>{{
-              $t('nav.dashboard')
+              $t("nav.dashboard")
             }}</UButton>
           </template>
           <template v-else>
             <UButton :to="$localePath('/sign-in')" block>{{
-              $t('nav.signIn')
+              $t("nav.signIn")
             }}</UButton>
             <UButton :to="$localePath('/register')" variant="solid" block>{{
-              $t('nav.getStarted')
+              $t("nav.getStarted")
             }}</UButton>
           </template>
         </div>
@@ -66,22 +66,22 @@
           <h1
             class="mb-6 text-2xl md:text-4xl font-extrabold leading-tight text-slate-800"
           >
-            {{ $t('hero.titleBefore') }}
-            <span class="text-blue-600">{{ $t('hero.highlight') }}</span>
-            {{ $t('hero.titleAfter') }}
+            {{ $t("hero.titleBefore") }}
+            <span class="text-blue-600">{{ $t("hero.highlight") }}</span>
+            {{ $t("hero.titleAfter") }}
           </h1>
           <p class="mb-8 text-lg md:text-xl text-slate-500">
-            {{ $t('hero.subtitle') }}
+            {{ $t("hero.subtitle") }}
           </p>
           <div class="flex flex-wrap gap-4">
             <UButton :to="$localePath('/register')" variant="solid" size="xl">
-              {{ $t('hero.placeProject') }}
+              {{ $t("hero.placeProject") }}
             </UButton>
             <UButton
               :to="$localePath('/dashboard/vendor-registration')"
               size="xl"
             >
-              {{ $t('hero.becomeVendor') }}
+              {{ $t("hero.becomeVendor") }}
             </UButton>
           </div>
         </div>
@@ -101,10 +101,10 @@
       <div class="mx-auto max-w-7xl">
         <div class="mb-16 text-center">
           <h2 class="mb-4 text-2xl md:text-4xl font-extrabold text-slate-800">
-            {{ $t('features.title') }}
+            {{ $t("features.title") }}
           </h2>
           <p class="text-lg md:text-xl text-slate-500">
-            {{ $t('features.subtitle') }}
+            {{ $t("features.subtitle") }}
           </p>
         </div>
         <div class="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
@@ -133,10 +133,10 @@
       <div class="mx-auto max-w-7xl">
         <div class="mb-16 text-center">
           <h2 class="mb-4 text-2xl md:text-4xl font-extrabold text-slate-800">
-            {{ $t('howItWorks.title') }}
+            {{ $t("howItWorks.title") }}
           </h2>
           <p class="text-lg md:text-xl text-slate-500">
-            {{ $t('howItWorks.subtitle') }}
+            {{ $t("howItWorks.subtitle") }}
           </p>
         </div>
         <UStepper
@@ -155,10 +155,10 @@
       <div class="mx-auto max-w-7xl">
         <div class="mb-16 text-center">
           <h2 class="mb-4 text-2xl md:text-4xl font-extrabold text-slate-800">
-            {{ $t('audience.title') }}
+            {{ $t("audience.title") }}
           </h2>
           <p class="text-lg md:text-xl text-slate-500">
-            {{ $t('audience.subtitle') }}
+            {{ $t("audience.subtitle") }}
           </p>
         </div>
         <div class="grid gap-12 md:grid-cols-2">
@@ -192,10 +192,10 @@
       <div class="mx-auto max-w-7xl">
         <div class="mb-16 text-center">
           <h2 class="mb-4 text-2xl md:text-4xl font-extrabold text-slate-800">
-            {{ $t('clients.title') }}
+            {{ $t("clients.title") }}
           </h2>
           <p class="text-lg md:text-xl text-slate-500">
-            {{ $t('clients.subtitle') }}
+            {{ $t("clients.subtitle") }}
           </p>
         </div>
         <UCarousel
@@ -231,16 +231,16 @@
     >
       <div class="mx-auto max-w-3xl">
         <h2 class="mb-6 text-2xl md:text-5xl font-extrabold">
-          {{ $t('cta.title') }}
+          {{ $t("cta.title") }}
         </h2>
         <p class="mb-8 text-lg md:text-xl opacity-90">
-          {{ $t('cta.subtitle') }}
+          {{ $t("cta.subtitle") }}
         </p>
         <NuxtLink
           :to="$localePath('/register')"
           class="inline-block rounded-lg bg-white px-6 py-3 text-base font-semibold text-blue-600 transition hover:bg-white/90"
         >
-          {{ $t('cta.button') }}
+          {{ $t("cta.button") }}
         </NuxtLink>
       </div>
     </section>
@@ -250,18 +250,18 @@
         class="mx-auto mb-12 grid max-w-7xl gap-12 md:grid-cols-[2fr_1fr_1fr_1fr]"
       >
         <div>
-          <h3 class="mb-4 text-3xl font-bold">{{ $t('brandName') }}</h3>
-          <p class="text-white/70">{{ $t('footer.description') }}</p>
+          <h3 class="mb-4 text-3xl font-bold">{{ $t("brandName") }}</h3>
+          <p class="text-white/70">{{ $t("footer.description") }}</p>
         </div>
         <div>
-          <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.product') }}</h4>
+          <h4 class="mb-4 text-lg font-semibold">{{ $t("footer.product") }}</h4>
           <ul class="space-y-2">
             <li>
               <NuxtLink
                 :to="$localePath('/search-process')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.searchProcess') }}
+                {{ $t("pages.searchProcess") }}
               </NuxtLink>
             </li>
             <li>
@@ -269,7 +269,7 @@
                 :to="$localePath('/pricing')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.pricing') }}
+                {{ $t("pages.pricing") }}
               </NuxtLink>
             </li>
             <li>
@@ -277,20 +277,20 @@
                 class="text-white/70 transition hover:text-white text-left"
                 @click="showApiToast"
               >
-                {{ $t('pages.api') }}
+                {{ $t("pages.api") }}
               </button>
             </li>
           </ul>
         </div>
         <div>
-          <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.company') }}</h4>
+          <h4 class="mb-4 text-lg font-semibold">{{ $t("footer.company") }}</h4>
           <ul class="space-y-2">
             <li>
               <NuxtLink
                 :to="$localePath('/about')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.about') }}
+                {{ $t("pages.about") }}
               </NuxtLink>
             </li>
             <li>
@@ -298,20 +298,20 @@
                 :to="$localePath('/contacts')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.contacts') }}
+                {{ $t("pages.contacts") }}
               </NuxtLink>
             </li>
           </ul>
         </div>
         <div>
-          <h4 class="mb-4 text-lg font-semibold">{{ $t('footer.legal') }}</h4>
+          <h4 class="mb-4 text-lg font-semibold">{{ $t("footer.legal") }}</h4>
           <ul class="space-y-2">
             <li>
               <NuxtLink
                 :to="$localePath('/privacy')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.privacy') }}
+                {{ $t("pages.privacy") }}
               </NuxtLink>
             </li>
             <li>
@@ -319,7 +319,7 @@
                 :to="$localePath('/personal-data')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.personalData') }}
+                {{ $t("pages.personalData") }}
               </NuxtLink>
             </li>
             <li>
@@ -327,7 +327,7 @@
                 :to="$localePath('/recommendations-policy')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.recommendationsPolicy') }}
+                {{ $t("pages.recommendationsPolicy") }}
               </NuxtLink>
             </li>
             <li>
@@ -335,7 +335,15 @@
                 :to="$localePath('/public-offer')"
                 class="text-white/70 transition hover:text-white"
               >
-                {{ $t('pages.publicOffer') }}
+                {{ $t("pages.publicOffer") }}
+              </NuxtLink>
+            </li>
+            <li>
+              <NuxtLink
+                :to="$localePath('/cookie-policy')"
+                class="text-white/70 transition hover:text-white"
+              >
+                {{ $t("pages.cookiePolicy") }}
               </NuxtLink>
             </li>
           </ul>
@@ -344,7 +352,7 @@
       <div
         class="mx-auto max-w-7xl border-t border-white/10 pt-8 text-center text-white/70"
       >
-        <p>{{ $t('footer.copyright', { year: year }) }}</p>
+        <p>{{ $t("footer.copyright", { year: year }) }}</p>
       </div>
     </footer>
   </div>
@@ -357,105 +365,105 @@ const auth = useAuth();
 const { t, tm, rt } = useI18n();
 const toast = useToast();
 
-useHead({ title: () => t('pageTitle') });
+useHead({ title: () => t("pageTitle") });
 
 const year = new Date().getFullYear();
 
 function showApiToast() {
   toast.add({
-    title: t('footer.comingSoon'),
-    icon: 'i-lucide-clock',
-    color: 'info',
+    title: t("footer.comingSoon"),
+    icon: "i-lucide-clock",
+    color: "info",
   });
 }
 
 function scrollToSection(id: string) {
-  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+  document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 }
 
 const navItems = computed(() => [
-  { label: t('nav.features'), onSelect: () => scrollToSection('features') },
+  { label: t("nav.features"), onSelect: () => scrollToSection("features") },
   {
-    label: t('nav.howItWorks'),
-    onSelect: () => scrollToSection('how-it-works'),
+    label: t("nav.howItWorks"),
+    onSelect: () => scrollToSection("how-it-works"),
   },
-  { label: t('nav.clients'), onSelect: () => scrollToSection('clients') },
+  { label: t("nav.clients"), onSelect: () => scrollToSection("clients") },
 ]);
 
 const companies = [
-  { name: 'Лукойл', domain: 'lukoil.com' },
-  { name: 'Газпром', domain: 'gazprom.com' },
-  { name: 'Сбербанк', domain: 'sberbank.ru' },
-  { name: 'ВТБ', domain: 'vtb.ru' },
-  { name: 'Роснефть', domain: 'rosneft.com' },
-  { name: 'МТС', domain: 'mts.ru' },
-  { name: 'Яндекс', domain: 'ya.ru' },
-  { name: 'РЖД', domain: 'rzd.ru' },
-  { name: 'Мегафон', domain: 'megafon.ru' },
-  { name: 'Ростех', domain: 'rostec.ru' },
+  { name: "Лукойл", domain: "lukoil.com" },
+  { name: "Газпром", domain: "gazprom.com" },
+  { name: "Сбербанк", domain: "sberbank.ru" },
+  { name: "ВТБ", domain: "vtb.ru" },
+  { name: "Роснефть", domain: "rosneft.com" },
+  { name: "МТС", domain: "mts.ru" },
+  { name: "Яндекс", domain: "ya.ru" },
+  { name: "РЖД", domain: "rzd.ru" },
+  { name: "Мегафон", domain: "megafon.ru" },
+  { name: "Ростех", domain: "rostec.ru" },
 ];
 
 const features = computed(() => [
   {
-    icon: 'i-lucide-search',
-    title: t('features.search.title'),
-    description: t('features.search.description'),
+    icon: "i-lucide-search",
+    title: t("features.search.title"),
+    description: t("features.search.description"),
   },
   {
-    icon: 'i-lucide-file-text',
-    title: t('features.briefs.title'),
-    description: t('features.briefs.description'),
+    icon: "i-lucide-file-text",
+    title: t("features.briefs.title"),
+    description: t("features.briefs.description"),
   },
   {
-    icon: 'i-lucide-scale',
-    title: t('features.compare.title'),
-    description: t('features.compare.description'),
+    icon: "i-lucide-scale",
+    title: t("features.compare.title"),
+    description: t("features.compare.description"),
   },
   {
-    icon: 'i-lucide-shield-check',
-    title: t('features.verified.title'),
-    description: t('features.verified.description'),
+    icon: "i-lucide-shield-check",
+    title: t("features.verified.title"),
+    description: t("features.verified.description"),
   },
   {
-    icon: 'i-lucide-message-square',
-    title: t('features.communication.title'),
-    description: t('features.communication.description'),
+    icon: "i-lucide-message-square",
+    title: t("features.communication.title"),
+    description: t("features.communication.description"),
   },
   {
-    icon: 'i-lucide-bar-chart-2',
-    title: t('features.analytics.title'),
-    description: t('features.analytics.description'),
+    icon: "i-lucide-bar-chart-2",
+    title: t("features.analytics.title"),
+    description: t("features.analytics.description"),
   },
 ]);
 
 const steps = computed(() => [
   {
-    value: 'step-1',
-    title: t('howItWorks.step1.title'),
-    description: t('howItWorks.step1.description'),
+    value: "step-1",
+    title: t("howItWorks.step1.title"),
+    description: t("howItWorks.step1.description"),
   },
   {
-    value: 'step-2',
-    title: t('howItWorks.step2.title'),
-    description: t('howItWorks.step2.description'),
+    value: "step-2",
+    title: t("howItWorks.step2.title"),
+    description: t("howItWorks.step2.description"),
   },
   {
-    value: 'step-3',
-    title: t('howItWorks.step3.title'),
-    description: t('howItWorks.step3.description'),
+    value: "step-3",
+    title: t("howItWorks.step3.title"),
+    description: t("howItWorks.step3.description"),
   },
 ]);
 
 const audienceGroups = computed(() => [
   {
-    title: t('audience.forCompanies.title'),
-    items: (tm('audience.forCompanies.items') as unknown[]).map((item) =>
+    title: t("audience.forCompanies.title"),
+    items: (tm("audience.forCompanies.items") as unknown[]).map((item) =>
       rt(item),
     ),
   },
   {
-    title: t('audience.forVendors.title'),
-    items: (tm('audience.forVendors.items') as unknown[]).map((item) =>
+    title: t("audience.forVendors.title"),
+    items: (tm("audience.forVendors.items") as unknown[]).map((item) =>
       rt(item),
     ),
   },

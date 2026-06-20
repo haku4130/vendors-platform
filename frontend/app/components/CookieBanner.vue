@@ -13,9 +13,9 @@
         />
         <p class="text-sm text-gray-200 flex-1">
           {{ $t("cookieBanner.text") }}&nbsp;<NuxtLink
-            :to="$localePath('/privacy')"
+            :to="$localePath('/cookie-policy')"
             class="text-blue-400 hover:text-blue-300 underline underline-offset-2"
-            >{{ $t("cookieBanner.privacyLink") }}</NuxtLink
+            >{{ $t("cookieBanner.cookiePolicyLink") }}</NuxtLink
           >.
         </p>
         <UButton size="sm" class="shrink-0" @click="accept">

@@ -1,564 +1,564 @@
 {
-  "common": {
-    "cancel": "Cancel",
-    "back": "Back",
-    "loading": "Loading...",
-    "loadMore": "Load more",
-    "website": "Website",
-    "phone": "Phone",
-    "contacts": "Contacts",
-    "reviews": "Reviews",
-    "noRatings": "No ratings yet",
-    "goToDashboard": "Go to Dashboard",
-    "reviewCount": {
-      "singular": "review",
-      "few": "reviews",
-      "many": "reviews"
-    }
-  },
-  "brandName": "VendorHub",
-  "pageTitle": "VendorHub — platform for company-vendor collaboration",
-  "nav": {
-    "features": "Features",
-    "howItWorks": "How It Works",
-    "clients": "Our Clients",
-    "signIn": "Sign In",
-    "getStarted": "Get Started",
-    "dashboard": "Dashboard"
-  },
-  "hero": {
-    "titleBefore": "Find the",
-    "highlight": "perfect",
-    "titleAfter": "IT partner in minutes",
-    "subtitle": "VendorHub is a digital platform that simplifies IT vendor search and selection. Automate your procurement process and save up to 60% of time on finding contractors.",
-    "placeProject": "Post a Project",
-    "becomeVendor": "Become a Vendor"
-  },
-  "features": {
-    "title": "Why Choose VendorHub",
-    "subtitle": "All the tools for effective IT vendor collaboration in one place",
-    "search": {
-      "title": "Smart Vendor Search",
-      "description": "Algorithms automatically match suitable vendors based on your requirements, tech stack, and project budget."
-    },
-    "briefs": {
-      "title": "Standardized Briefs",
-      "description": "Create detailed project briefs in minutes using ready-made templates. All requirements are structured and clear for vendors."
-    },
-    "compare": {
-      "title": "Proposal Comparison",
-      "description": "Compare vendor proposals in a single interface. Evaluate technical solutions, timelines, and costs."
-    },
-    "verified": {
-      "title": "Verified Profiles",
-      "description": "All vendors are verified. Browse portfolios, client reviews, and ratings before making a decision."
-    },
-    "communication": {
-      "title": "Unified Communication",
-      "description": "All correspondence, documents, and interaction history with vendors is stored in one place."
-    },
-    "analytics": {
-      "title": "Analytics & Reports",
-      "description": "Track key metrics: project closure time, budgets, and vendor performance."
-    }
-  },
-  "howItWorks": {
-    "title": "How It Works",
-    "subtitle": "A simple process from posting a project to choosing a contractor",
-    "step1": {
-      "title": "Describe Your Project",
-      "description": "Fill out a project brief with goals, requirements, budget, and timeline. Our builder helps you cover everything."
-    },
-    "step2": {
-      "title": "Receive Proposals",
-      "description": "Matching vendors will be notified about your project and will submit their commercial proposals."
-    },
-    "step3": {
-      "title": "Choose a Contractor",
-      "description": "Compare proposals, review portfolios and feedback. Contact finalists and select the best partner."
-    }
-  },
-  "audience": {
-    "title": "Who Is VendorHub For",
-    "subtitle": "Our platform is built for two types of users",
-    "forCompanies": {
-      "title": "For Companies",
-      "items": [
-        "Fast IT vendor search for any task",
-        "Save time comparing proposals",
-        "Access to a network of verified contractors",
-        "Transparent vendor selection process",
-        "Reduce the risk of choosing the wrong vendor"
-      ]
-    },
-    "forVendors": {
-      "title": "For IT Vendors",
-      "items": [
-        "New clients and projects in your specialty",
-        "Increase brand awareness in the market",
-        "Structured briefs with clear requirements",
-        "Lower client acquisition costs",
-        "Tools to showcase your expertise"
-      ]
-    }
-  },
-  "clients": {
-    "title": "Trusted By",
-    "subtitle": "Leading companies choose us to find IT vendors"
-  },
-  "cta": {
-    "title": "Ready to Get Started?",
-    "subtitle": "Join companies that have already optimized their IT vendor search",
-    "button": "Create an Account"
-  },
-  "footer": {
-    "description": "A digital platform for effective IT vendor collaboration. We simplify the process of finding and selecting technology partners.",
-    "product": "Product",
-    "searchProcess": "Search Process",
-    "features": "Features",
-    "company": "Company",
-    "contacts": "Contact",
-    "reviews": "Reviews",
-    "other": "Other",
-    "signIn": "Sign In",
-    "register": "Register",
-    "copyright": "© {year} VendorHub LLC",
-    "legal": "Legal",
-    "privacy": "Privacy Policy",
-    "personalData": "Personal Data",
-    "publicOffer": "Public Offer",
-    "api": "API",
-    "pricing": "Pricing",
-    "comingSoon": "Coming soon"
-  },
-  "auth": {
-    "signIn": {
-      "title": "Sign In",
-      "subtitle": "Welcome back to VendorHub",
-      "email": "Email",
-      "password": "Password",
-      "forgotPassword": "Forgot password?",
-      "submit": "Continue",
-      "noAccount": "Don't have an account?",
-      "register": "Register"
-    },
-    "register": {
-      "title": "Register",
-      "submit": "Register",
-      "hasAccount": "Already have an account?",
-      "signIn": "Sign In",
-      "subtitle": "Create an account to get started",
-      "fullName": "Full Name",
-      "companyName": "Company Name",
-      "companyLocation": "Company Location",
-      "email": "Email",
-      "password": "Password",
-      "confirmPassword": "Confirm Password",
-      "nextStep": "Next Step",
-      "goBack": "Go Back",
-      "consent": "I accept the",
-      "consentPublicOffer": "public offer",
-      "consentAnd": "and",
-      "consentPrivacy": "privacy policy",
-      "consentPersonalData": "and personal data processing",
-      "consentRequired": "You must accept the terms",
-      "roles": {
-        "company": {
-          "label": "Hire a business partner",
-          "description": "I want to find and hire a provider to help our company achieve our goals."
-        },
-        "vendor": {
-          "label": "Get listed on the platform",
-          "description": "I want to sell my business' services and boost visibility for my brand."
+    "common": {
+        "cancel": "Cancel",
+        "back": "Back",
+        "loading": "Loading...",
+        "loadMore": "Load more",
+        "website": "Website",
+        "phone": "Phone",
+        "contacts": "Contacts",
+        "reviews": "Reviews",
+        "noRatings": "No ratings yet",
+        "goToDashboard": "Go to Dashboard",
+        "reviewCount": {
+            "singular": "review",
+            "few": "reviews",
+            "many": "reviews"
         }
-      }
     },
-    "forgotPassword": {
-      "title": "Forgot Password",
-      "submit": "Send"
+    "brandName": "VendorHub",
+    "pageTitle": "VendorHub — platform for company-vendor collaboration",
+    "nav": {
+        "features": "Features",
+        "howItWorks": "How It Works",
+        "clients": "Our Clients",
+        "signIn": "Sign In",
+        "getStarted": "Get Started",
+        "dashboard": "Dashboard"
     },
-    "resetPassword": {
-      "title": "New Password",
-      "newPassword": "New Password",
-      "confirmPassword": "Confirm Password",
-      "submit": "Save"
-    }
-  },
-  "dashboard": {
-    "title": "Dashboard",
-    "logout": "Log Out",
-    "platformFeedback": "Platform Feedback",
-    "admin": {
-      "contentPages": "Site Pages"
+    "hero": {
+        "titleBefore": "Find the",
+        "highlight": "perfect",
+        "titleAfter": "IT partner in minutes",
+        "subtitle": "VendorHub is a digital platform that simplifies IT vendor search and selection. Automate your procurement process and save up to 60% of time on finding contractors.",
+        "placeProject": "Post a Project",
+        "becomeVendor": "Become a Vendor"
     },
-    "menu": {
-      "projects": "Projects",
-      "shortlist": "Shortlist",
-      "reviews": "Reviews",
-      "profile": "Profile",
-      "findVendors": "Find Vendors",
-      "portfolio": "Portfolio",
-      "analytics": "Analytics",
-      "bills": "Bills",
-      "team": "Team"
-    },
-    "underConstruction": {
-      "title": "That page is under construction",
-      "description": "We are working hard to bring you this feature soon."
-    },
-    "projects": {
-      "title": "My Projects",
-      "buildBrief": "Build a project brief in minutes",
-      "buildBriefDesc": "Create a personalized project brief and send it to multiple best-fit vendors all at once.",
-      "projectBrief": "Project Brief",
-      "tabs": {
-        "incoming": "Incoming",
-        "search": "Search Projects",
-        "accepted": "Accepted"
-      },
-      "empty": {
-        "incoming": "Awaiting company requests",
-        "incomingDesc": "We'll list their requests here as soon as they come in.",
-        "search": "Awaiting company projects",
-        "searchDesc": "We'll list their projects here as soon as they come in.",
-        "accepted": "No accepted projects",
-        "acceptedDesc": "Accepted projects will appear here."
-      },
-      "startProject": "Start a Project",
-      "tabActive": "Active",
-      "tabArchive": "Archive",
-      "noArchived": "No archived projects yet.",
-      "archived": "This project is archived",
-      "archiveProject": "Archive Project",
-      "archiveConfirmTitle": "Archive this project?",
-      "archiveConfirmDesc": "Vendors will no longer see this project. It will be moved to your Archive tab. Vendors who have applied will also see it in their Archive.",
-      "myRecommendations": "My Recommendations",
-      "noReviews": "You haven't left a review to anyone yet!",
-      "modal": {
-        "title": "Project Brief",
-        "step1Title": "Give your project a name as a short description.",
-        "step2Title": "What kind of services are you looking for?",
-        "step3Title": "When would you like to start this project?",
-        "step4Title": "What is your project budget?",
-        "step5Title": "What's important to you about a provider's location?",
-        "step6Title": "What's your company's website?",
-        "step7Title": "Tell us more about your project and goals."
-      }
-    },
-    "vendorSection": {
-      "tabs": {
-        "incoming": "Incoming Projects",
-        "incomingShort": "Incoming",
-        "find": "Find a Project",
-        "findShort": "Find",
-        "proposals": "My Proposals",
-        "proposalsShort": "Proposals",
-        "archive": "Archive"
-      },
-      "empty": {
-        "incomingTitle": "Awaiting company requests",
-        "incomingDesc": "We'll list their requests here as soon as they come in.",
-        "findTitle": "Awaiting company projects",
-        "findDesc": "We'll list their projects here as soon as they come in.",
-        "proposalsTitle": "No proposals yet",
-        "proposalsDesc": "Your project proposals will appear here.",
-        "archiveTitle": "No archived projects",
-        "archiveDesc": "Projects you applied to that were archived will appear here."
-      },
-      "filters": {
-        "all": "All",
-        "sent": "Under Review",
-        "accepted": "Accepted",
-        "declined": "Declined"
-      }
-    },
-    "vendors": {
-      "bannerTitle": "Find the perfect partner for your project",
-      "searchPlaceholder": "Search for Web Design, Web App Development, etc.",
-      "selectedServices": "Selected Services ({count}/10)",
-      "searching": "Searching for vendors...",
-      "searchButton": "Search",
-      "noResults": "No vendors found",
-      "noResultsDesc": "Try adjusting your search criteria or selecting different services.",
-      "clearSearch": "Clear Search",
-      "startTitle": "Start searching for vendors",
-      "startDesc": "Select the services you need and optionally a location to find the perfect vendors for your project."
-    },
-    "shortlist": {
-      "title": "Shortlist",
-      "subtitle": "Your favorite vendors saved for quick access.",
-      "howItWorks": "How it works",
-      "notPicked": "You haven't picked your favorites yet!",
-      "findPartner": "Find a Partner",
-      "findMore": "Find More Vendors",
-      "loading": "Loading shortlist...",
-      "noProjects": "No projects yet",
-      "noProjectsDesc": "Create a project first, then you can add vendors to your shortlist.",
-      "vendorCount": "{count} vendor(s) in shortlist",
-      "noVendors": "No vendors in shortlist",
-      "noVendorsDesc": "Browse vendors and add them to your shortlist for this project.",
-      "steps": {
-        "startProject": {
-          "title": "Start a Project",
-          "description": "Create a brief describing your needs and goals."
+    "features": {
+        "title": "Why Choose VendorHub",
+        "subtitle": "All the tools for effective IT vendor collaboration in one place",
+        "search": {
+            "title": "Smart Vendor Search",
+            "description": "Algorithms automatically match suitable vendors based on your requirements, tech stack, and project budget."
         },
-        "getMatched": {
-          "title": "Get Matched",
-          "description": "We'll suggest the best-fit vendors based on your project details."
+        "briefs": {
+            "title": "Standardized Briefs",
+            "description": "Create detailed project briefs in minutes using ready-made templates. All requirements are structured and clear for vendors."
         },
-        "shortlistDecide": {
-          "title": "Shortlist & Decide",
-          "description": "Compare proposals, pick your favorites, and choose who to work with."
+        "compare": {
+            "title": "Proposal Comparison",
+            "description": "Compare vendor proposals in a single interface. Evaluate technical solutions, timelines, and costs."
+        },
+        "verified": {
+            "title": "Verified Profiles",
+            "description": "All vendors are verified. Browse portfolios, client reviews, and ratings before making a decision."
+        },
+        "communication": {
+            "title": "Unified Communication",
+            "description": "All correspondence, documents, and interaction history with vendors is stored in one place."
+        },
+        "analytics": {
+            "title": "Analytics & Reports",
+            "description": "Track key metrics: project closure time, budgets, and vendor performance."
         }
-      }
     },
-    "reviews": {
-      "banner": "Leaving a review helps business leaders like you make a confident choice",
-      "tabs": {
-        "written": "My Reviews",
-        "writtenShort": "Written",
-        "received": "Reviews About Me",
-        "receivedShort": "Received",
-        "toReview": "Write a Review",
-        "toReviewShort": "Write"
-      },
-      "empty": {
-        "writtenTitle": "No reviews written yet",
-        "writtenDescription": "Start by reviewing people you've worked with on projects.",
-        "receivedTitle": "No reviews received yet",
-        "receivedDescription": "Complete projects with partners to receive reviews.",
-        "toReviewTitle": "No one to review",
-        "toReviewDescription": "Complete projects with partners to leave reviews."
-      },
-      "writeButton": "Write Review",
-      "backToReviews": "Back to Reviews",
-      "writeReview": "Write a Review",
-      "submitReview": "Submit Review",
-      "userNotFound": "User not found",
-      "userNotFoundDesc": "The user you're trying to review doesn't exist.",
-      "rating": "Rating",
-      "yourReview": "Your Review"
+    "howItWorks": {
+        "title": "How It Works",
+        "subtitle": "A simple process from posting a project to choosing a contractor",
+        "step1": {
+            "title": "Describe Your Project",
+            "description": "Fill out a project brief with goals, requirements, budget, and timeline. Our builder helps you cover everything."
+        },
+        "step2": {
+            "title": "Receive Proposals",
+            "description": "Matching vendors will be notified about your project and will submit their commercial proposals."
+        },
+        "step3": {
+            "title": "Choose a Contractor",
+            "description": "Compare proposals, review portfolios and feedback. Contact finalists and select the best partner."
+        }
     },
-    "messages": {
-      "banner": "You haven't sent any messages yet!",
-      "findPartner": "Find a Partner"
+    "audience": {
+        "title": "Who Is VendorHub For",
+        "subtitle": "Our platform is built for two types of users",
+        "forCompanies": {
+            "title": "For Companies",
+            "items": [
+                "Fast IT vendor search for any task",
+                "Save time comparing proposals",
+                "Access to a network of verified contractors",
+                "Transparent vendor selection process",
+                "Reduce the risk of choosing the wrong vendor"
+            ]
+        },
+        "forVendors": {
+            "title": "For IT Vendors",
+            "items": [
+                "New clients and projects in your specialty",
+                "Increase brand awareness in the market",
+                "Structured briefs with clear requirements",
+                "Lower client acquisition costs",
+                "Tools to showcase your expertise"
+            ]
+        }
     },
-    "profile": {
-      "generalInfo": "General Information",
-      "fullName": "Full Name",
-      "email": "Email",
-      "companyName": "Company Name",
-      "location": "Location",
-      "saveChanges": "Save Changes",
-      "uploadImage": "Upload new image",
-      "changeImage": "Change image",
-      "imageHint": "JPG, GIF or PNG. 1MB Max.",
-      "submit": "Submit"
+    "clients": {
+        "title": "Trusted By",
+        "subtitle": "Leading companies choose us to find IT vendors"
     },
-    "feedback": {
-      "title": "Give Feedback",
-      "subtitle": "Tell us what you like and what we should improve about the vendor platform.",
-      "rating": "Rate your experience",
-      "message": "Feedback",
-      "messageHint": "Please be specific (min 10 chars).",
-      "placeholder": "What worked well? What didn't? Any missing features?",
-      "reset": "Reset",
-      "send": "Send feedback"
+    "cta": {
+        "title": "Ready to Get Started?",
+        "subtitle": "Join companies that have already optimized their IT vendor search",
+        "button": "Create an Account"
+    },
+    "footer": {
+        "description": "A digital platform for effective IT vendor collaboration. We simplify the process of finding and selecting technology partners.",
+        "product": "Product",
+        "searchProcess": "Search Process",
+        "features": "Features",
+        "company": "Company",
+        "contacts": "Contact",
+        "reviews": "Reviews",
+        "other": "Other",
+        "signIn": "Sign In",
+        "register": "Register",
+        "copyright": "© {year} VendorHub LLC",
+        "legal": "Legal",
+        "privacy": "Privacy Policy",
+        "personalData": "Personal Data",
+        "publicOffer": "Public Offer",
+        "api": "API",
+        "pricing": "Pricing",
+        "comingSoon": "Coming soon"
+    },
+    "auth": {
+        "signIn": {
+            "title": "Sign In",
+            "subtitle": "Welcome back to VendorHub",
+            "email": "Email",
+            "password": "Password",
+            "forgotPassword": "Forgot password?",
+            "submit": "Continue",
+            "noAccount": "Don't have an account?",
+            "register": "Register"
+        },
+        "register": {
+            "title": "Register",
+            "submit": "Register",
+            "hasAccount": "Already have an account?",
+            "signIn": "Sign In",
+            "subtitle": "Create an account to get started",
+            "fullName": "Full Name",
+            "companyName": "Company Name",
+            "companyLocation": "Company Location",
+            "email": "Email",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "nextStep": "Next Step",
+            "goBack": "Go Back",
+            "inn": "Tax ID (INN)",
+            "innInvalid": "INN must be 10 or 12 digits",
+            "consent": "I accept the",
+            "consentPrivacy": "privacy policy",
+            "consentRequired": "You must accept the terms",
+            "roles": {
+                "company": {
+                    "label": "Hire a business partner",
+                    "description": "I want to find and hire a provider to help our company achieve our goals."
+                },
+                "vendor": {
+                    "label": "Get listed on the platform",
+                    "description": "I want to sell my business' services and boost visibility for my brand."
+                }
+            }
+        },
+        "forgotPassword": {
+            "title": "Forgot Password",
+            "submit": "Send"
+        },
+        "resetPassword": {
+            "title": "New Password",
+            "newPassword": "New Password",
+            "confirmPassword": "Confirm Password",
+            "submit": "Save"
+        }
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "logout": "Log Out",
+        "platformFeedback": "Platform Feedback",
+        "admin": {
+            "contentPages": "Site Pages"
+        },
+        "menu": {
+            "projects": "Projects",
+            "shortlist": "Shortlist",
+            "reviews": "Reviews",
+            "profile": "Profile",
+            "findVendors": "Find Vendors",
+            "portfolio": "Portfolio",
+            "analytics": "Analytics",
+            "bills": "Bills",
+            "team": "Team"
+        },
+        "underConstruction": {
+            "title": "That page is under construction",
+            "description": "We are working hard to bring you this feature soon."
+        },
+        "projects": {
+            "title": "My Projects",
+            "buildBrief": "Build a project brief in minutes",
+            "buildBriefDesc": "Create a personalized project brief and send it to multiple best-fit vendors all at once.",
+            "projectBrief": "Project Brief",
+            "tabs": {
+                "incoming": "Incoming",
+                "search": "Search Projects",
+                "accepted": "Accepted"
+            },
+            "empty": {
+                "incoming": "Awaiting company requests",
+                "incomingDesc": "We'll list their requests here as soon as they come in.",
+                "search": "Awaiting company projects",
+                "searchDesc": "We'll list their projects here as soon as they come in.",
+                "accepted": "No accepted projects",
+                "acceptedDesc": "Accepted projects will appear here."
+            },
+            "startProject": "Start a Project",
+            "tabActive": "Active",
+            "tabArchive": "Archive",
+            "noArchived": "No archived projects yet.",
+            "archived": "This project is archived",
+            "archiveProject": "Archive Project",
+            "archiveConfirmTitle": "Archive this project?",
+            "archiveConfirmDesc": "Vendors will no longer see this project. It will be moved to your Archive tab. Vendors who have applied will also see it in their Archive.",
+            "myRecommendations": "My Recommendations",
+            "noReviews": "You haven't left a review to anyone yet!",
+            "modal": {
+                "title": "Project Brief",
+                "step1Title": "Give your project a name as a short description.",
+                "step2Title": "What kind of services are you looking for?",
+                "step3Title": "When would you like to start this project?",
+                "step4Title": "What is your project budget?",
+                "step5Title": "What's important to you about a provider's location?",
+                "step6Title": "What's your company's website?",
+                "step7Title": "Tell us more about your project and goals."
+            }
+        },
+        "vendorSection": {
+            "tabs": {
+                "incoming": "Incoming Projects",
+                "incomingShort": "Incoming",
+                "find": "Find a Project",
+                "findShort": "Find",
+                "proposals": "My Proposals",
+                "proposalsShort": "Proposals",
+                "archive": "Archive"
+            },
+            "empty": {
+                "incomingTitle": "Awaiting company requests",
+                "incomingDesc": "We'll list their requests here as soon as they come in.",
+                "findTitle": "Awaiting company projects",
+                "findDesc": "We'll list their projects here as soon as they come in.",
+                "proposalsTitle": "No proposals yet",
+                "proposalsDesc": "Your project proposals will appear here.",
+                "archiveTitle": "No archived projects",
+                "archiveDesc": "Projects you applied to that were archived will appear here."
+            },
+            "filters": {
+                "all": "All",
+                "sent": "Under Review",
+                "accepted": "Accepted",
+                "declined": "Declined"
+            }
+        },
+        "vendors": {
+            "bannerTitle": "Find the perfect partner for your project",
+            "searchPlaceholder": "Search for Web Design, Web App Development, etc.",
+            "selectedServices": "Selected Services ({count}/10)",
+            "searching": "Searching for vendors...",
+            "searchButton": "Search",
+            "noResults": "No vendors found",
+            "noResultsDesc": "Try adjusting your search criteria or selecting different services.",
+            "clearSearch": "Clear Search",
+            "startTitle": "Start searching for vendors",
+            "startDesc": "Select the services you need and optionally a location to find the perfect vendors for your project."
+        },
+        "shortlist": {
+            "title": "Shortlist",
+            "subtitle": "Your favorite vendors saved for quick access.",
+            "howItWorks": "How it works",
+            "notPicked": "You haven't picked your favorites yet!",
+            "findPartner": "Find a Partner",
+            "findMore": "Find More Vendors",
+            "loading": "Loading shortlist...",
+            "noProjects": "No projects yet",
+            "noProjectsDesc": "Create a project first, then you can add vendors to your shortlist.",
+            "vendorCount": "{count} vendor(s) in shortlist",
+            "noVendors": "No vendors in shortlist",
+            "noVendorsDesc": "Browse vendors and add them to your shortlist for this project.",
+            "steps": {
+                "startProject": {
+                    "title": "Start a Project",
+                    "description": "Create a brief describing your needs and goals."
+                },
+                "getMatched": {
+                    "title": "Get Matched",
+                    "description": "We'll suggest the best-fit vendors based on your project details."
+                },
+                "shortlistDecide": {
+                    "title": "Shortlist & Decide",
+                    "description": "Compare proposals, pick your favorites, and choose who to work with."
+                }
+            }
+        },
+        "reviews": {
+            "banner": "Leaving a review helps business leaders like you make a confident choice",
+            "tabs": {
+                "written": "My Reviews",
+                "writtenShort": "Written",
+                "received": "Reviews About Me",
+                "receivedShort": "Received",
+                "toReview": "Write a Review",
+                "toReviewShort": "Write"
+            },
+            "empty": {
+                "writtenTitle": "No reviews written yet",
+                "writtenDescription": "Start by reviewing people you've worked with on projects.",
+                "receivedTitle": "No reviews received yet",
+                "receivedDescription": "Complete projects with partners to receive reviews.",
+                "toReviewTitle": "No one to review",
+                "toReviewDescription": "Complete projects with partners to leave reviews."
+            },
+            "writeButton": "Write Review",
+            "backToReviews": "Back to Reviews",
+            "writeReview": "Write a Review",
+            "submitReview": "Submit Review",
+            "userNotFound": "User not found",
+            "userNotFoundDesc": "The user you're trying to review doesn't exist.",
+            "rating": "Rating",
+            "yourReview": "Your Review"
+        },
+        "messages": {
+            "banner": "You haven't sent any messages yet!",
+            "findPartner": "Find a Partner"
+        },
+        "profile": {
+            "generalInfo": "General Information",
+            "fullName": "Full Name",
+            "email": "Email",
+            "companyName": "Company Name",
+            "location": "Location",
+            "saveChanges": "Save Changes",
+            "uploadImage": "Upload new image",
+            "changeImage": "Change image",
+            "imageHint": "JPG, GIF or PNG. 1MB Max.",
+            "submit": "Submit"
+        },
+        "feedback": {
+            "title": "Give Feedback",
+            "subtitle": "Tell us what you like and what we should improve about the vendor platform.",
+            "rating": "Rate your experience",
+            "message": "Feedback",
+            "messageHint": "Please be specific (min 10 chars).",
+            "placeholder": "What worked well? What didn't? Any missing features?",
+            "reset": "Reset",
+            "send": "Send feedback"
+        }
+    },
+    "vendorProfile": {
+        "loading": "Loading vendor profile...",
+        "notFound": "Vendor not found",
+        "notFoundDesc": "The vendor you are looking for does not exist.",
+        "foundedIn": "Founded in {year}",
+        "about": "About",
+        "mainGoal": "Main Goal",
+        "specialization": "Specialization",
+        "noReviews": "No reviews yet",
+        "noReviewsDesc": "This vendor hasn't received any reviews yet.",
+        "stats": "Stats",
+        "minProject": "Min. Project",
+        "hourlyRate": "Hourly Rate",
+        "team": "Team",
+        "employees": "{count} people",
+        "turnover": "Revenue"
+    },
+    "companyProfile": {
+        "loading": "Loading company profile...",
+        "notFound": "Company not found",
+        "notFoundDesc": "The company you are looking for does not exist.",
+        "noReviews": "No reviews yet",
+        "noReviewsDesc": "This company hasn't received any reviews yet."
+    },
+    "vendorCard": {
+        "noReviews": "No reviews",
+        "specialization": "Specialization",
+        "minProject": "Min. Project",
+        "hourlyRate": "Hourly Rate",
+        "team": "Team",
+        "employees": "{count} people",
+        "location": "Location",
+        "clientReviews": "Client Reviews",
+        "noClientReviews": "No reviews",
+        "noClientReviewsDesc": "This vendor hasn't received any reviews yet.",
+        "whyChoose": "Why Choose",
+        "inShortlist": "In Shortlist",
+        "addToShortlist": "Add to Shortlist",
+        "requestSent": "Sent!",
+        "requestProposal": "Request Proposal",
+        "viewProposal": "View Proposal",
+        "specializationHighlight": "Specialization: {services}",
+        "teamHighlight": "Team of {count} specialists",
+        "teamHighlightLocation": "Team of {count} specialists in {location}",
+        "minProjectHighlight": "Minimum project from ${amount}"
+    },
+    "projectCard": {
+        "noRating": "No rating",
+        "noLocation": "No location preference",
+        "viewBrief": "View Brief",
+        "archived": "Archived",
+        "vendorSelected": "Vendor Selected",
+        "viewVendor": "View Vendor",
+        "proposalSingular": "{count} proposal",
+        "proposalFew": "{count} proposals",
+        "proposalMany": "{count} proposals",
+        "findVendors": "Find Vendors",
+        "proposals": "Proposals"
+    },
+    "proposalCard": {
+        "statusSent": "Under Review",
+        "statusAccepted": "Accepted",
+        "statusDeclined": "Declined",
+        "sentAt": "Sent {date}",
+        "viewBrief": "View Brief",
+        "contactClient": "Contact Client"
+    },
+    "vendorSelection": {
+        "loading": "Loading...",
+        "noVendors": "No matching vendors found",
+        "noVendorsDesc": "However, vendors have received your request. Their responses will appear soon."
+    },
+    "vendorCompare": {
+        "loading": "Loading...",
+        "noVendors": "Awaiting vendor requests",
+        "noVendorsDesc": "We'll list their requests here as soon as they come in."
+    },
+    "projectDetail": {
+        "title": "Request for {name} Services",
+        "keyInformation": "Key Information",
+        "companyName": "Company Name",
+        "projectName": "Project Name",
+        "startDate": "Project Start Date",
+        "startOptions": {
+            "within30": "Within 30 days",
+            "within60": "Within 60 days",
+            "after60": "After 60+ days"
+        },
+        "budget": "Project Budget",
+        "location": "Location",
+        "noLocation": "No preference",
+        "contactPerson": "Contact Person",
+        "companyWebsite": "Company Website",
+        "introduction": "Introduction",
+        "servicesNeeded": "Services Needed",
+        "servicesPlaceholder": "Search for Web Design, Web App Development, etc.",
+        "questions": "Questions",
+        "addQuestion": "Add a question",
+        "noQuestionsAuthor": "You can add your questions to vendors here.",
+        "noQuestionsVendor": "The author has not added any questions.",
+        "requirements": "Requirements",
+        "noRequirementsAuthor": "You can add your project requirements here.",
+        "noRequirementsVendor": "The author has not added any requirements."
+    },
+    "projectSummary": {
+        "title": "Your Project Brief",
+        "reviewDetails": "Review your project details",
+        "sendToVendors": "We'll send your project to best-fit vendors",
+        "receiveResponse": "Receive a response directly through platform",
+        "outline": "Outline",
+        "sections": {
+            "keyInformation": "Key Information",
+            "introduction": "Introduction",
+            "services": "Services Needed",
+            "questions": "Questions",
+            "requirements": "Requirements"
+        }
+    },
+    "vendorRegistration": {
+        "step": "Vendor Registration · Step {step}/{total}",
+        "mainGoal": {
+            "title": "What is your main goal?",
+            "option1": "Collect reviews and improve my reputation",
+            "option2": "Generate and convert leads for my business",
+            "option3": "Get recognized as a leading service provider"
+        },
+        "companyInfo": {
+            "title": "Add Company Information",
+            "salesEmail": "Sales Email",
+            "phone": "Admin Contact Phone",
+            "employees": "Total Employees",
+            "website": "Company Website",
+            "foundingYear": "Founding Year",
+            "turnover": "Company's Value"
+        },
+        "description": {
+            "title": "Give a brief description of your company"
+        },
+        "projectSize": {
+            "title": "Add Project Size & Rate",
+            "minProject": "Minimum Project Size",
+            "hourlyRate": "Average Hourly Rate"
+        },
+        "services": {
+            "title": "Add Services You Provide"
+        },
+        "prev": "Prev",
+        "next": "Next",
+        "completeStep": "Please complete the current step before proceeding"
+    },
+    "proposal": {
+        "back": "Back",
+        "sentAt": "Sent {date}",
+        "timing": "Your Proposal on Timeline & Cost",
+        "vendorProposal": "Vendor Proposal",
+        "daysToStart": "Ready to Start In",
+        "duration": "Duration",
+        "cost": "Cost",
+        "questionAnswers": "Answers to Client Questions",
+        "questionAnswersShort": "Answers to Questions",
+        "acceptProposal": "Accept Proposal",
+        "decline": "Decline"
+    },
+    "explore": {
+        "title": "Best-fit vendors for your project"
+    },
+    "cookieBanner": {
+        "text": "We use cookies to ensure the website works correctly and to improve your experience. By continuing to use the site, you agree to our",
+        "cookiePolicyLink": "Cookie Policy",
+        "accept": "Accept"
+    },
+    "recommendationBanner": {
+        "text": "Vendor recommendations are generated by an algorithmic system based on your project parameters.",
+        "learnMore": "Recommendation technology policy",
+        "dismiss": "Got it"
+    },
+    "content": {
+        "edit": "Edit",
+        "editPage": "Edit page",
+        "preview": "Preview",
+        "save": "Save",
+        "saved": "Saved",
+        "saveError": "Save error"
+    },
+    "pages": {
+        "searchProcess": "Search Process",
+        "pricing": "Pricing",
+        "about": "About",
+        "contacts": "Contacts",
+        "privacy": "Privacy Policy",
+        "personalData": "Personal Data Policy",
+        "recommendationsPolicy": "Recommendation Technology Policy",
+        "publicOffer": "Public Offer",
+        "cookiePolicy": "Cookie Policy",
+        "api": "API"
     }
-  },
-  "vendorProfile": {
-    "loading": "Loading vendor profile...",
-    "notFound": "Vendor not found",
-    "notFoundDesc": "The vendor you are looking for does not exist.",
-    "foundedIn": "Founded in {year}",
-    "about": "About",
-    "mainGoal": "Main Goal",
-    "specialization": "Specialization",
-    "noReviews": "No reviews yet",
-    "noReviewsDesc": "This vendor hasn't received any reviews yet.",
-    "stats": "Stats",
-    "minProject": "Min. Project",
-    "hourlyRate": "Hourly Rate",
-    "team": "Team",
-    "employees": "{count} people",
-    "turnover": "Revenue"
-  },
-  "companyProfile": {
-    "loading": "Loading company profile...",
-    "notFound": "Company not found",
-    "notFoundDesc": "The company you are looking for does not exist.",
-    "noReviews": "No reviews yet",
-    "noReviewsDesc": "This company hasn't received any reviews yet."
-  },
-  "vendorCard": {
-    "noReviews": "No reviews",
-    "specialization": "Specialization",
-    "minProject": "Min. Project",
-    "hourlyRate": "Hourly Rate",
-    "team": "Team",
-    "employees": "{count} people",
-    "location": "Location",
-    "clientReviews": "Client Reviews",
-    "noClientReviews": "No reviews",
-    "noClientReviewsDesc": "This vendor hasn't received any reviews yet.",
-    "whyChoose": "Why Choose",
-    "inShortlist": "In Shortlist",
-    "addToShortlist": "Add to Shortlist",
-    "requestSent": "Sent!",
-    "requestProposal": "Request Proposal",
-    "viewProposal": "View Proposal",
-    "specializationHighlight": "Specialization: {services}",
-    "teamHighlight": "Team of {count} specialists",
-    "teamHighlightLocation": "Team of {count} specialists in {location}",
-    "minProjectHighlight": "Minimum project from ${amount}"
-  },
-  "projectCard": {
-    "noRating": "No rating",
-    "noLocation": "No location preference",
-    "viewBrief": "View Brief",
-    "archived": "Archived",
-    "vendorSelected": "Vendor Selected",
-    "viewVendor": "View Vendor",
-    "proposalSingular": "{count} proposal",
-    "proposalFew": "{count} proposals",
-    "proposalMany": "{count} proposals",
-    "findVendors": "Find Vendors",
-    "proposals": "Proposals"
-  },
-  "proposalCard": {
-    "statusSent": "Under Review",
-    "statusAccepted": "Accepted",
-    "statusDeclined": "Declined",
-    "sentAt": "Sent {date}",
-    "viewBrief": "View Brief",
-    "contactClient": "Contact Client"
-  },
-  "vendorSelection": {
-    "loading": "Loading...",
-    "noVendors": "No matching vendors found",
-    "noVendorsDesc": "However, vendors have received your request. Their responses will appear soon."
-  },
-  "vendorCompare": {
-    "loading": "Loading...",
-    "noVendors": "Awaiting vendor requests",
-    "noVendorsDesc": "We'll list their requests here as soon as they come in."
-  },
-  "projectDetail": {
-    "title": "Request for {name} Services",
-    "keyInformation": "Key Information",
-    "companyName": "Company Name",
-    "projectName": "Project Name",
-    "startDate": "Project Start Date",
-    "startOptions": {
-      "within30": "Within 30 days",
-      "within60": "Within 60 days",
-      "after60": "After 60+ days"
-    },
-    "budget": "Project Budget",
-    "location": "Location",
-    "noLocation": "No preference",
-    "contactPerson": "Contact Person",
-    "companyWebsite": "Company Website",
-    "introduction": "Introduction",
-    "servicesNeeded": "Services Needed",
-    "servicesPlaceholder": "Search for Web Design, Web App Development, etc.",
-    "questions": "Questions",
-    "addQuestion": "Add a question",
-    "noQuestionsAuthor": "You can add your questions to vendors here.",
-    "noQuestionsVendor": "The author has not added any questions.",
-    "requirements": "Requirements",
-    "noRequirementsAuthor": "You can add your project requirements here.",
-    "noRequirementsVendor": "The author has not added any requirements."
-  },
-  "projectSummary": {
-    "title": "Your Project Brief",
-    "reviewDetails": "Review your project details",
-    "sendToVendors": "We'll send your project to best-fit vendors",
-    "receiveResponse": "Receive a response directly through platform",
-    "outline": "Outline",
-    "sections": {
-      "keyInformation": "Key Information",
-      "introduction": "Introduction",
-      "services": "Services Needed",
-      "questions": "Questions",
-      "requirements": "Requirements"
-    }
-  },
-  "vendorRegistration": {
-    "step": "Vendor Registration · Step {step}/{total}",
-    "mainGoal": {
-      "title": "What is your main goal?",
-      "option1": "Collect reviews and improve my reputation",
-      "option2": "Generate and convert leads for my business",
-      "option3": "Get recognized as a leading service provider"
-    },
-    "companyInfo": {
-      "title": "Add Company Information",
-      "salesEmail": "Sales Email",
-      "phone": "Admin Contact Phone",
-      "employees": "Total Employees",
-      "website": "Company Website",
-      "foundingYear": "Founding Year",
-      "turnover": "Company's Value"
-    },
-    "description": {
-      "title": "Give a brief description of your company"
-    },
-    "projectSize": {
-      "title": "Add Project Size & Rate",
-      "minProject": "Minimum Project Size",
-      "hourlyRate": "Average Hourly Rate"
-    },
-    "services": {
-      "title": "Add Services You Provide"
-    },
-    "prev": "Prev",
-    "next": "Next",
-    "completeStep": "Please complete the current step before proceeding"
-  },
-  "proposal": {
-    "back": "Back",
-    "sentAt": "Sent {date}",
-    "timing": "Your Proposal on Timeline & Cost",
-    "vendorProposal": "Vendor Proposal",
-    "daysToStart": "Ready to Start In",
-    "duration": "Duration",
-    "cost": "Cost",
-    "questionAnswers": "Answers to Client Questions",
-    "questionAnswersShort": "Answers to Questions",
-    "acceptProposal": "Accept Proposal",
-    "decline": "Decline"
-  },
-  "explore": {
-    "title": "Best-fit vendors for your project"
-  },
-  "cookieBanner": {
-    "text": "We use cookies to ensure the website works correctly and to improve your experience. By continuing to use the site, you agree to our",
-    "privacyLink": "privacy policy",
-    "accept": "Accept"
-  },
-  "recommendationBanner": {
-    "text": "Vendor recommendations are generated by an algorithmic system based on your project parameters.",
-    "learnMore": "Recommendation technology policy",
-    "dismiss": "Got it"
-  },
-  "content": {
-    "edit": "Edit",
-    "editPage": "Edit page",
-    "preview": "Preview",
-    "save": "Save",
-    "saved": "Saved",
-    "saveError": "Save error"
-  },
-  "pages": {
-    "searchProcess": "Search Process",
-    "pricing": "Pricing",
-    "about": "About",
-    "contacts": "Contacts",
-    "privacy": "Privacy Policy",
-    "personalData": "Personal Data Policy",
-    "recommendationsPolicy": "Recommendation Technology Policy",
-    "publicOffer": "Public Offer",
-    "api": "API"
-  }
 }

@@ -12,7 +12,7 @@
         class="flex items-center gap-2 pe-4 py-3 text-[1.25rem] font-bold text-blue-600"
       >
         <Logo />
-        {{ $t('brandName') }}
+        {{ $t("brandName") }}
       </NuxtLink>
     </template>
     <template #default>
@@ -54,7 +54,7 @@
         <p
           class="px-3 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wide"
         >
-          {{ $t('dashboard.admin.contentPages') }}
+          {{ $t("dashboard.admin.contentPages") }}
         </p>
         <nav class="flex flex-col gap-1 w-full">
           <UButton
@@ -82,13 +82,13 @@
     <template #footer>
       <div class="flex justify-between w-full">
         <UButton :to="$localePath('/logout')">
-          {{ $t('dashboard.logout') }}
+          {{ $t("dashboard.logout") }}
         </UButton>
         <UButton
           :to="$localePath('/dashboard/platform-feedback')"
           variant="link"
         >
-          {{ $t('dashboard.platformFeedback') }}
+          {{ $t("dashboard.platformFeedback") }}
         </UButton>
       </div>
     </template>
@@ -101,67 +101,68 @@ const auth = useAuth();
 const { t } = useI18n();
 
 const contentPages = computed(() => [
-  { slug: 'about', label: t('pages.about') },
-  { slug: 'contacts', label: t('pages.contacts') },
-  { slug: 'pricing', label: t('pages.pricing') },
-  { slug: 'search-process', label: t('pages.searchProcess') },
-  { slug: 'privacy', label: t('pages.privacy') },
-  { slug: 'personal-data', label: t('pages.personalData') },
-  { slug: 'public-offer', label: t('pages.publicOffer') },
-  { slug: 'recommendations-policy', label: t('pages.recommendationsPolicy') },
+  { slug: "about", label: t("pages.about") },
+  { slug: "contacts", label: t("pages.contacts") },
+  { slug: "pricing", label: t("pages.pricing") },
+  { slug: "search-process", label: t("pages.searchProcess") },
+  { slug: "privacy", label: t("pages.privacy") },
+  { slug: "personal-data", label: t("pages.personalData") },
+  { slug: "public-offer", label: t("pages.publicOffer") },
+  { slug: "recommendations-policy", label: t("pages.recommendationsPolicy") },
+  { slug: "cookie-policy", label: t("pages.cookiePolicy") },
 ]);
 
 const menuItems = computed(() =>
-  auth.user.value?.role === 'company'
+  auth.user.value?.role === "company"
     ? [
         {
-          id: 'projects',
-          label: t('dashboard.menu.projects'),
-          icon: 'i-lucide-layers-2',
+          id: "projects",
+          label: t("dashboard.menu.projects"),
+          icon: "i-lucide-layers-2",
         },
         {
-          id: 'shortlist',
-          label: t('dashboard.menu.shortlist'),
-          icon: 'i-lucide-bookmark',
+          id: "shortlist",
+          label: t("dashboard.menu.shortlist"),
+          icon: "i-lucide-bookmark",
         },
         {
-          id: 'reviews',
-          label: t('dashboard.menu.reviews'),
-          icon: 'i-lucide-star',
+          id: "reviews",
+          label: t("dashboard.menu.reviews"),
+          icon: "i-lucide-star",
         },
         {
-          id: 'vendors',
-          label: t('dashboard.menu.findVendors'),
-          icon: 'i-lucide-search',
+          id: "vendors",
+          label: t("dashboard.menu.findVendors"),
+          icon: "i-lucide-search",
         },
       ]
     : [
         {
-          id: 'projects',
-          label: t('dashboard.menu.projects'),
-          icon: 'i-lucide-layers-2',
+          id: "projects",
+          label: t("dashboard.menu.projects"),
+          icon: "i-lucide-layers-2",
         },
         {
-          id: 'portfolio',
-          label: t('dashboard.menu.portfolio'),
-          icon: 'i-lucide-file-user',
+          id: "portfolio",
+          label: t("dashboard.menu.portfolio"),
+          icon: "i-lucide-file-user",
         },
         {
-          id: 'reviews',
-          label: t('dashboard.menu.reviews'),
-          icon: 'i-lucide-star',
+          id: "reviews",
+          label: t("dashboard.menu.reviews"),
+          icon: "i-lucide-star",
         },
         {
-          id: 'analytics',
-          label: t('dashboard.menu.analytics'),
-          icon: 'i-lucide-bar-chart-2',
+          id: "analytics",
+          label: t("dashboard.menu.analytics"),
+          icon: "i-lucide-bar-chart-2",
         },
         {
-          id: 'bills',
-          label: t('dashboard.menu.bills'),
-          icon: 'i-lucide-receipt',
+          id: "bills",
+          label: t("dashboard.menu.bills"),
+          icon: "i-lucide-receipt",
         },
-        { id: 'team', label: t('dashboard.menu.team'), icon: 'i-lucide-users' },
+        { id: "team", label: t("dashboard.menu.team"), icon: "i-lucide-users" },
       ],
 );
 </script>
