@@ -2,10 +2,10 @@
   <AuthFormContainer>
     <div class="text-start space-y-1">
       <h2 class="text-xl font-semibold text-white">
-        {{ $t('auth.register.title') }}
+        {{ $t("auth.register.title") }}
       </h2>
       <h2 class="text-sm mb-6 text-gray-200">
-        {{ $t('auth.register.subtitle') }}
+        {{ $t("auth.register.subtitle") }}
       </h2>
     </div>
 
@@ -112,12 +112,28 @@
           <UFormField name="consent">
             <UCheckbox v-model="state.consent" :ui="{ label: 'text-start' }">
               <template #label>
-                {{ $t('auth.register.consent') }}
+                {{ $t("auth.register.consent") }}
                 <NuxtLink
                   :to="$localePath('/privacy')"
                   target="_blank"
                   class="underline"
-                  >{{ $t('auth.register.consentPrivacy') }}</NuxtLink
+                  >{{ $t("auth.register.consentPrivacy") }}</NuxtLink
+                >
+              </template>
+            </UCheckbox>
+          </UFormField>
+          <UFormField name="consentPersonalData">
+            <UCheckbox
+              v-model="state.consentPersonalData"
+              :ui="{ label: 'text-start' }"
+            >
+              <template #label>
+                {{ $t("auth.register.consentPersonalData") }}
+                <NuxtLink
+                  :to="$localePath('/personal-data')"
+                  target="_blank"
+                  class="underline"
+                  >{{ $t("auth.register.consentPersonalDataLink") }}</NuxtLink
                 >
               </template>
             </UCheckbox>
@@ -177,68 +193,73 @@
     </UStepper>
 
     <p class="text-sm text-gray-800 mt-4">
-      {{ $t('auth.register.hasAccount') }}
+      {{ $t("auth.register.hasAccount") }}
       <NuxtLink
         :to="$localePath('/sign-in')"
         class="font-semibold underline hover:text-gray-900"
       >
-        {{ $t('auth.register.signIn') }}
+        {{ $t("auth.register.signIn") }}
       </NuxtLink>
     </p>
   </AuthFormContainer>
 </template>
 
 <script setup lang="ts">
-import * as v from 'valibot';
-import type { FormSubmitEvent } from '@nuxt/ui';
+import * as v from "valibot";
+import type { FormSubmitEvent } from "@nuxt/ui";
 
-import { usersRegisterUser, loginLoginAccessToken } from '~/generated/api';
-import type { UserRole } from '~/generated/api';
+import { usersRegisterUser, loginLoginAccessToken } from "~/generated/api";
+import type { UserRole } from "~/generated/api";
 
 const { t } = useI18n();
 const localePath = useLocalePath();
-const stepper = useTemplateRef('stepper');
+const stepper = useTemplateRef("stepper");
 
 const state = ref({
-  fullName: '',
-  companyName: '',
-  inn: '',
-  companyLocation: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+  fullName: "",
+  companyName: "",
+  inn: "",
+  companyLocation: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
   consent: false,
-  role: '',
+  consentPersonalData: false,
+  role: "",
 });
 
 const schemaDefinition = v.pipe(
   v.object({
-    fullName: v.pipe(v.string(), v.nonEmpty('This field is required')),
-    companyName: v.pipe(v.string(), v.nonEmpty('This field is required')),
+    fullName: v.pipe(v.string(), v.nonEmpty("This field is required")),
+    companyName: v.pipe(v.string(), v.nonEmpty("This field is required")),
     inn: v.pipe(
       v.string(),
-      v.nonEmpty('This field is required'),
-      v.regex(/^\d{10}(\d{2})?$/, t('auth.register.innInvalid')),
+      v.nonEmpty("This field is required"),
+      v.regex(/^\d{10}(\d{2})?$/, t("auth.register.innInvalid")),
     ),
-    companyLocation: v.pipe(v.string(), v.nonEmpty('This field is required')),
-    email: v.pipe(v.string(), v.email('Invalid email')),
+    companyLocation: v.pipe(v.string(), v.nonEmpty("This field is required")),
+    email: v.pipe(v.string(), v.email("Invalid email")),
     password: v.pipe(
       v.string(),
-      v.minLength(8, 'Must be at least 8 characters'),
+      v.minLength(8, "Must be at least 8 characters"),
     ),
     confirmPassword: v.string(),
     consent: v.pipe(
       v.boolean(),
-      v.literal(true, t('auth.register.consentRequired')),
+      v.literal(true, t("auth.register.consentRequired")),
+    ),
+    consentPersonalData: v.pipe(
+      v.boolean(),
+      v.literal(true, t("auth.register.consentRequired")),
     ),
   }),
   v.forward(
     v.partialCheck(
-      [['password'], ['confirmPassword']],
+      [["password"], ["confirmPassword"]],
       (input) => input.password === input.confirmPassword,
-      'Passwords do not match',
+      "Passwords do not match",
     ),
-    ['confirmPassword'],
+    ["confirmPassword"],
   ),
 );
 
@@ -247,7 +268,7 @@ type Schema = v.InferOutput<typeof schemaDefinition>;
 const schema = schemaDefinition;
 
 const toast = useToast();
-const token = useCookie('access_token');
+const token = useCookie("access_token");
 const auth = useAuth();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
@@ -268,9 +289,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   if (register.error) {
     toast.add({
-      title: 'Registration failed',
+      title: "Registration failed",
       description: extractErrorMessage(register.error),
-      color: 'error',
+      color: "error",
     });
     return;
   }
@@ -281,9 +302,9 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
   if (login.error) {
     toast.add({
-      title: 'Error',
-      description: 'Registered successfully, but failed to login.',
-      color: 'warning',
+      title: "Error",
+      description: "Registered successfully, but failed to login.",
+      color: "warning",
     });
     return;
   }
@@ -293,31 +314,31 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
   await auth.loadUser();
 
   toast.add({
-    title: 'Welcome!',
-    description: 'Your account has been created.',
-    color: 'success',
+    title: "Welcome!",
+    description: "Your account has been created.",
+    color: "success",
   });
 
-  navigateTo(localePath('/dashboard'));
+  navigateTo(localePath("/dashboard"));
 }
 
 const show = ref(false);
 
 const items = [
-  { title: 'Registration', slot: 'registration' },
-  { title: 'Role Selection', slot: 'role-selection' },
+  { title: "Registration", slot: "registration" },
+  { title: "Role Selection", slot: "role-selection" },
 ];
 
 const roleSelectionOptions = computed(() => [
   {
-    label: t('auth.register.roles.company.label'),
-    value: 'company',
-    description: t('auth.register.roles.company.description'),
+    label: t("auth.register.roles.company.label"),
+    value: "company",
+    description: t("auth.register.roles.company.description"),
   },
   {
-    label: t('auth.register.roles.vendor.label'),
-    value: 'vendor',
-    description: t('auth.register.roles.vendor.description'),
+    label: t("auth.register.roles.vendor.label"),
+    value: "vendor",
+    description: t("auth.register.roles.vendor.description"),
   },
 ]);
 </script>
