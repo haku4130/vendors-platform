@@ -48,6 +48,7 @@ class UserBaseRequired(SQLModel):
 
 class UserBaseOptional(SQLModel):
     logo_url: str | None = Field(default=None, max_length=255)
+    inn: str | None = Field(default=None, max_length=12)
 
 
 class UserBasePublic(UserBaseRequired, UserBaseOptional):

@@ -40,6 +40,13 @@
               class="w-full"
             />
           </UFormField>
+          <UFormField :label="$t('auth.register.inn')" name="inn">
+            <UInput
+              v-model="state.inn"
+              leading-icon="i-lucide-hash"
+              class="w-full"
+            />
+          </UFormField>
           <UFormField
             :label="$t('auth.register.companyLocation')"
             name="companyLocation"
@@ -103,26 +110,17 @@
           </UFormField>
 
           <UFormField name="consent">
-            <div class="flex items-start gap-2 mt-2">
-              <UCheckbox v-model="state.consent" class="mt-0.5" />
-              <span class="text-sm text-gray-600 leading-snug">
+            <UCheckbox v-model="state.consent" :ui="{ label: 'text-start' }">
+              <template #label>
                 {{ $t('auth.register.consent') }}
-                <NuxtLink
-                  :to="$localePath('/public-offer')"
-                  target="_blank"
-                  class="underline hover:text-white"
-                  >{{ $t('auth.register.consentPublicOffer') }}</NuxtLink
-                >
-                {{ $t('auth.register.consentAnd') }}
                 <NuxtLink
                   :to="$localePath('/privacy')"
                   target="_blank"
-                  class="underline hover:text-white"
+                  class="underline"
                   >{{ $t('auth.register.consentPrivacy') }}</NuxtLink
                 >
-                {{ $t('auth.register.consentPersonalData') }}
-              </span>
-            </div>
+              </template>
+            </UCheckbox>
           </UFormField>
 
           <UButton
@@ -204,6 +202,7 @@ const stepper = useTemplateRef('stepper');
 const state = ref({
   fullName: '',
   companyName: '',
+  inn: '',
   companyLocation: '',
   email: '',
   password: '',
@@ -216,6 +215,11 @@ const schemaDefinition = v.pipe(
   v.object({
     fullName: v.pipe(v.string(), v.nonEmpty('This field is required')),
     companyName: v.pipe(v.string(), v.nonEmpty('This field is required')),
+    inn: v.pipe(
+      v.string(),
+      v.nonEmpty('This field is required'),
+      v.regex(/^\d{10}(\d{2})?$/, t('auth.register.innInvalid')),
+    ),
     companyLocation: v.pipe(v.string(), v.nonEmpty('This field is required')),
     email: v.pipe(v.string(), v.email('Invalid email')),
     password: v.pipe(
@@ -247,7 +251,7 @@ const token = useCookie('access_token');
 const auth = useAuth();
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
-  const { email, password, fullName, companyName, companyLocation } =
+  const { email, password, fullName, companyName, inn, companyLocation } =
     event.data;
 
   const register = await usersRegisterUser({
@@ -256,6 +260,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       password,
       full_name: fullName,
       company_name: companyName,
+      inn,
       location: companyLocation,
       role: state.value.role as UserRole,
     },
