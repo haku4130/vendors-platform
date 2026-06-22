@@ -1054,6 +1054,10 @@ export type VendorProfileCreate = {
    */
   main_goal: string;
   /**
+   * Sales Email
+   */
+  sales_email: string;
+  /**
    * Company Website
    */
   company_website?: string | null;
@@ -1079,6 +1083,10 @@ export type VendorProfilePublic = {
    * Main Goal
    */
   main_goal: string;
+  /**
+   * Sales Email
+   */
+  sales_email: string;
   /**
    * Company Website
    */

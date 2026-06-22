@@ -489,6 +489,7 @@
     },
     "companyInfo": {
       "title": "Add Company Information",
+      "salesEmail": "Contact Email",
       "description": "Company Description",
       "descriptionPlaceholder": "Describe your company, its mission, and values.",
       "website": "Company Website (optional)",

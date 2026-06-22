@@ -70,6 +70,11 @@
           :state="answers"
           :schema="
             v.object({
+              sales_email: v.pipe(
+                v.string(),
+                v.email('Invalid email'),
+                v.nonEmpty('Email is required'),
+              ),
               description: v.pipe(
                 v.string(),
                 v.nonEmpty('This step is required'),
@@ -89,6 +94,17 @@
           "
           class="space-y-4"
         >
+          <UFormField
+            :label="$t('vendorRegistration.companyInfo.salesEmail')"
+            name="sales_email"
+          >
+            <UInput
+              v-model="answers.sales_email"
+              placeholder="example@mail.com"
+              icon="i-lucide-at-sign"
+              class="w-full"
+            />
+          </UFormField>
           <UFormField
             :label="$t('vendorRegistration.companyInfo.description')"
             name="description"
@@ -216,6 +232,7 @@ const mainGoalOptions = computed(() => [
 
 const answers = ref<VendorProfileCreate>({
   main_goal: "",
+  sales_email: "",
   company_website: "",
   description: "",
   min_project_size: 100,

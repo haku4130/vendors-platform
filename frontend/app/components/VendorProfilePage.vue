@@ -200,6 +200,29 @@
             </div>
           </div>
         </div>
+
+        <!-- Contact -->
+        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
+          <h3 class="text-base font-semibold mb-4">
+            {{ t("common.contacts") }}
+          </h3>
+          <div class="flex items-start gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0"
+            >
+              <UIcon name="i-lucide-mail" class="w-4 h-4 text-gray-500" />
+            </div>
+            <div class="min-w-0">
+              <p class="text-xs text-gray-400">Email</p>
+              <a
+                :href="`mailto:${vendor.sales_email}`"
+                class="text-sm text-blue-600 hover:underline break-all"
+              >
+                {{ vendor.sales_email }}
+              </a>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
