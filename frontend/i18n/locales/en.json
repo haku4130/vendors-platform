@@ -371,18 +371,13 @@
     "loading": "Loading vendor profile...",
     "notFound": "Vendor not found",
     "notFoundDesc": "The vendor you are looking for does not exist.",
-    "foundedIn": "Founded in {year}",
     "about": "About",
     "mainGoal": "Main Goal",
     "specialization": "Specialization",
     "noReviews": "No reviews yet",
     "noReviewsDesc": "This vendor hasn't received any reviews yet.",
     "stats": "Stats",
-    "minProject": "Min. Project",
-    "hourlyRate": "Hourly Rate",
-    "team": "Team",
-    "employees": "{count} people",
-    "turnover": "Revenue"
+    "minProject": "Min. Project"
   },
   "companyProfile": {
     "loading": "Loading company profile...",
@@ -395,9 +390,6 @@
     "noReviews": "No reviews",
     "specialization": "Specialization",
     "minProject": "Min. Project",
-    "hourlyRate": "Hourly Rate",
-    "team": "Team",
-    "employees": "{count} people",
     "location": "Location",
     "clientReviews": "Client Reviews",
     "noClientReviews": "No reviews",
@@ -409,8 +401,7 @@
     "requestProposal": "Request Proposal",
     "viewProposal": "View Proposal",
     "specializationHighlight": "Specialization: {services}",
-    "teamHighlight": "Team of {count} specialists",
-    "teamHighlightLocation": "Team of {count} specialists in {location}",
+    "locationHighlight": "Located in {location}",
     "minProjectHighlight": "Minimum project from ${amount}"
   },
   "projectCard": {
@@ -498,20 +489,10 @@
     },
     "companyInfo": {
       "title": "Add Company Information",
-      "salesEmail": "Sales Email",
-      "phone": "Admin Contact Phone",
-      "employees": "Total Employees",
-      "website": "Company Website",
-      "foundingYear": "Founding Year",
-      "turnover": "Company's Value"
-    },
-    "description": {
-      "title": "Give a brief description of your company"
-    },
-    "projectSize": {
-      "title": "Add Project Size & Rate",
-      "minProject": "Minimum Project Size",
-      "hourlyRate": "Average Hourly Rate"
+      "description": "Company Description",
+      "descriptionPlaceholder": "Describe your company, its mission, and values.",
+      "website": "Company Website (optional)",
+      "minProject": "Minimum Project Size"
     },
     "services": {
       "title": "Add Services You Provide"

@@ -371,18 +371,13 @@
     "loading": "Загрузка профиля вендора...",
     "notFound": "Вендор не найден",
     "notFoundDesc": "Вендор, которого вы ищете, не существует.",
-    "foundedIn": "Основана в {year}",
     "about": "О компании",
     "mainGoal": "Основная цель",
     "specialization": "Специализация",
     "noReviews": "Отзывов пока нет",
     "noReviewsDesc": "Этот вендор ещё не получил отзывов.",
     "stats": "Показатели",
-    "minProject": "Мин. проект",
-    "hourlyRate": "Ставка в час",
-    "team": "Команда",
-    "employees": "{count} человек",
-    "turnover": "Оборот"
+    "minProject": "Мин. проект"
   },
   "companyProfile": {
     "loading": "Загрузка профиля компании...",
@@ -395,9 +390,6 @@
     "noReviews": "Нет отзывов",
     "specialization": "Специализация",
     "minProject": "Мин. проект",
-    "hourlyRate": "Ставка в час",
-    "team": "Команда",
-    "employees": "{count} человек",
     "location": "Локация",
     "clientReviews": "Отзывы клиентов",
     "noClientReviews": "Нет отзывов",
@@ -409,8 +401,7 @@
     "requestProposal": "Запросить предложение",
     "viewProposal": "Просмотреть предложение",
     "specializationHighlight": "Специализация: {services}",
-    "teamHighlight": "Команда {count} специалистов",
-    "teamHighlightLocation": "Команда {count} специалистов в {location}",
+    "locationHighlight": "Расположен в {location}",
     "minProjectHighlight": "Минимальный проект от ${amount}"
   },
   "projectCard": {
@@ -498,20 +489,10 @@
     },
     "companyInfo": {
       "title": "Добавьте информацию о компании",
-      "salesEmail": "Email для продаж",
-      "phone": "Контактный телефон",
-      "employees": "Количество сотрудников",
-      "website": "Сайт компании",
-      "foundingYear": "Год основания",
-      "turnover": "Оборот компании"
-    },
-    "description": {
-      "title": "Кратко опишите вашу компанию"
-    },
-    "projectSize": {
-      "title": "Размер проекта и ставка",
-      "minProject": "Минимальный размер проекта",
-      "hourlyRate": "Средняя почасовая ставка"
+      "description": "Описание компании",
+      "descriptionPlaceholder": "Опишите вашу компанию, её миссию и ценности.",
+      "website": "Сайт компании (необязательно)",
+      "minProject": "Минимальная стоимость проекта"
     },
     "services": {
       "title": "Добавьте ваши услуги"
