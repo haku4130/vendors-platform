@@ -116,15 +116,9 @@ class UsersPublic(SQLModel):
 
 class VendorProfileBase(SQLModel):
     main_goal: str
-    sales_email: EmailStr
-    admin_contact_phone: str
-    employee_count: int
-    company_website: str
-    founded_year: int
-    turnover: float
+    company_website: str | None = Field(default=None, max_length=255)
     description: str = Field(max_length=2000)
     min_project_size: float
-    avg_hourly_rate: float
 
 
 class VendorProfileCreate(VendorProfileBase):
