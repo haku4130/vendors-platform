@@ -1,0 +1,10 @@
+{
+  "overrides": [
+    {
+      "files": ["i18n/locales/*.json"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}
