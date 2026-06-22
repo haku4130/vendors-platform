@@ -119,16 +119,7 @@
                   class="underline"
                   >{{ $t("auth.register.consentPrivacy") }}</NuxtLink
                 >
-              </template>
-            </UCheckbox>
-          </UFormField>
-          <UFormField name="consentPersonalData">
-            <UCheckbox
-              v-model="state.consentPersonalData"
-              :ui="{ label: 'text-start' }"
-            >
-              <template #label>
-                {{ $t("auth.register.consentPersonalData") }}
+                {{ $t("auth.register.consentAnd") }}
                 <NuxtLink
                   :to="$localePath('/personal-data')"
                   target="_blank"
@@ -224,7 +215,6 @@ const state = ref({
   password: "",
   confirmPassword: "",
   consent: false,
-  consentPersonalData: false,
   role: "",
 });
 
@@ -245,10 +235,6 @@ const schemaDefinition = v.pipe(
     ),
     confirmPassword: v.string(),
     consent: v.pipe(
-      v.boolean(),
-      v.literal(true, t("auth.register.consentRequired")),
-    ),
-    consentPersonalData: v.pipe(
       v.boolean(),
       v.literal(true, t("auth.register.consentRequired")),
     ),
