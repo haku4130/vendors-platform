@@ -28,7 +28,7 @@
       :items="items"
       :ui="{
         header: 'hidden',
-        root: currentStep === 5 ? 'w-full my-auto' : 'w-fit my-auto',
+        root: currentStep === 3 ? 'w-full my-auto' : 'w-fit my-auto',
         content: 'size-auto',
       }"
     >
@@ -70,97 +70,38 @@
           :state="answers"
           :schema="
             v.object({
-              sales_email: v.pipe(
+              description: v.pipe(
                 v.string(),
-                v.email('Invalid email'),
-                v.nonEmpty('Sales Email is required'),
-              ),
-              admin_contact_phone: v.pipe(
-                v.string(),
-                v.nonEmpty('Phone number is required'),
-              ),
-              employee_count: v.pipe(
-                v.number('Please input a number'),
-                v.minValue(1, 'Employee count should be greater than 1'),
+                v.nonEmpty('This step is required'),
               ),
               company_website: v.pipe(
                 v.string(),
-                v.url('Invalid URL'),
-                v.nonEmpty('Company website is required'),
-              ),
-              founded_year: v.pipe(
-                v.number('Please input a number'),
-                v.minValue(1900, 'Enter valid founding year'),
-                v.maxValue(
-                  new Date().getFullYear(),
-                  'Enter valid founding year',
+                v.check(
+                  (val) => val === '' || /^https?:\/\//.test(val),
+                  'Invalid URL',
                 ),
               ),
-              turnover: v.pipe(
+              min_project_size: v.pipe(
                 v.number('Please input a number'),
-                v.minValue(0, 'Turnover should be positive'),
+                v.minValue(0, 'Should be positive'),
               ),
             })
           "
           class="space-y-4"
         >
           <UFormField
-            :label="$t('vendorRegistration.companyInfo.salesEmail')"
-            name="sales_email"
+            :label="$t('vendorRegistration.companyInfo.description')"
+            name="description"
           >
-            <UInput
-              v-model="answers.sales_email"
-              placeholder="example@mail.com"
-              icon="i-lucide-at-sign"
+            <UTextarea
+              v-model="answers.description"
               class="w-full"
+              :rows="5"
+              autoresize
+              :placeholder="
+                $t('vendorRegistration.companyInfo.descriptionPlaceholder')
+              "
             />
-          </UFormField>
-          <UFormField
-            :label="$t('vendorRegistration.companyInfo.phone')"
-            name="admin_contact_phone"
-          >
-            <UFieldGroup class="w-full">
-              <USelectMenu
-                v-model="phone_country_code"
-                placeholder="Code"
-                label-key="dial_code"
-                :loading="status === 'pending'"
-                :items="country_codes"
-                :filter-fields="['dial_code', 'code', 'name']"
-                :ui="{
-                  content: 'min-w-fit',
-                  trailingIcon: 'hidden',
-                  base: 'pe-2',
-                }"
-                @update:open="onOpen"
-              >
-                <template #leading="{ modelValue, ui }">
-                  <span v-if="modelValue" class="size-5 text-center">
-                    {{ modelValue?.emoji }}
-                  </span>
-                  <UIcon
-                    v-else
-                    name="i-lucide-phone"
-                    :class="ui.leadingIcon()"
-                  />
-                </template>
-                <template #item-leading="{ item }">
-                  <span class="size-5 text-center">
-                    {{ item.emoji }}
-                  </span>
-                </template>
-                <template #item-label="{ item }">
-                  {{ item.dial_code }} · {{ item.code }}
-                </template>
-              </USelectMenu>
-              <UInput v-model="contact_phone" type="tel" class="w-full" />
-            </UFieldGroup>
-          </UFormField>
-          <UFormField
-            :label="$t('vendorRegistration.companyInfo.employees')"
-            name="employee_count"
-          >
-            <UInputNumber v-model="answers.employee_count" class="w-full" />
           </UFormField>
           <UFormField
             :label="$t('vendorRegistration.companyInfo.website')"
@@ -173,103 +114,11 @@
             />
           </UFormField>
           <UFormField
-            :label="$t('vendorRegistration.companyInfo.foundingYear')"
-            name="founded_year"
-          >
-            <UInputNumber
-              v-model="answers.founded_year"
-              class="w-full"
-              :format-options="{
-                useGrouping: false,
-                maximumFractionDigits: 0,
-              }"
-            />
-          </UFormField>
-          <UFormField
-            :label="$t('vendorRegistration.companyInfo.turnover')"
-            name="turnover"
-          >
-            <UInputNumber
-              v-model="answers.turnover"
-              class="w-full"
-              :format-options="{
-                style: 'currency',
-                currency: 'USD',
-              }"
-            />
-          </UFormField>
-        </UForm>
-      </template>
-
-      <template #description-step>
-        <h1 class="text-xl text-center font-bold mb-6">
-          {{ $t("vendorRegistration.description.title") }}
-        </h1>
-        <UForm
-          :ref="setFormRef('description-step')"
-          :state="answers"
-          :schema="
-            v.object({
-              description: v.pipe(
-                v.string(),
-                v.nonEmpty('This step is required'),
-              ),
-            })
-          "
-          class="space-y-4"
-        >
-          <UFormField name="description">
-            <UTextarea
-              v-model="answers.description"
-              class="w-full"
-              :rows="5"
-              autoresize
-              placeholder="Describe your company, its mission, and values."
-            />
-          </UFormField>
-        </UForm>
-      </template>
-
-      <template #project-size>
-        <h1 class="text-xl text-center font-bold mb-6">
-          {{ $t("vendorRegistration.projectSize.title") }}
-        </h1>
-        <UForm
-          :ref="setFormRef('project-size')"
-          :state="answers"
-          :schema="
-            v.object({
-              min_project_size: v.pipe(
-                v.number('Please input a number'),
-                v.minValue(0, 'Should be positive'),
-              ),
-              avg_hourly_rate: v.pipe(
-                v.number('Please input a number'),
-                v.minValue(0, 'Should be positive'),
-              ),
-            })
-          "
-          class="space-y-4"
-        >
-          <UFormField
-            :label="$t('vendorRegistration.projectSize.minProject')"
+            :label="$t('vendorRegistration.companyInfo.minProject')"
             name="min_project_size"
           >
             <UInputNumber
               v-model="answers.min_project_size"
-              class="w-full"
-              :format-options="{
-                style: 'currency',
-                currency: 'USD',
-              }"
-            />
-          </UFormField>
-          <UFormField
-            :label="$t('vendorRegistration.projectSize.hourlyRate')"
-            name="avg_hourly_rate"
-          >
-            <UInputNumber
-              v-model="answers.avg_hourly_rate"
               class="w-full"
               :format-options="{
                 style: 'currency',
@@ -301,7 +150,7 @@
           "
           class="space-y-4 max-w-xl mx-auto"
         >
-          <UFormField :label="$t('vendorRegistration.projectSize.minProject')">
+          <UFormField :label="$t('vendorRegistration.services.title')">
             <ServiceTagsSelect
               v-model="services"
               :errors="forms['services']?.getErrors() || []"
@@ -356,8 +205,6 @@ const { t } = useI18n();
 const items: StepperItem[] = [
   { slot: "main-goal" as const },
   { slot: "company-information" as const },
-  { slot: "description-step" as const },
-  { slot: "project-size" as const },
   { slot: "services" as const },
 ];
 
@@ -369,59 +216,12 @@ const mainGoalOptions = computed(() => [
 
 const answers = ref<VendorProfileCreate>({
   main_goal: "",
-  sales_email: "",
-  admin_contact_phone: "",
-  employee_count: 15,
   company_website: "",
-  founded_year: 2000,
-  turnover: 15000,
   description: "",
   min_project_size: 100,
-  avg_hourly_rate: 15,
   service_ids: [],
 });
 const services = ref<ServicePublicShort[]>([]);
-const phone_country_code = ref();
-const contact_phone = ref();
-
-const fullPhoneNumber = computed({
-  get: () => {
-    if (phone_country_code.value?.dial_code && contact_phone.value) {
-      return `${phone_country_code.value.dial_code}${contact_phone.value}`;
-    }
-    return "";
-  },
-  set: (value: string) => {
-    answers.value.admin_contact_phone = value;
-  },
-});
-
-watch(fullPhoneNumber, (newValue) => {
-  answers.value.admin_contact_phone = newValue;
-});
-
-const {
-  data: country_codes,
-  status,
-  execute,
-} = await useLazyFetch<
-  {
-    name: string;
-    code: string;
-    emoji: string;
-    unicode: string;
-    image: string;
-    dial_code: string;
-  }[]
->("/countries.json", {
-  immediate: false,
-});
-
-function onOpen() {
-  if (!country_codes.value?.length) {
-    execute();
-  }
-}
 
 const totalSteps = items.length;
 const currentStep = ref(1);
@@ -458,6 +258,7 @@ async function handleNextStep() {
 const prepareAnswers = () => {
   return {
     ...answers.value,
+    company_website: answers.value.company_website || null,
     service_ids: services.value.map((service) => service.id),
   };
 };
