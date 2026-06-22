@@ -72,26 +72,6 @@
             </p>
           </div>
         </div>
-        <div class="flex items-start gap-3">
-          <UIcon name="i-lucide-clock" class="mt-0.5 text-gray-400 shrink-0" />
-          <div>
-            <p class="text-xs text-gray-400">
-              {{ $t("vendorCard.hourlyRate") }}
-            </p>
-            <p class="font-semibold">
-              ${{ formatNumber(vendor.avg_hourly_rate) }}
-            </p>
-          </div>
-        </div>
-        <div class="flex items-start gap-3">
-          <UIcon name="i-lucide-users" class="mt-0.5 text-gray-400 shrink-0" />
-          <div>
-            <p class="text-xs text-gray-400">{{ $t("vendorCard.team") }}</p>
-            <p class="font-semibold">
-              {{ $t("vendorCard.employees", { count: vendor.employee_count }) }}
-            </p>
-          </div>
-        </div>
         <div v-if="vendor.user?.location" class="flex items-start gap-3">
           <UIcon
             name="i-lucide-map-pin"
@@ -316,20 +296,10 @@ const highlights = computed(() => {
           .join(", "),
       }),
     );
-  if (vendor.employee_count) {
-    if (vendor.user?.location) {
-      items.push(
-        t("vendorCard.teamHighlightLocation", {
-          count: vendor.employee_count,
-          location: vendor.user.location,
-        }),
-      );
-    } else {
-      items.push(
-        t("vendorCard.teamHighlight", { count: vendor.employee_count }),
-      );
-    }
-  }
+  if (vendor.user?.location)
+    items.push(
+      t("vendorCard.locationHighlight", { location: vendor.user.location }),
+    );
   if (vendor.min_project_size)
     items.push(
       t("vendorCard.minProjectHighlight", {

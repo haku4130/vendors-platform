@@ -36,15 +36,6 @@
                 <UIcon name="i-lucide-map-pin" class="w-4 h-4 shrink-0" />
                 <span>{{ vendor.user.location }}</span>
               </div>
-              <div
-                v-if="vendor.founded_year"
-                class="flex items-center gap-1.5 text-sm text-gray-500"
-              >
-                <UIcon name="i-lucide-calendar" class="w-4 h-4 shrink-0" />
-                <span>{{
-                  t("vendorProfile.foundedIn", { year: vendor.founded_year })
-                }}</span>
-              </div>
               <a
                 v-if="vendor.company_website"
                 :href="
@@ -207,102 +198,6 @@
                 </p>
               </div>
             </div>
-            <div class="flex items-start gap-3">
-              <div
-                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
-              >
-                <UIcon name="i-lucide-clock" class="w-4 h-4 text-blue-500" />
-              </div>
-              <div>
-                <p class="text-xs text-gray-400">
-                  {{ t("vendorProfile.hourlyRate") }}
-                </p>
-                <p class="font-semibold text-sm">
-                  ${{ formatNumber(vendor.avg_hourly_rate) }}
-                </p>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div
-                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
-              >
-                <UIcon name="i-lucide-users" class="w-4 h-4 text-blue-500" />
-              </div>
-              <div>
-                <p class="text-xs text-gray-400">
-                  {{ t("vendorProfile.team") }}
-                </p>
-                <p class="font-semibold text-sm">
-                  {{
-                    t("vendorProfile.employees", {
-                      count: vendor.employee_count,
-                    })
-                  }}
-                </p>
-              </div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div
-                class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center shrink-0"
-              >
-                <UIcon
-                  name="i-lucide-trending-up"
-                  class="w-4 h-4 text-blue-500"
-                />
-              </div>
-              <div>
-                <p class="text-xs text-gray-400">
-                  {{ t("vendorProfile.turnover") }}
-                </p>
-                <p class="font-semibold text-sm">
-                  ${{ formatTurnover(vendor.turnover) }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Contact -->
-        <div class="bg-white border border-gray-200 rounded-2xl shadow-sm p-6">
-          <h3 class="text-base font-semibold mb-4">
-            {{ t("common.contacts") }}
-          </h3>
-          <div class="space-y-3">
-            <div v-if="vendor.sales_email" class="flex items-start gap-3">
-              <div
-                class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0"
-              >
-                <UIcon name="i-lucide-mail" class="w-4 h-4 text-gray-500" />
-              </div>
-              <div class="min-w-0">
-                <p class="text-xs text-gray-400">Email</p>
-                <a
-                  :href="`mailto:${vendor.sales_email}`"
-                  class="text-sm text-blue-600 hover:underline break-all"
-                >
-                  {{ vendor.sales_email }}
-                </a>
-              </div>
-            </div>
-            <div
-              v-if="vendor.admin_contact_phone"
-              class="flex items-start gap-3"
-            >
-              <div
-                class="w-8 h-8 rounded-lg bg-gray-50 flex items-center justify-center shrink-0"
-              >
-                <UIcon name="i-lucide-phone" class="w-4 h-4 text-gray-500" />
-              </div>
-              <div>
-                <p class="text-xs text-gray-400">{{ t("common.phone") }}</p>
-                <a
-                  :href="`tel:${vendor.admin_contact_phone}`"
-                  class="text-sm text-blue-600 hover:underline"
-                >
-                  {{ vendor.admin_contact_phone }}
-                </a>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -357,12 +252,6 @@ function reviewsLabel(n: number): string {
 
 function formatNumber(n: number): string {
   return n.toLocaleString("ru-RU");
-}
-
-function formatTurnover(n: number): string {
-  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + "M";
-  if (n >= 1_000) return (n / 1_000).toFixed(1) + "K";
-  return n.toString();
 }
 
 const reviews = ref<ReviewPublic[]>([]);
