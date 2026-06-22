@@ -23,10 +23,11 @@
         variant="ghost"
         color="neutral"
         size="xs"
-        icon="i-lucide-x"
         class="shrink-0 -mt-0.5 -mr-1 text-blue-500 hover:text-blue-700 hover:bg-blue-100"
         @click="dismiss"
-      />
+      >
+        {{ $t("recommendationBanner.dismiss") }}
+      </UButton>
     </div>
   </Transition>
 </template>

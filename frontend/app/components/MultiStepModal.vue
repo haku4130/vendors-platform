@@ -53,11 +53,11 @@
         leading-icon="i-lucide-chevron-left"
         @click="$emit('prev-step')"
       >
-        Back
+        {{ $t("multiStepModal.back") }}
       </UButton>
       <UTooltip
         :delay-duration="0"
-        text="Please complete the current step before proceeding"
+        :text="$t('multiStepModal.completeStep')"
         :disabled="isValidCurrentStep"
         :disable-closing-trigger="true"
       >
@@ -68,27 +68,27 @@
           :disabled="!isValidCurrentStep"
           @click="$emit('next-step')"
         >
-          Next
+          {{ $t("multiStepModal.next") }}
         </UButton>
       </UTooltip>
     </template>
     <template v-else-if="phase === 'summary'" #footer>
       <div></div>
       <UButton variant="solid" size="xl" @click="$emit('finish-create')">
-        Select Vendors
+        {{ $t("multiStepModal.selectVendors") }}
       </UButton>
     </template>
     <template v-else-if="phase === 'vendors'" #footer>
       <div></div>
       <UButton variant="solid" size="xl" @click="finishAndClose">
-        Send to Vendors
+        {{ $t("multiStepModal.sendToVendors") }}
       </UButton>
     </template>
   </UModal>
 </template>
 
 <script setup lang="ts">
-import type { AnswersType } from '@/types/answers';
+import type { AnswersType } from "@/types/answers";
 
 const props = withDefaults(
   defineProps<{
@@ -98,37 +98,37 @@ const props = withDefaults(
     totalSteps: number;
     isValidCurrentStep: boolean;
     createdProjectId: string;
-    phase: 'form' | 'summary' | 'vendors';
+    phase: "form" | "summary" | "vendors";
   }>(),
   {
-    title: 'Project Brief',
-    triggerLabel: 'Start a Project',
+    title: "Project Brief",
+    triggerLabel: "Start a Project",
   },
 );
 
 const answers = defineModel<AnswersType>({ required: true });
 
-const emit = defineEmits(['next-step', 'prev-step', 'finish-create', 'finish']);
+const emit = defineEmits(["next-step", "prev-step", "finish-create", "finish"]);
 
 const open = ref(false);
 const stepNumber = computed(() => props.stepIndex + 1);
 
 const modalUi = computed(() => {
   return {
-    header: props.phase === 'form' ? 'bg-vendor-gradient' : '',
-    footer: 'justify-between',
+    header: props.phase === "form" ? "bg-vendor-gradient" : "",
+    footer: "justify-between",
     body: [
-      props.phase === 'form' ? '' : 'bg-vendor-gradient',
-      props.phase === 'vendors' ? '!py-0' : '',
+      props.phase === "form" ? "" : "bg-vendor-gradient",
+      props.phase === "vendors" ? "!py-0" : "",
     ],
-    title: props.phase === 'form' ? 'text-white' : 'text-black',
-    close: props.phase === 'form' ? 'text-white' : 'text-black',
+    title: props.phase === "form" ? "text-white" : "text-black",
+    close: props.phase === "form" ? "text-white" : "text-black",
   };
 });
 
 function finishAndClose() {
   open.value = false;
-  emit('finish');
+  emit("finish");
 }
 
 defineExpose({ open });
