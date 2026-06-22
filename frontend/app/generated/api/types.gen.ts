@@ -1054,29 +1054,9 @@ export type VendorProfileCreate = {
    */
   main_goal: string;
   /**
-   * Sales Email
-   */
-  sales_email: string;
-  /**
-   * Admin Contact Phone
-   */
-  admin_contact_phone: string;
-  /**
-   * Employee Count
-   */
-  employee_count: number;
-  /**
    * Company Website
    */
-  company_website: string;
-  /**
-   * Founded Year
-   */
-  founded_year: number;
-  /**
-   * Turnover
-   */
-  turnover: number;
+  company_website?: string | null;
   /**
    * Description
    */
@@ -1085,10 +1065,6 @@ export type VendorProfileCreate = {
    * Min Project Size
    */
   min_project_size: number;
-  /**
-   * Avg Hourly Rate
-   */
-  avg_hourly_rate: number;
   /**
    * Service Ids
    */
@@ -1104,29 +1080,9 @@ export type VendorProfilePublic = {
    */
   main_goal: string;
   /**
-   * Sales Email
-   */
-  sales_email: string;
-  /**
-   * Admin Contact Phone
-   */
-  admin_contact_phone: string;
-  /**
-   * Employee Count
-   */
-  employee_count: number;
-  /**
    * Company Website
    */
-  company_website: string;
-  /**
-   * Founded Year
-   */
-  founded_year: number;
-  /**
-   * Turnover
-   */
-  turnover: number;
+  company_website?: string | null;
   /**
    * Description
    */
@@ -1135,10 +1091,6 @@ export type VendorProfilePublic = {
    * Min Project Size
    */
   min_project_size: number;
-  /**
-   * Avg Hourly Rate
-   */
-  avg_hourly_rate: number;
   /**
    * Id
    */
