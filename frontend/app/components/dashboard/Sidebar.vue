@@ -101,6 +101,7 @@ const auth = useAuth();
 const { t } = useI18n();
 
 const contentPages = computed(() => [
+  { slug: "clients-carousel", label: t("clientsCarousel.sidebarLabel") },
   { slug: "about", label: t("pages.about") },
   { slug: "contacts", label: t("pages.contacts") },
   { slug: "pricing", label: t("pages.pricing") },

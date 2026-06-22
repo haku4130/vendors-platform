@@ -30,5 +30,17 @@
     "public-offer": {
         "ru": "<h1>Публичная оферта</h1><p>Текст оферты.</p>",
         "en": "<h1>Public Offer</h1><p>Offer text.</p>"
-    }
+    },
+    "clients-carousel": [
+        { "name": "Лукойл", "domain": "lukoil.com" },
+        { "name": "Газпром", "domain": "gazprom.com" },
+        { "name": "Сбербанк", "domain": "sberbank.ru" },
+        { "name": "ВТБ", "domain": "vtb.ru" },
+        { "name": "Роснефть", "domain": "rosneft.com" },
+        { "name": "МТС", "domain": "mts.ru" },
+        { "name": "Яндекс", "domain": "ya.ru" },
+        { "name": "РЖД", "domain": "rzd.ru" },
+        { "name": "Мегафон", "domain": "megafon.ru" },
+        { "name": "Ростех", "domain": "rostec.ru" }
+    ]
 }

@@ -528,6 +528,13 @@
     "learnMore": "Правила применения рекомендательных технологий",
     "dismiss": "Принять"
   },
+  "clientsCarousel": {
+    "sidebarLabel": "Карусель клиентов",
+    "editTitle": "Карусель клиентов",
+    "namePlaceholder": "Название компании",
+    "domainPlaceholder": "домен.ру",
+    "addCompany": "Добавить компанию"
+  },
   "content": {
     "edit": "Редактировать",
     "editPage": "Редактирование страницы",

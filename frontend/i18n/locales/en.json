@@ -528,6 +528,13 @@
     "learnMore": "Recommendation technology policy",
     "dismiss": "Accept"
   },
+  "clientsCarousel": {
+    "sidebarLabel": "Clients Carousel",
+    "editTitle": "Clients Carousel",
+    "namePlaceholder": "Company name",
+    "domainPlaceholder": "domain.com",
+    "addCompany": "Add company"
+  },
   "content": {
     "edit": "Edit",
     "editPage": "Edit page",

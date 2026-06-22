@@ -390,18 +390,10 @@ const navItems = computed(() => [
   { label: t("nav.clients"), onSelect: () => scrollToSection("clients") },
 ]);
 
-const companies = [
-  { name: "Лукойл", domain: "lukoil.com" },
-  { name: "Газпром", domain: "gazprom.com" },
-  { name: "Сбербанк", domain: "sberbank.ru" },
-  { name: "ВТБ", domain: "vtb.ru" },
-  { name: "Роснефть", domain: "rosneft.com" },
-  { name: "МТС", domain: "mts.ru" },
-  { name: "Яндекс", domain: "ya.ru" },
-  { name: "РЖД", domain: "rzd.ru" },
-  { name: "Мегафон", domain: "megafon.ru" },
-  { name: "Ростех", domain: "rostec.ru" },
-];
+const { data: companies } = await useFetch<{ name: string; domain: string }[]>(
+  "/content-api/clients-carousel",
+  { default: () => [] },
+);
 
 const features = computed(() => [
   {
