@@ -17,13 +17,13 @@ ENV NODE_ENV=${NODE_ENV}
 COPY package.json package-lock.json ./
 
 # Install dependencies (including dev dependencies needed for build)
-RUN npm ci
+RUN npm ci --prefer-offline || npm install
 
 # Copy the entire project
 COPY . ./
 
 # Build the project
-RUN NODE_OPTIONS="--max-old-space-size=4096" npm run build && \
+RUN npm run build && \
     mkdir -p .output/server/data && \
     cp server/data/content.json .output/server/data/content.json
 
